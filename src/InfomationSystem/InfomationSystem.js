@@ -9,7 +9,8 @@ const loginVerifyURL = "/user/login";
 const registerVerifyURL = "/user/register";
 
 // 基本账户信息
-var accountInfo = { accountId: "", password: "" };
+var accountInfo = { "accountId": "", "password": "" };
+var accountOnlineState = false;
 
 //=================基本返回码===============//
 const BACKERROR = 99;   // 程序异常
@@ -21,7 +22,7 @@ export class InfomationSystem {
         accountInfo.accountId = String(accountId).trim();
         accountInfo.password = String(password).trim();
 
-        DebugTool.debugLog("账号信息接收数组: " + JSON.stringify(accountInfo));
+        DebugTool.debugLog("前端信息中心: 账号信息接收数组: " + JSON.stringify(accountInfo));
         DebugTool.debugLog(baseURL + loginVerifyURL);
 
         // 发送对应类型检测
@@ -30,6 +31,17 @@ export class InfomationSystem {
         } else if (param == 1) {
             sendRegisterInfo(accountId, password, callback);
         }
+    }
+    // 得到当前登录状态
+    static getCurrentLoginState() {
+        return accountOnlineState;
+    }
+
+    // 得到当前登录信息(副本)
+    static getCurrentLoginInfo() {
+        const ObjCopy = { ...accountInfo };
+        DebugTool.debugLog("前端信息中心: 发送当前登录信息: " + JSON.stringify(ObjCopy));
+        return ObjCopy;
     }
 }
 
@@ -45,12 +57,14 @@ function sendLoginInfo(accountId, password, callback) {
         timeout: 5000
     })
         .then((res) => {
-            DebugTool.debugLog("登录请求成功, 后端返回: " + JSON.stringify(res.data));
+            DebugTool.debugLog("前端信息中心: 登录请求成功, 后端返回: " + JSON.stringify(res.data));
+            // 更新登录状态
+            verifyLoginSuccess(res.data, accountId, password);
             callback(res.data);
             return res.data;
         })
         .catch((err) => {
-            DebugTool.debugLog("登录请求失败: ", err.message, err.response?.data);
+            DebugTool.debugLog("前端信息中心: 登录请求失败: " + err.message + err.response?.data);
             callback(BACKERROR);
             return BACKERROR;
         });
@@ -68,13 +82,30 @@ function sendRegisterInfo(accountId, password, callback) {
         timeout: 5000
     })
         .then((res) => {
-            DebugTool.debugLog("注册请求成功, 后端返回: " + JSON.stringify(res.data));
+            DebugTool.debugLog("前端信息中心: 注册请求成功, 后端返回: " + JSON.stringify(res.data));
+            // 更新登录状态
+            verifyLoginSuccess(res.data, accountId, password);
             callback(res.data);
             return res.data;
         })
         .catch((err) => {
-            DebugTool.debugLog("注册请求失败: ", err.message, err.response?.data);
+            DebugTool.debugLog("前端信息中心: 注册请求失败: " + err.message + err.response?.data);
             callback(BACKERROR);
             return BACKERROR;
         });
+}
+
+// 判断登录成功用于更改状态
+function verifyLoginSuccess(resultData, accountId, password) {
+    if (!("data" in resultData)) {
+        return;
+    }
+
+    // 登录或注册成功更新状态
+    if (resultData.data == "0") {
+        accountInfo.accountId = accountId;
+        accountInfo.password = password;
+        accountOnlineState = true;
+        DebugTool.debugLog("前端信息中心: 账户登录成功: " + accountId);
+    }
 }
