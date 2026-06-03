@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem"
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { useNavigate } from "react-router-dom";
+
+//==========自定义工具组引入===================
+import Theme from "../../Theme/theme";
+
+//============================================
+
 
 // 用户常量
 const USERURL = "/user";
 
 // 登录界面
 function Login() {
+    // =================进入界面初始化===================
+    InfomationSystem.clearOnlineState();
+    //==================================================
+
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
     const [password, setPassword] = useState(""); // 绑定密码
     const [loginInfo, setLoginInfo] = useState([]) // 显示登录状态
+    const [administrator, setadministrator] = useState(false) // 是否为管理员
 
     // 重定向工具
     const navigate = useNavigate();
@@ -25,8 +36,15 @@ function Login() {
 
     // 登录确定(清空密码)
     function LoginConfirm() {
+
+        // 检验是否勾选管理员
+        var isAdmin = 0;
+        if (administrator) {
+            isAdmin = 2;
+        }
+
         // 向信息管理器传送账号信息
-        InfomationSystem.sentAccountInfo(accountId, password, 0, (result) => {
+        InfomationSystem.sentAccountInfo(accountId, password, isAdmin, (result) => {
             DebugTool.debugLog("登录前端接收: " + JSON.stringify(result));
             // 更新网站验证信息
             setLoginInfo(result.message);
@@ -34,6 +52,12 @@ function Login() {
             LoginNavigateVerify();
         });
         setPassword("");
+    }
+
+    // 管理员状态转换
+    function administratorStateChange() {
+        setadministrator(prev => !prev);
+        DebugTool.debugLog("登录前端: 当前选择管理员状态: " + administrator);
     }
 
     // 登录跳转检验
@@ -55,7 +79,7 @@ function Login() {
 
     return (
         <div>
-            <h1>请点击登录</h1>
+            <h1>请点击登录(普通/管理员)</h1>
             <div>
                 <input
                     type="text"
@@ -63,14 +87,7 @@ function Login() {
                     onChange={(e) => setAccountId(e.target.value)}
                     onKeyDown={enterPressed}
                     placeholder="请输入账号"
-                    style={{
-                        padding: "10px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ddd",
-                        fontSize: "15px",
-                        outline: "none",
-                        transition: "all 0.2s ease",
-                    }}
+                    style={Theme.LoginSystemInputTheme}
                 /><br />
                 <input
                     type="text"
@@ -78,19 +95,19 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={enterPressed}
                     placeholder="请输入密码"
-                    style={{
-                        padding: "10px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ddd",
-                        fontSize: "15px",
-                        outline: "none",
-                        transition: "all 0.2s ease",
-                    }}
+                    style={Theme.LoginSystemInputTheme}
                 />
                 <p>{loginInfo}</p>
             </div>
-            <button
-                onClick={() => { LoginConfirm() }}>登录</button>
+            <div style={{ display: "flex", gap: "30px" }}>
+                <button onClick={() => { LoginConfirm() }} style={{
+                    inlineSize: '100px'
+                }}>登录</button>
+                <button onClick={() => { administratorStateChange() }}>管理员</button>
+                <input type="checkbox" checked={administrator} onClick={administratorStateChange} style={{
+                    marginLeft: "-20px"
+                }} />
+            </div>
         </div>
     );
 }

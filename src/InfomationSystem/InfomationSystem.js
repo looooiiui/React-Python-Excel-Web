@@ -4,12 +4,12 @@ import axios from "axios";
 
 
 // 后端基址
-const baseURL = 'http://localhost:5000/api';
+const baseURL = 'http://26.224.10.101:5000/api';
 const loginVerifyURL = "/user/login";
 const registerVerifyURL = "/user/register";
 
 // 基本账户信息
-var accountInfo = { "accountId": "", "password": "" };
+var accountInfo = { "accountId": "" };
 var accountOnlineState = false;
 
 //=================基本返回码===============//
@@ -20,16 +20,17 @@ export class InfomationSystem {
     // 账户信息发送(登录，注册)
     static sentAccountInfo(accountId, password, param, callback) {
         accountInfo.accountId = String(accountId).trim();
-        accountInfo.password = String(password).trim();
 
         DebugTool.debugLog("前端信息中心: 账号信息接收数组: " + JSON.stringify(accountInfo));
-        DebugTool.debugLog(baseURL + loginVerifyURL);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + baseURL + loginVerifyURL);
 
         // 发送对应类型检测
         if (param == 0) {
-            sendLoginInfo(accountId, password, callback);
+            sendLoginInfo(accountId, password, callback, "0");
         } else if (param == 1) {
             sendRegisterInfo(accountId, password, callback);
+        } else if (param == 2) {
+            sendLoginInfo(accountId, password, callback, "1");
         }
     }
     // 得到当前登录状态
@@ -40,17 +41,26 @@ export class InfomationSystem {
     // 得到当前登录信息(副本)
     static getCurrentLoginInfo() {
         const ObjCopy = { ...accountInfo };
-        DebugTool.debugLog("前端信息中心: 发送当前登录信息: " + JSON.stringify(ObjCopy));
+        DebugTool.debugLog("前端信息中心: 向前端其他页面发送当前登录信息: " + JSON.stringify(ObjCopy));
         return ObjCopy;
+    }
+
+    // 清空当前账户ID状态
+    static clearOnlineState() {
+        accountInfo = { "accountId": "" };
+        accountOnlineState = false
     }
 }
 
-// 发送注册检测
-function sendLoginInfo(accountId, password, callback) {
+// 发送登录检测
+function sendLoginInfo(accountId, password, callback, adminParam) {
     accountId = String(accountId);
     password = String(password);
+    adminParam = String(adminParam);
+    DebugTool.debugLog("前端信息中心: 发送管理员状态: " + adminParam)
+
     // 建立发送字典
-    var sendInfo = { accountId, password };
+    var sendInfo = { accountId, password, adminParam };
 
     // 发送验证请求
     axios.post(baseURL + loginVerifyURL, sendInfo, {
@@ -70,7 +80,7 @@ function sendLoginInfo(accountId, password, callback) {
         });
 }
 
-// 发送登录检测
+// 发送注册检测
 function sendRegisterInfo(accountId, password, callback) {
     accountId = String(accountId);
     password = String(password);
@@ -104,7 +114,6 @@ function verifyLoginSuccess(resultData, accountId, password) {
     // 登录或注册成功更新状态
     if (resultData.data == "0") {
         accountInfo.accountId = accountId;
-        accountInfo.password = password;
         accountOnlineState = true;
         DebugTool.debugLog("前端信息中心: 账户登录成功: " + accountId);
     }

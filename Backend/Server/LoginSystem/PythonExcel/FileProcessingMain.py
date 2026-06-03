@@ -30,6 +30,7 @@ default_godot_argv_len:         int = 5       # 默认传参长度
 #=============指定命令==============#
 godot_login:        str = "0"                 # 指定Godot登录命令为 "0"
 godot_register:     str = "1"                 # 指定Godot注册命令为 "1"
+godot_admin_login:  str = "2"                 # 指定管理员信息验证为 "2"
 #=============指定命令==============#
 
 """
@@ -57,12 +58,30 @@ def login_verify(input_login_info: Optional[list[str]]) -> None:
         read_sheet = read_from_excel(default_save_exc_name, default_exc_data_player)
         stored_info_dict = convert_excel_to_account(read_sheet)
         # 验证登录信息
-        verify_result: tuple =  detect_login_information(stored_info_dict, input_login_info)
+        verify_result: tuple =  detect_login_information(stored_info_dict, input_login_info, "0")
         # 通过验证
         print(str(verify_result[1]))
     except Exception as e:
         # 登录程序运行失败
         print("-1")
+
+# 管理员验证器
+def admin_login_verify(input_login_info: Optional[list[str]]) -> None:
+    if input_login_info is None:
+        return None
+    
+    try:
+        # 得到账户表格
+        read_sheet = read_from_excel(default_save_exc_name, default_exc_data_player)
+        stored_info_dict = convert_excel_to_account(read_sheet)
+        # 验证登录信息
+        verify_result: tuple =  detect_login_information(stored_info_dict, input_login_info, "1")
+        # 通过验证
+        print(str(verify_result[1]))
+    except Exception as e:
+        # 登录程序运行失败
+        print("-1")
+
 
 """
 账户注册处理
@@ -108,6 +127,8 @@ if __name__ == "__main__":
             login_verify(input_info)
         if (godot_order == godot_register):
             register_verify(input_info)
+        if (godot_order == godot_admin_login):
+            admin_login_verify(input_info)
 
     # 参数不够传 -2
     else:

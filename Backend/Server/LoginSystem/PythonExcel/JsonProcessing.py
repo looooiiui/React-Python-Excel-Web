@@ -50,7 +50,7 @@ def convert_excel_to_dir(out_excel_worksheet: Optional[Worksheet]) -> dict:
         return {}
 
 # ===============================================================================#
-# 转换工作表为账号格式 { "名字": ["密码", "昵称"] }
+# 转换工作表为账号格式 { "名字": ["密码", "是否为管理员"] }
 # 适配 Godot本地登录，查字典完成账号校验
 # 传参 (Excel工作表)，返回上述字典
 # ===============================================================================#
@@ -82,7 +82,7 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
                     excel_list.append(append_case)
 
         #==注意传进来的工作表不要 read_only=True 否则无法使用列迭代器 ==#
-        # 这里遍历 1 到 3 列 ，同样可以换成常数，分别指 ID PASSWORD NAME
+        # 这里遍历 1 到 3 列 ，同样可以换成常数，分别指 ID PASSWORD ADMIN
         for col_num, cell in enumerate(out_excel_worksheet.iter_cols(min_col=1, 
                                                                      max_col=3, 
                                                                      min_row=2, 
@@ -98,7 +98,7 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
                 # 玩家密码信息
                 case 2: 
                     append_value(cell, excel_password_list)
-                # 玩家名字信息
+                # 是否为管理员
                 case 3:
                     append_value(cell, excel_name_list)
                 
@@ -117,10 +117,11 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
         result_info_list: list[list[str]] = []
         # 整合结果字典 [[password, name]]
         result_info_list = [
-            [password, name]
-            for password, name in zip(excel_password_list, 
-                                      excel_name_list)
+            [str(password), str(admin)]
+            for password, admin in zip(excel_password_list, 
+                                             excel_name_list)
         ]
+
 
         # 转换字典
         excel_account_dir = dict(zip(excel_id_list, result_info_list))
@@ -167,8 +168,8 @@ def convert_dir_to_json(out_dir: dict, json_out_path: str) -> None:
 # 返回 tuple[bool, int] 元组
 # 第一个bool为校验是否通过，int 为校验得到的结果码
 def detect_login_information(input_info_dict: dict, 
-                             login_info: Optional[list[str]]
-                             ) -> tuple[bool, int]:
+                             login_info: Optional[list[str]],
+                             admin_param: int = "0") -> tuple[bool, int]:
 
     # 空信息校验
     if login_info is None:
@@ -192,7 +193,17 @@ def detect_login_information(input_info_dict: dict,
         log("账号密码错误!")
         return False, 2
         
+    # 校验普通与管理员账户
+    if (admin_param == "0"):
+        if input_info_dict[login_info[0]][1] != "0":
+            log("不为普通用户!")
+            return False, 3
+    if (admin_param == "1"):
+        if input_info_dict[login_info[0]][1] != "1":
+            log("不为管理员用户!")
+            return False, 4
+
     # 校验通过
     log("校验通过")
     return True, 0
-    
+

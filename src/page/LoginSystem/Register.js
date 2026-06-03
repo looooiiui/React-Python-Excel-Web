@@ -3,11 +3,20 @@ import { InfomationSystem } from "../../InfomationSystem/InfomationSystem"
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { useNavigate } from "react-router-dom";
 
+//==========自定义工具组引入===================
+import Theme from "../../Theme/theme";
+
+//============================================
+
 // 用户常量
 const USERURL = "/user";
 
 // 注册界面
 function Register() {
+    // =================进入界面初始化===================
+    InfomationSystem.clearOnlineState();
+    //==================================================
+
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
     const [password, setPassword] = useState(""); // 绑定密码
     const [registerInfo, setRegisterInfo] = useState([]) // 显示登录状态
@@ -19,12 +28,12 @@ function Register() {
     const enterPressed = (e) => {
         if (e.key === 'Enter') {
             // 发送登录信息
-            LoginConfirm()
+            RegisterConfirm()
         }
     };
 
     // 注册确定(清空密码)
-    function LoginConfirm() {
+    function RegisterConfirm() {
         // 向信息管理器传送账号信息
         InfomationSystem.sentAccountInfo(accountId, password, 1, (result) => {
             DebugTool.debugLog("登录前端接收: " + JSON.stringify(result));
@@ -56,7 +65,7 @@ function Register() {
 
     return (
         <div>
-            <h1>请点击注册</h1>
+            <h1>请点击注册(仅有普通登录)</h1>
             <div>
                 <input
                     type="text"
@@ -64,14 +73,7 @@ function Register() {
                     onChange={(e) => setAccountId(e.target.value)}
                     onKeyDown={enterPressed}
                     placeholder="请输入账号"
-                    style={{
-                        padding: "10px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ddd",
-                        fontSize: "15px",
-                        outline: "none",
-                        transition: "all 0.2s ease",
-                    }}
+                    style={Theme.LoginSystemInputTheme}
                 /><br />
                 <input
                     type="text"
@@ -79,18 +81,13 @@ function Register() {
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={enterPressed}
                     placeholder="请输入密码"
-                    style={{
-                        padding: "10px 15px",
-                        borderRadius: "10px",
-                        border: "1px solid #ddd",
-                        fontSize: "15px",
-                        outline: "none",
-                        transition: "all 0.2s ease",
-                    }}
+                    style={Theme.LoginSystemInputTheme}
                 />
                 <p>{registerInfo}</p>
             </div>
-            <button onClick={() => { LoginConfirm() }}>注册</button>
+            <button onClick={() => { RegisterConfirm() }} style={{
+                inlineSize: "100px"
+            }}>注册</button>
         </div>
     );
 }

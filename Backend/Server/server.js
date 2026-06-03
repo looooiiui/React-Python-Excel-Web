@@ -59,8 +59,9 @@ const ACCOUNT_INFO_INCOMPLETE = 11    // 后端账户不全
 app.post('/api/user/login', async (req, res) => {
     try {
         // 获取账户信息
-        const { accountId, password } = req.body;
+        const { accountId, password, adminParam } = req.body;
 
+        DebugTool.debugLog("后端主程序: 接收登录参数: " + adminParam);
         // 检验输入账号或者密码是否为空
         if (!verifyAccountNotEmpty(accountId, password)) {
             return res.json({
@@ -70,9 +71,15 @@ app.post('/api/user/login', async (req, res) => {
             });
         }
 
-        // 等待命令完成
-        const result = await pythonVerify(accountId, password, "0");
-        var returnValue = transmitArgvConvert(result);
+        // 等待命令完成(登录校验传入"0"代表普通登录, 传入"1"为管理员登录)
+        if (adminParam == "0") {
+            const result = await pythonVerify(accountId, password, "0");
+            var returnValue = transmitArgvConvert(result);
+        }
+        else if (adminParam == "1") {
+            const result = await pythonVerify(accountId, password, "2");
+            var returnValue = transmitArgvConvert(result);
+        }
 
         // 原始返回结果
         var originalResult = {
