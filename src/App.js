@@ -6,25 +6,21 @@ import Bbout from './page/Bbout'
 import Login from './page/LoginSystem/Login'
 import Register from './page/LoginSystem/Register';
 import MainPage from './page/MainPage';
-import UserMainPage from './UserPage/UserMainPage';
+import UserMainPage from './page/UserPage/UserMainPage';
+import UserProfile from './page/UserPage/UserProfile/UserProfile';
 
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
 import { InfomationSystem } from './InfomationSystem/InfomationSystem';
+import AuthRoute from './Util/DebugTool/AuthRoute/AuthRoute';
 import Theme from './Theme/theme';
 import './Theme/CSS/Header.css'
+import CONSTPARAM from './Core/CONST/CONST';
 
 // 自带组件引入
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-//=============路由使用常量============================
-const MAINPAGEURL = "/MainPage"; // 主页面
-const LOGINURL = "/Login"; // 登录页面
-const ABOUTURL = "/Bbout"; // 关于
-const REGISTERURL = "/Register"; // 注册
-const USERBASEURL = "/user"; // 用户基址
-//==========================路由区==========================
 function App() {
 
   // 路由跳转
@@ -42,10 +38,11 @@ function App() {
     // 用户登录状态判断
     if (currentLoginState) {
       var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
-      DebugTool.debugLog("路由主界面: 头像点击进入用户主页: " + currentAccountInfo.accountId);
-      navigate(USERBASEURL + "/" + currentAccountInfo.accountId);
+      var currentAccountId = currentAccountInfo.accountId;
+      DebugTool.debugLog("路由主界面: 头像点击进入用户主页: " + currentAccountId);
+      navigate(CONSTPARAM.USERBASEURL + "/" + currentAccountId + "/" + CONSTPARAM.USERPROFILE);
     } else {
-      navigate(LOGINURL);
+      navigate(CONSTPARAM.LOGINURL);
     }
   }
 
@@ -65,10 +62,10 @@ function App() {
       }}></div>
 
       <nav style={Theme.NavigateTheme}>
-        <Link to={MAINPAGEURL} style={Theme.NavigateFontTheme}>首页</Link>
-        <Link to={ABOUTURL} style={Theme.NavigateFontTheme}>关于</Link>
-        <Link to={LOGINURL} style={Theme.NavigateFontTheme}>登录</Link>
-        <Link to={REGISTERURL} style={Theme.NavigateFontTheme}>注册</Link>
+        <Link to={CONSTPARAM.MAINPAGEURL} style={Theme.NavigateFontTheme}>首页</Link>
+        <Link to={CONSTPARAM.ABOUTURL} style={Theme.NavigateFontTheme}>关于</Link>
+        <Link to={CONSTPARAM.LOGINURL} style={Theme.NavigateFontTheme}>登录</Link>
+        <Link to={CONSTPARAM.REGISTERURL} style={Theme.NavigateFontTheme}>注册</Link>
         <img src="/logo512.png" alt="头像" style={Theme.AvatarTheme}
           onClick={avatarClick} />
       </nav>
@@ -77,11 +74,12 @@ function App() {
       }}>
         <Routes>
           <Route path='/' element={<Navigate to="/MainPage" replace />} />
-          <Route path={MAINPAGEURL} element={<MainPage />} />
-          <Route path={ABOUTURL} element={<Bbout />} />
-          <Route path={LOGINURL} element={<Login />} />
-          <Route path={REGISTERURL} element={<Register />} />
-          <Route path='/user/:id' element={<UserMainPage />} />
+          <Route path={CONSTPARAM.MAINPAGEURL} element={<MainPage />} />
+          <Route path={CONSTPARAM.ABOUTURL} element={<Bbout />} />
+          <Route path={CONSTPARAM.LOGINURL} element={<Login />} />
+          <Route path={CONSTPARAM.REGISTERURL} element={<Register />} />
+          <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
+          <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />
         </Routes>
       </div>

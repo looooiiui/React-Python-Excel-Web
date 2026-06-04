@@ -5,16 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 //==========自定义工具组引入===================
 import Theme from "../../Theme/theme";
-
+import CONSTPARAM from "../../Core/CONST/CONST";
 //============================================
 
 // 用户常量
-const USERURL = "/user";
+const INPUTMAXLEN = 20;
 
 // 注册界面
 function Register() {
     // =================进入界面初始化===================
-    InfomationSystem.clearOnlineState();
+    // InfomationSystem.clearOnlineState();
     //==================================================
 
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
@@ -60,7 +60,7 @@ function Register() {
             return;
         }
         var userId = String(currentAccountInfo.accountId);
-        navigate(USERURL + "/" + userId);
+        navigate(CONSTPARAM.USERBASEURL + "/" + userId);
     }
 
     return (
@@ -69,6 +69,7 @@ function Register() {
             <div>
                 <input
                     type="text"
+                    maxLength={INPUTMAXLEN}
                     value={accountId}
                     onChange={(e) => setAccountId(e.target.value)}
                     onKeyDown={enterPressed}
@@ -77,6 +78,7 @@ function Register() {
                 /><br />
                 <input
                     type="text"
+                    maxLength={INPUTMAXLEN}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={enterPressed}

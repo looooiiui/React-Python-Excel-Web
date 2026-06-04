@@ -5,17 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 //==========自定义工具组引入===================
 import Theme from "../../Theme/theme";
-
+import CONSTPARAM from "../../Core/CONST/CONST";
 //============================================
 
 
 // 用户常量
-const USERURL = "/user";
+const INPUTMAXLEN = 20;
 
 // 登录界面
 function Login() {
     // =================进入界面初始化===================
-    InfomationSystem.clearOnlineState();
+    // InfomationSystem.clearOnlineState();
     //==================================================
 
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
@@ -74,7 +74,7 @@ function Login() {
             return;
         }
         var userId = String(currentAccountInfo.accountId);
-        navigate(USERURL + "/" + userId);
+        navigate(CONSTPARAM.USERBASEURL + "/" + userId);
     }
 
     return (
@@ -83,6 +83,7 @@ function Login() {
             <div>
                 <input
                     type="text"
+                    maxLength={INPUTMAXLEN}
                     value={accountId}
                     onChange={(e) => setAccountId(e.target.value)}
                     onKeyDown={enterPressed}
@@ -91,6 +92,7 @@ function Login() {
                 /><br />
                 <input
                     type="text"
+                    maxLength={INPUTMAXLEN}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={enterPressed}
@@ -104,9 +106,14 @@ function Login() {
                     inlineSize: '100px'
                 }}>登录</button>
                 <button onClick={() => { administratorStateChange() }}>管理员</button>
-                <input type="checkbox" checked={administrator} onClick={administratorStateChange} style={{
-                    marginLeft: "-20px"
-                }} />
+                <input
+                    type="checkbox"
+                    checked={administrator}
+                    onChange={administratorStateChange}
+                    style={{
+                        marginLeft: "-20px"
+                    }}
+                />
             </div>
         </div>
     );
