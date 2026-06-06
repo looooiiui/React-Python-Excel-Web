@@ -7,7 +7,7 @@ import CONSTPARAM from "../Core/CONST/CONST";
 
 
 // 后端基址
-const baseURL = 'http://26.224.10.101:5000/api';
+var baseURL = "";
 const loginVerifyURL = "/user/login";
 const registerVerifyURL = "/user/register";
 
@@ -21,10 +21,13 @@ var isAdmin = false;
 const NORMALPARMA = "0";
 const ADMINPARMA = "1";
 
-//=========================基本返回码======================//
+//=========================基本返回码======================
 const BACKERROR = 99;   // 程序异常
 
+//=================信息中心初始化=========================
 initializeAccountInfo();
+initializeBaseUrl();
+//=======================================================
 
 export class InfomationSystem {
 
@@ -94,7 +97,7 @@ function sendLoginInfo(accountId, password, callback, adminParam) {
     var sendInfo = { accountId, password, adminParam };
 
     // 发送验证请求
-    axios.post(baseURL + loginVerifyURL, sendInfo, {
+    axios.post(`${baseURL}${loginVerifyURL}`, sendInfo, {
         timeout: 5000
     })
         .then((res) => {
@@ -119,7 +122,7 @@ function sendRegisterInfo(accountId, password, callback) {
     var sendInfo = { accountId, password };
 
     // 发送验证请求
-    axios.post(baseURL + registerVerifyURL, sendInfo, {
+    axios.post(`${baseURL}${registerVerifyURL}`, sendInfo, {
         timeout: 5000
     })
         .then((res) => {
@@ -185,4 +188,19 @@ function initializeAccountInfo() {
     isAdmin = admin === "true";
 
     DebugTool.debugLog("前端信息中心: 初始化读取账户信息: " + JSON.stringify(accountInfo) + " 管理员：" + isAdmin);
+}
+
+// 初始化网站与后端基址
+async function initializeBaseUrl() {
+    var sendName = { serverName: "Login-Server" }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName);
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入系统地址
+    baseURL = `${data.url}${CONSTPARAM.LOGINBASE}`;
 }

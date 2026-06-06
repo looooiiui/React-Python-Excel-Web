@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
+import Theme from "../../Theme/theme";
 import CONSTPARAM from "../../Core/CONST/CONST";
 
 function UserMainPage() {
@@ -69,7 +70,7 @@ function UserMainPage() {
                 {/* 快速入口 */}
                 <div style={{ marginTop: "20px", display: "flex", gap: "15px", justifyContent: "center" }}>
                     <button
-                        onClick={() => navigate(`/user/${id}/profile`)}
+                        onClick={() => navigate(`${CONSTPARAM.USERBASEURL}/${id}/${CONSTPARAM.USERPROFILE}`)}
                         style={{
                             padding: "10px 20px",
                             borderRadius: "8px",
@@ -86,4 +87,4 @@ function UserMainPage() {
     );
 }
 
-export default UserMainPage;
+export default UserMainPage; 

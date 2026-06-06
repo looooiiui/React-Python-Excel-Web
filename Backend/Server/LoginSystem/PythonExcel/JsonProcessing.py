@@ -50,7 +50,7 @@ def convert_excel_to_dir(out_excel_worksheet: Optional[Worksheet]) -> dict:
         return {}
 
 # ===============================================================================#
-# 转换工作表为账号格式 { "名字": ["密码", "是否为管理员"] }
+# 转换工作表为账号格式 { "名字": ["密码", "是否为管理员", "是否被封禁"] }
 # 适配 Godot本地登录，查字典完成账号校验
 # 传参 (Excel工作表)，返回上述字典
 # ===============================================================================#
@@ -64,8 +64,9 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
         # 转换账户信息ID，需要的list容器
         excel_id_list:          list[str | None]        = []
         excel_password_list:    list[str | None]        = []
-        excel_name_list:        list[str | None]        = []
-        excel_account_dir:      dict[str , list]         = {}
+        excel_admin_list:       list[str | None]        = []
+        excel_permission_list:  list[str | None]        = []
+        excel_account_dir:      dict[str , list]        = {}
 
         # 添加数据内置的用于转化特定列的数据到存储列表的函数
         # 思路同上转化玩家存档数据
@@ -82,9 +83,9 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
                     excel_list.append(append_case)
 
         #==注意传进来的工作表不要 read_only=True 否则无法使用列迭代器 ==#
-        # 这里遍历 1 到 3 列 ，同样可以换成常数，分别指 ID PASSWORD ADMIN
+        # 这里遍历 1 到 4 列 ，同样可以换成常数，分别指 ID PASSWORD ADMIN PERMISSION
         for col_num, cell in enumerate(out_excel_worksheet.iter_cols(min_col=1, 
-                                                                     max_col=3, 
+                                                                     max_col=4, 
                                                                      min_row=2, 
                                                                      max_row=None), 
                                        start=1):
@@ -100,16 +101,20 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
                     append_value(cell, excel_password_list)
                 # 是否为管理员
                 case 3:
-                    append_value(cell, excel_name_list)
-                
+                    append_value(cell, excel_admin_list)
+                # 是否被封禁
+                case 4:
+                    append_value(cell, excel_permission_list)
+
         # 获得当前最小的数据列表长度
-        min_valid_length = min(len(excel_password_list), len(excel_name_list), len(excel_id_list))
+        max_valid_length = max(len(excel_password_list), len(excel_admin_list), len(excel_id_list), len(excel_permission_list))
 
         # 截断列表, 保证每一个数据所存的数据长度一致
         # 方便后续 zip 转化
-        excel_id_list           = excel_id_list[:min_valid_length]
-        excel_name_list         = excel_name_list[:min_valid_length]
-        excel_password_list     = excel_password_list[:min_valid_length]
+        #excel_id_list           = excel_id_list[:min_valid_length]
+        #excel_admin_list         = excel_admin_list[:min_valid_length]
+        #excel_password_list     = excel_password_list[:min_valid_length]
+        #excel_permission_list   = excel_permission_list[:min_valid_length]
         
         # 这里的思路是先将后面的所有数据整合成列表
         # 然后再和 ID 匹配转化成字典
@@ -117,9 +122,12 @@ def convert_excel_to_account(out_excel_worksheet: Optional[Worksheet]) -> dict:
         result_info_list: list[list[str]] = []
         # 整合结果字典 [[password, name]]
         result_info_list = [
-            [str(password), str(admin)]
-            for password, admin in zip(excel_password_list, 
-                                             excel_name_list)
+            [str(password), str(admin), str(permission)]
+            for password, admin, permission in zip(
+                excel_password_list, 
+                excel_admin_list,
+                excel_permission_list
+            )
         ]
 
 
@@ -202,6 +210,11 @@ def detect_login_information(input_info_dict: dict,
         if input_info_dict[login_info[0]][1] != "1":
             log("不为管理员用户!")
             return False, 4
+        
+    # 校验是否被封禁(有权限登录)
+    if (input_info_dict[login_info[0]][2] == "1"):
+        log("账户被封禁!")
+        return False, 5
 
     # 校验通过
     log("校验通过")

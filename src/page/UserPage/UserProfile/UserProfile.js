@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import LogoutButton from "../../../CustomComponents/CustomButton/LogoutButton";
+import Theme from "../../../Theme/theme";
 
 export default function UserProfile() {
     const userInfo = InfomationSystem.getCurrentLoginInfo();
@@ -17,12 +18,13 @@ export default function UserProfile() {
                 顶部用户卡片 
             ====================== */}
             <div style={{
-                background: "#fff",
+                backgroundColor: Theme.defalutColor,
                 padding: "20px 30px",
                 borderRadius: "12px",
                 boxShadow: "0 0 10px #0000006b",
                 display: "flex",
                 justifyContent: "space-between",
+                backdropFilter: "blur(10px)",
                 alignItems: "center",
                 marginBottom: "20px"
             }}>
@@ -45,17 +47,22 @@ export default function UserProfile() {
                 菜单 
             ====================== */}
             <div style={{
+                backgroundColor: Theme.defalutColor,
                 display: "flex",
                 gap: "10px",
                 marginBottom: "20px",
-                flexWrap: "wrap"
+                flexWrap: "wrap",
+                borderRadius: "16px",
+                backgroundClip: "padding-box",
+                backdropFilter: "blur(10px)",
+                overflow: "hidden",
             }}>
                 <button onClick={() => setTab("profile")}
                     style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "profile" ? "#1677ff" : "#f5f5f5", color: tab === "profile" ? "#fff" : "#000" }}>
                     个人资料
                 </button>
                 <button onClick={() => setTab("setting")}
-                    style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "setting" ? "#1677ff" : "#f5f5f5", color: tab === "profile" ? "#fff" : "#000" }}>
+                    style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "setting" ? "#1677ff" : "#f5f5f5", color: tab === "setting" ? "#fff" : "#000" }}>
                     安全设置
                 </button>
 
@@ -72,7 +79,8 @@ export default function UserProfile() {
                 内容区域 
             ====================== */}
             <div style={{
-                background: "#fff",
+                backdropFilter: "blur(10px)",
+                backgroundColor: Theme.defalutColor,
                 padding: "25px 30px",
                 borderRadius: "12px",
                 boxShadow: "0 0 10px #0000006b",
