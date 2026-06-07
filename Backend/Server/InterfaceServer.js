@@ -70,7 +70,7 @@ app.post(`${CONSTPARAM.INTERFACEURL}/getServerUrl`, async (req, res) => {
 
 // 启动监听
 app.listen(port, async () => {
-    console.log("接口后端运行中");
+    DebugTool.debugLog("接口后端运行中");
     var test = await getNacosConfig();
     DebugTool.debugLog("后端调取: " + JSON.stringify(test));
 });

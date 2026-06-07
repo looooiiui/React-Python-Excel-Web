@@ -1,7 +1,13 @@
+import { useEffect, useState } from "react";
 import { DebugTool } from "../Util/DebugTool/DebugTool";
+import axios from "axios";
 
-export default function MainPage() {
+function MainPage() {
     return (
-        <h1>欢迎来到我的主页!</h1>
+        <div>
+            <h1>欢迎来到我的主页!</h1>
+        </div>
     );
 }
+
+export default MainPage;

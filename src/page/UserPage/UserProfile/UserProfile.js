@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import LogoutButton from "../../../CustomComponents/CustomButton/LogoutButton";
+import AccountLists from "../../../CustomComponents/AccountList/AccountList";
 import Theme from "../../../Theme/theme";
 
 export default function UserProfile() {
@@ -105,6 +106,7 @@ export default function UserProfile() {
                     <div>
                         <h3>管理员后台</h3>
                         <p>只有管理员能看到这里！</p>
+                        <AccountLists />
                     </div>
                 )}
             </div>

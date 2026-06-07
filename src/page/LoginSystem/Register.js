@@ -14,7 +14,7 @@ const INPUTMAXLEN = 20;
 // 注册界面
 function Register() {
     // =================进入界面初始化===================
-    // InfomationSystem.clearOnlineState();
+    InfomationSystem.clearOnlineState();
     //==================================================
 
     const [accountId, setAccountId] = useState(""); // 绑定账号ID

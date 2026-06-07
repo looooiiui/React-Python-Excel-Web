@@ -11,6 +11,8 @@ class CONSTPARAM {
     static LOGINSERVERGROUP = "LOGINGROUP";
     static INTERFACESERVER = "Interface-Server";
     static INTERFACESERVERGROUP = "INTERFACEGROUP";
+    static INFOSERVER = "Info-Server";
+    static INFOSeRVERGROUP = "INFOSERVERGROUP";
     //==============标准后端返回=====================
     static WEBSUCCESSCODE = 200;         // 后端请求处理成功
     static WEBARGVERROR = 400;           // 传入参数错误

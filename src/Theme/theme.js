@@ -10,7 +10,7 @@ class Theme {
         backgroundImage: `
         url(${CONSTPARAM.NavLogo}),
         linear-gradient(to right,#3c457a 0%,#3c457a7e 100%)`,
-        backgroundSize: "contain, 100% 90%",
+        backgroundSize: "contain, 100% 70%",
         backgroundPosition: "center,center",
         backgroundRepeat: "no-repeat,no-repeat",
         backdropFilter: "blur(10px)",

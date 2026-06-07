@@ -247,6 +247,7 @@ def detect_id_excel_exist(read_data_name: str, file_read_path: str, detected_id:
         if detected_id in exist_dir:
             read_excel.close()
             return True
+        
         read_excel.close()
         return False
 

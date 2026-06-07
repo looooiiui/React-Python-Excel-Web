@@ -126,7 +126,7 @@ if __name__ == "__main__":
         if (godot_order == godot_login):
             login_verify(input_info)
         if (godot_order == godot_register):
-            register_info: list[str] = [input_name, input_pwd, "0"]
+            register_info: list[str] = [input_name, input_pwd, "0", "0"]
             register_verify(register_info)
         if (godot_order == godot_admin_login):
             admin_login_verify(input_info)
