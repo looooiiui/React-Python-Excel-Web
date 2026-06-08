@@ -1,8 +1,13 @@
 import { useState } from "react";
+//===============自定义组件引入============================
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import LogoutButton from "../../../CustomComponents/CustomButton/LogoutButton";
-import AccountLists from "../../../CustomComponents/AccountList/AccountList";
 import Theme from "../../../Theme/theme";
+// 选择栏
+import SelectionBar from "../../../CustomComponents/SelectionBar/SelectionBar";
+import SecurityCenterBar from "../../../CustomComponents/SelectionBar/SecurityCenterBar";
+import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+//========================================================
 
 export default function UserProfile() {
     const userInfo = InfomationSystem.getCurrentLoginInfo();
@@ -58,21 +63,21 @@ export default function UserProfile() {
                 backdropFilter: "blur(10px)",
                 overflow: "hidden",
             }}>
-                <button onClick={() => setTab("profile")}
-                    style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "profile" ? "#1677ff" : "#f5f5f5", color: tab === "profile" ? "#fff" : "#000" }}>
+                <ThemedButton onClick={() => setTab("profile")}>
                     个人资料
-                </button>
-                <button onClick={() => setTab("setting")}
-                    style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "setting" ? "#1677ff" : "#f5f5f5", color: tab === "setting" ? "#fff" : "#000" }}>
+                </ThemedButton>
+                <ThemedButton onClick={() => setTab("setting")}>
                     安全设置
-                </button>
+                </ThemedButton>
+                <ThemedButton onClick={() => setTab("personalCenter")}>
+                    个人中心
+                </ThemedButton>
 
                 {/* 管理员专用菜单 */}
                 {isAdmin && (
-                    <button onClick={() => setTab("admin")}
-                        style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: tab === "admin" ? "#ff4d4f" : "#f5f5f5", color: tab === "admin" ? "#fff" : "#000" }}>
+                    <ThemedButton onClick={() => setTab("admin")}>
                         管理员后台
-                    </button>
+                    </ThemedButton>
                 )}
             </div>
 
@@ -97,16 +102,19 @@ export default function UserProfile() {
 
                 {tab === "setting" && (
                     <div>
-                        <h3>安全设置</h3>
-                        <p>密码修改功能（可扩展）</p>
+                        <SecurityCenterBar />
+                    </div>
+                )}
+
+                {tab === "personalCenter" && (
+                    <div>
+                        <h3>个人中心</h3>
                     </div>
                 )}
 
                 {tab === "admin" && (
                     <div>
-                        <h3>管理员后台</h3>
-                        <p>只有管理员能看到这里！</p>
-                        <AccountLists />
+                        <SelectionBar />
                     </div>
                 )}
             </div>

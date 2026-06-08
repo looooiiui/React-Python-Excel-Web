@@ -8,11 +8,12 @@ import CONSTPARAM from "../Core/CONST/CONST";
 
 const loginVerifyURL = "/user/login";
 const registerVerifyURL = "/user/register";
+const adminBanURL = "/ban"
 
 // 基本账户信息
-var accountInfo = { "accountId": "" };
-var accountOnlineState = false;
-var isAdmin = false;
+let accountInfo = { "accountId": "" };
+let accountOnlineState = false;
+let isAdmin = false;
 
 //============基本常量========================================
 
@@ -37,7 +38,7 @@ export class InfomationSystem {
         accountInfo.accountId = String(accountId).trim();
 
         DebugTool.debugLog("前端信息中心: 账号信息接收数组: " + JSON.stringify(accountInfo));
-        DebugTool.debugLog("前端信息中心: 后端地址: " + CONSTPARAM.LOGINIP + loginVerifyURL);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + CONSTPARAM.LOGINIP + CONSTPARAM.LOGINBASE);
 
         // 发送对应类型检测
         // "0" 为登录中普通登录
@@ -49,6 +50,24 @@ export class InfomationSystem {
         } else if (param === 2) {
             sendLoginInfo(accountId, password, callback, ADMINPARMA);
         }
+    }
+
+    // 封禁指令发出
+    static sendBanOperator(accountId, callback) {
+        accountId = String(accountId).trim();
+        DebugTool.debugLog("前端信息中心: 账号信息接收账户名: " + accountId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + CONSTPARAM.LOGINIP + CONSTPARAM.LOGINBASE + adminBanURL);
+
+        sendBanInfo(accountId, callback);
+    }
+
+    // 信息修改指令发出
+    static sendChangeOperator(changeInfo, param, callback) {
+        changeInfo = String(changeInfo).trim();
+        DebugTool.debugLog("前端信息中心: 接收修改信息名: " + changeInfo);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + CONSTPARAM.LOGINIP + CONSTPARAM.LOGINBASE + CONSTPARAM.USERBASEURL + CONSTPARAM.INFOCHANGEURL);
+
+        sendChangeInfo(changeInfo, param, callback);
     }
     // 得到当前登录状态
     static getCurrentLoginState() {
@@ -91,10 +110,10 @@ function sendLoginInfo(accountId, password, callback, adminParam) {
     DebugTool.debugLog("前端信息中心: 发送管理员状态: " + adminParam)
 
     // 建立发送字典
-    var sendInfo = { accountId, password, adminParam };
+    let sendInfo = { accountId, password, adminParam };
 
     // 发送验证请求
-    axios.post(`${CONSTPARAM.LOGINIP}${loginVerifyURL}`, sendInfo, {
+    axios.post(`${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${loginVerifyURL}`, sendInfo, {
         timeout: 5000
     })
         .then((res) => {
@@ -111,15 +130,66 @@ function sendLoginInfo(accountId, password, callback, adminParam) {
         });
 }
 
+// 发送更改请求
+function sendChangeInfo(changeInfo, param, callback) {
+    let accountId = accountInfo.accountId;
+    DebugTool.debugLog("前端信息中心: 更改信息状态: " + param)
+
+    // 建立发送字典
+    let sendInfo = { accountId, changeInfo, param };
+
+    // 发送更改请求
+    axios.post(`${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${CONSTPARAM.USERBASEURL}${CONSTPARAM.INFOCHANGEURL}`, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 修改请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 修改请求失败: " + err.message + err.response?.data);
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+}
+
+// 发送封禁请求
+function sendBanInfo(accountId, callback) {
+    // 验证身份
+    if (!isAdmin) {
+        DebugTool.debugLog("前端信息中心: 封禁请求失败: 账户不为管理员");
+        callback(BACKERROR);
+        return BACKERROR;
+    }
+
+    accountId = String(accountId);
+    // 建立发送字典
+    let sendInfo = { accountId };
+    axios.post(`${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${CONSTPARAM.ADMINBASE}${adminBanURL}`, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 封禁请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 封禁请求失败: " + err.message + err.response?.data);
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+}
+
 // 发送注册检测
 function sendRegisterInfo(accountId, password, callback) {
     accountId = String(accountId);
     password = String(password);
     // 建立发送字典
-    var sendInfo = { accountId, password };
+    let sendInfo = { accountId, password };
 
     // 发送验证请求
-    axios.post(`${CONSTPARAM.LOGINIP}${registerVerifyURL}`, sendInfo, {
+    axios.post(`${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${registerVerifyURL}`, sendInfo, {
         timeout: 5000
     })
         .then((res) => {

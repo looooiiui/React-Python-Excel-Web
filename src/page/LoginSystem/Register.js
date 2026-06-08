@@ -8,6 +8,9 @@ import Theme from "../../Theme/theme";
 import CONSTPARAM from "../../Core/CONST/CONST";
 //============================================
 
+//=============自定义组件引入================
+import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+
 // 用户常量
 const INPUTMAXLEN = 20;
 
@@ -87,9 +90,9 @@ function Register() {
                 />
                 <p>{registerInfo}</p>
             </div>
-            <button onClick={() => { RegisterConfirm() }} style={{
+            <ThemedButton onClick={() => { RegisterConfirm() }} style={{
                 inlineSize: "100px"
-            }}>注册</button>
+            }}>注册</ThemedButton>
         </div>
     );
 }

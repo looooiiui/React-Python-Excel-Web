@@ -4,7 +4,6 @@ const { promisify } = require('util');
 const execAsync = promisify(exec);
 const { DebugTool } = require('../../../src/Util/DebugTool/DebugTool');
 
-
 //=========Python执行路径(绝对路径)==========
 const pythonPath = path.join(__dirname, "./PythonExcel/FileProcessingMain.py");
 const accountExcelPath = path.join(__dirname, "./PythonExcel/AccountInfomation.xlsx");
@@ -12,7 +11,7 @@ const accountExcelPath = path.join(__dirname, "./PythonExcel/AccountInfomation.x
 //==========验证参数===================
 const LOGINPARAM = "0";         // 登录请求参数 
 const REGISTERPARAM = "1";      // 注册请求操作
-
+const ADMINBANOPERATOR = "3"    // 封禁指令
 //=========登录信息校验基本信息返回映射表============
 const LOGINMAP = {
     "-3": "后端程序运行出错",
@@ -31,10 +30,73 @@ const REGISTERMAP = {
     "2": "账户已被注册"
 };
 
+// 调用Python更改封禁状态(4参数)
+async function pythonBanOperator(accountId) {
+    try {
+        // ========格式化入形式为字符串==============
+        var transmitParma = ADMINBANOPERATOR;
+        accountId = String(accountId);
+        var cmd = `python "${pythonPath}" "${accountExcelPath}" "${transmitParma}" "${accountId}"`;
+
+        DebugTool.debugLog("执行命令：" + cmd);
+
+        const { stdout, stderr } = await execAsync(cmd);
+
+        if (stderr) {
+            DebugTool.debugLog("Python: 脚本报错:" + stderr);
+            return "-3";
+        }
+
+        // 处理结果交出
+        const result = stdout.trim();
+        DebugTool.debugLog("Python: 输出: " + result);
+        return result;
+
+        // 程序异常
+    } catch (error) {
+        DebugTool.debugLog("Python: 执行错误: " + error);
+        return "-3";
+    }
+}
+
+// 调用Python修改账户信息
+async function pythonInfoChange(accountId, changeInfo, param) {
+    try {
+        // ========格式化入形式为字符串==============
+        var transmitParma = String(param);
+        accountId = String(accountId);
+        changeInfo = String(changeInfo);
+        var cmd = `python "${pythonPath}" "${accountExcelPath}" "${transmitParma}" "${accountId}" "${changeInfo}"`;
+
+        DebugTool.debugLog("执行命令：" + cmd);
+
+        // 等待程序执行完成
+        const { stdout, stderr } = await execAsync(cmd);
+
+        if (stderr) {
+            DebugTool.debugLog("Python: 脚本报错:" + stderr);
+            return "-3";
+        }
+
+        // 处理结果交出
+        const result = stdout.trim();
+        DebugTool.debugLog("Python: 输出: " + result);
+        return result;
+
+        // 程序异常
+    } catch (error) {
+        DebugTool.debugLog("Python: 执行错误: " + error);
+        return "-3";
+    }
+}
+
 // 调用Python验证账户状态
 async function pythonVerify(accountId, password, param) {
     try {
+        // ========格式化入形式为字符串==============
         var transmitParma = String(param);
+        accountId = String(accountId);
+        password = String(password);
         var cmd = `python "${pythonPath}" "${accountExcelPath}" "${transmitParma}" "${accountId}" "${password}"`;
 
         DebugTool.debugLog("执行命令：" + cmd);
@@ -51,6 +113,7 @@ async function pythonVerify(accountId, password, param) {
         const result = stdout.trim();
         DebugTool.debugLog("Python: 输出: " + result);
         return result;
+
         // 程序异常
     } catch (error) {
         DebugTool.debugLog("Python: 执行错误: " + error);
@@ -108,5 +171,7 @@ module.exports = {
     pythonVerify,
     transmitArgvConvert,
     verifyAccountNotEmpty,
-    convertVerifyInfo
+    convertVerifyInfo,
+    pythonBanOperator,
+    pythonInfoChange,
 };

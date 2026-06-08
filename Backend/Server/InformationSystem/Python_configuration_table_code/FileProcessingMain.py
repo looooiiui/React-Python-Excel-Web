@@ -28,8 +28,8 @@ DEFAULT_JSON_PATH   : str   = "InjectionConvert.json"
 DEFAULT_PARAM_NUM:          int = 4     # Godot传入参数数量
 DEFAULT_PYTHON_PATH:        int = 0     # Godot传入Python路径(绝对)
 DEFAULT_START_PARAM:        int = 1     # Godot传入启动参量
-DEFAULT_GODOT_NORMAL_PATH:  int = 2     # Godot默认地址传参
-DEFAULT_GODOT_JSON_PATH:    int = 3     # Godot默认注入Json路径
+DEFAULT_WEB_NORMAL_PATH:  int = 2     # Godot默认地址传参
+DEFAULT_WEB_JSON_PATH:    int = 3     # Godot默认注入Json路径
 #===============================================================#
 
 #========================Godot启动参量===========================#
@@ -60,8 +60,8 @@ def load_godot_arguments() -> None:
 
     # 初始化收到参数
     receive_param       = sys.argv[DEFAULT_START_PARAM]
-    godot_base_path     = sys.argv[DEFAULT_GODOT_NORMAL_PATH]
-    godot_json_path     = sys.argv[DEFAULT_GODOT_JSON_PATH]
+    godot_base_path     = sys.argv[DEFAULT_WEB_NORMAL_PATH]
+    godot_json_path     = sys.argv[DEFAULT_WEB_JSON_PATH]
 
 
     DEFAULT_EXCEL_PATH = godot_base_path + DEFAULT_EXCEL_PATH

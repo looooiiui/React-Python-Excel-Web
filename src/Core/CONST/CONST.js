@@ -8,17 +8,22 @@ class CONSTPARAM {
     static LOGINURL = "/Login"; // 登录页面
     static ABOUTURL = "/Bbout"; // 关于
     static REGISTERURL = "/Register"; // 注册
+    static INFOCHANGEURL = "/infochange"
     static USERBASEURL = "/user"; // 用户基址
     static USERPROFILE = "/profile"; // 简介基址
+    static TRAINEEMANAGERURL = "/traineesManager" // 学员管理基址
+    static SECURITYCENTERURL = "/securtiyCenter" // 安全中心基址
 
     //===================后端基址==========================
+    static ADMINBASE = "/admin"; //管理基址
     static LOGINBASE = "/api";  // 登录基址
     static INTERFACEBASE = "/interface"; //接口基址
     static INFOBASE = "/info" // 信息基址
     //==================资源地址=====================
     static NavLogo = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
     static MainBackgoundLogo = "Logo/MainLogo/BackgoundLogo/Backgound.PNG";
-    //=================IP==================
+    static ManagerBackground = "Logo/MainLogo/BackgoundLogo/ManagerBackground/ManagerBackground.PNG";
+    //=================服务IP==================
     static INTERFACEIP = "http://26.224.10.101:5001";
     static INFOIP = "";
     static LOGINIP = "";
@@ -26,9 +31,19 @@ class CONSTPARAM {
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
     static NACOSINTERFACE = "Interface-Server";
+
+    //=================数值常量================
+    static INPUTMAXLEN = 20;
+
+    //===================信息修改传输基本参数===============
+    static PASSWORDCHANGE = "4";
+
 }
-initializeLoginUrl()
-initializeInfoUrl()
+
+//===========初始化注入IP===============
+await initializeLoginUrl()
+await initializeInfoUrl()
+//======================================
 
 // 初始化网站与后端基址(登录系统)
 async function initializeLoginUrl() {

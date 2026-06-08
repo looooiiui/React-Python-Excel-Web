@@ -4,6 +4,9 @@ import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import Theme from "../../Theme/theme";
 import CONSTPARAM from "../../Core/CONST/CONST";
+//============自定组件引入=============
+import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+
 
 function UserMainPage() {
     const { id } = useParams(); // 路由里的用户ID
@@ -69,7 +72,7 @@ function UserMainPage() {
 
                 {/* 快速入口 */}
                 <div style={{ marginTop: "20px", display: "flex", gap: "15px", justifyContent: "center" }}>
-                    <button
+                    <ThemedButton
                         onClick={() => navigate(`${CONSTPARAM.USERBASEURL}/${id}/${CONSTPARAM.USERPROFILE}`)}
                         style={{
                             padding: "10px 20px",
@@ -80,7 +83,7 @@ function UserMainPage() {
                         }}
                     >
                         个人中心
-                    </button>
+                    </ThemedButton>
                 </div>
             </div>
         </div>

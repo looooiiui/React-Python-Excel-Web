@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 //==========自定义工具组引入===================
 import Theme from "../../Theme/theme";
 import CONSTPARAM from "../../Core/CONST/CONST";
+import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 //============================================
 
 
@@ -102,10 +103,10 @@ function Login() {
                 <p>{loginInfo}</p>
             </div>
             <div style={{ display: "flex", gap: "30px" }}>
-                <button onClick={() => { LoginConfirm() }} style={{
+                <ThemedButton onClick={() => { LoginConfirm() }} style={{
                     inlineSize: '100px'
-                }}>登录</button>
-                <button onClick={() => { administratorStateChange() }}>管理员</button>
+                }}>登录</ThemedButton>
+                <ThemedButton onClick={() => { administratorStateChange() }}>管理员</ThemedButton>
                 <input
                     type="checkbox"
                     checked={administrator}

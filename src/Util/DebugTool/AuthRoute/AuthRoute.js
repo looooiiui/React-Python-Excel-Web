@@ -5,7 +5,7 @@ import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import CONSTPARAM from "../../../Core/CONST/CONST";
 import { DebugTool } from "../DebugTool";
 
-function AuthRoute({ children }) {
+function AuthRoute({ children, requireAdmin = false }) {
     const loc = useLocation();
     const LOGINURL = "/Login";
 
@@ -13,6 +13,11 @@ function AuthRoute({ children }) {
     // 得到当前登录状态(检查登录状态)
     const isLogin = InfomationSystem.getCurrentLoginState();
     if (!isLogin) {
+        return <Navigate to={LOGINURL} state={{ from: loc.pathname }} replace />
+    }
+
+    // 管理员权限
+    if (requireAdmin && !InfomationSystem.getAdminState()) {
         return <Navigate to={LOGINURL} state={{ from: loc.pathname }} replace />
     }
 

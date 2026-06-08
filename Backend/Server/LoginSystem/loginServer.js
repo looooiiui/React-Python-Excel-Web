@@ -10,6 +10,9 @@ const { pythonVerify } = require("./LoginSystem");
 const { transmitArgvConvert } = require("./LoginSystem");
 const { verifyAccountNotEmpty } = require("./LoginSystem");
 const { convertVerifyInfo } = require("./LoginSystem");
+const { pythonBanOperator } = require("./LoginSystem");
+const { pythonInfoChange } = require("./LoginSystem");
+
 //===============================================================
 const { CONSTPARAM } = require("../Core/CONST/CONST");
 
@@ -96,6 +99,13 @@ const naming = new NacosNamingClient({
 })()
 
 //=============================================
+/*
+    后端传入Python参数与Python脚本内处理参数一致
+    Param 对应参数以及效果:
+    "0": 验证普通用户
+    "1": 注册普通用户
+    "2": 验证管理员用户
+*/
 
 // 登录信息送入
 app.post(`${CONSTPARAM.BACKENDBASEURL}/user/login`, async (req, res) => {
@@ -105,7 +115,7 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/login`, async (req, res) => {
 
         DebugTool.debugLog("后端主程序: 接收登录参数: " + adminParam);
         // 检验输入账号或者密码是否为空
-        if (!verifyAccountNotEmpty(accountId, password)) {
+        if (!verifyAccountNotEmpty(accountId.trim(), password.trim())) {
             return res.json({
                 "code": WEBSUCCESSCODE,
                 "message": "账户密码不能为空",
@@ -152,7 +162,7 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/register`, async (req, res) => {
         const { accountId, password } = req.body;
 
         // 检验输入账号或者密码是否为空
-        if (!verifyAccountNotEmpty(accountId, password)) {
+        if (!verifyAccountNotEmpty(accountId.trim(), password.trim())) {
             return res.json({
                 "code": WEBSUCCESSCODE,
                 "message": "账户密码不能为空",
@@ -184,6 +194,63 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/register`, async (req, res) => {
         });
     }
 });
+
+// 封禁请求送入
+app.post(`${CONSTPARAM.BACKENDBASEURL}/admin/ban`, async (req, res) => {
+    try {
+        // 获取账户信息
+        const { accountId } = req.body;
+
+        // 等待命令完成
+        const result = await pythonBanOperator(accountId)
+        var returnValue = transmitArgvConvert(result);
+
+        // 原始返回结果
+        var originalResult = {
+            "code": WEBSUCCESSCODE,
+            "message": returnValue == "0" ? "封禁完成" : "封禁失败",
+            "data": returnValue
+        }
+
+        // 返回结果
+        return res.json(originalResult);
+
+    } catch (err) {
+        return res.status(500).json({
+            "code": WEBSERVERERROR,
+            "message": "封禁错误",
+            "data": "-3"
+        });
+    }
+})
+
+// 信息更改请求送入
+app.post(`${CONSTPARAM.BACKENDBASEURL}/user/infochange`, async (req, res) => {
+    try {
+        // 获取账户信息
+        const { accountId, changeInfo, param } = req.body;
+
+        // 等待命令完成
+        const result = await pythonInfoChange(accountId, changeInfo, param);
+        var returnValue = transmitArgvConvert(result);
+
+        // 原始返回结果
+        var originalResult = {
+            "code": WEBSUCCESSCODE,
+            "message": returnValue == "0" ? "信息更新完成" : "信息更新失败",
+            "data": returnValue
+        }
+
+        // 返回结果
+        return res.json(originalResult);
+    } catch (error) {
+        return res.status(500).json({
+            "code": WEBSERVERERROR,
+            "message": "信息更新错误",
+            "data": returnValue
+        });
+    }
+})
 
 // 启动监听
 app.listen(port, async () => {

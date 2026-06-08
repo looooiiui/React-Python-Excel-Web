@@ -3,6 +3,9 @@ from openpyxl.worksheet.worksheet import Worksheet        # 工作表类
 from openpyxl.workbook.workbook import Workbook           # 工作簿类
 from openpyxl import load_workbook                        # 加载Excel函数
 from typing import Optional                               # 多类型注释，用于函数返回多类型
+#===============自定义工具引入================
+from CONST import CONSTPARAM
+
 
 #====允许调试信息(防止 print() 输出到Godot捕获参数列表)====#
 DEBUG = False
@@ -127,7 +130,7 @@ def read_from_excel(file_read_path: str,
     except Exception as e:
         log(f"read failed{e}")
         # 打开了就关闭Excel
-        if read_excel:
+        if read_excel is not None:
             read_excel.close()
         return None
     
@@ -208,7 +211,7 @@ def write_new_account(read_data_name: str,
     # 写入失败处理
     except Exception as e:
         log(f"write failed: {e}")
-        if read_excel:
+        if read_excel is not None:
             read_excel.close()
         return False, -1
 
@@ -254,7 +257,7 @@ def detect_id_excel_exist(read_data_name: str, file_read_path: str, detected_id:
     #=====检测出现异常，用于调试======#
     except Exception as e:
         log(f"查找Excel出现问题: {e}")
-        if read_excel:
+        if read_excel is not None:
             read_excel.close()
         return False
     
@@ -276,6 +279,9 @@ def verify_account_data(acc_info: list[str]) -> tuple[bool, str]:
     # 返回 bool 类型
     if not acc_id:
         return False, "账号ID不能为空或全空格"
+    if not acc_password:
+        return False, "密码不能全为空或空格"
+    
     if len(acc_id) < 3:
         return False, "账号长度不能小于3"
     # 这里右边 per_char 会遍历组成一个表格，只有非法字符会成为元素
@@ -283,6 +289,7 @@ def verify_account_data(acc_info: list[str]) -> tuple[bool, str]:
     if any(per_char in r'\/:*?"<>|“”‘’。+-=*，$%#@!^&*()__++]\';/.,/., （）()/【】、‘' for per_char in acc_id):
         return False, "账号ID包含非法特殊字符"
     
+
     #====密码校验====#
     if not acc_password:
         return False, "密码不能为空"
@@ -290,3 +297,134 @@ def verify_account_data(acc_info: list[str]) -> tuple[bool, str]:
         return False, "密码长度不能小于4"
     
     return True, "校验通过"
+
+# 更改账户封禁状态
+def change_ban_state(
+        read_data_name: str,
+        file_read_path: str,
+        accountId: Optional[str]
+        ) -> tuple[bool, int]:
+    
+    # 空名处理
+    if accountId == None:
+        return False, -1
+
+    read_excel = None
+    try:
+        #=====这里调用了下面验证Excel中玩家是否存在的函数=====#
+        #==================返回值为bool类型==================#
+        #=== 参数 (Excel工作表名字，Excel路径，查找账户ID) ===#
+        if not detect_id_excel_exist(read_data_name, file_read_path, accountId):
+            log(f"修改封禁ID不存在: {accountId}")
+            return False, -1
+        #===修改Excel表格，则Excel读取不能启用 read_only=True ===#
+        read_excel = load_workbook(file_read_path, read_only=False)
+        # 检查工作表存在
+        if read_data_name not in read_excel.sheetnames:
+            log(f"工作表'{read_data_name}' 不存在")
+            read_excel.close()
+            return False, -1
+        
+        #====选中工作表,获得ID(首列)列====#
+        read_excel_sheet = read_excel[read_data_name]
+        read_sheet_first = read_excel_sheet["A"]
+        #====遍历寻找用户ID====#
+        for current_row, cell in enumerate(read_sheet_first, start=1):
+            # 略过第一个属性名
+            if current_row == 1:
+                continue
+
+            # 将所有玩家ID放入字典，用于后续检测
+            if str(cell.value) == accountId:
+                # 反转用户封禁状态
+                pre_state = read_excel_sheet.cell(row=current_row, column=CONSTPARAM.DEFAULT_BAN_INDEX).value
+                # 翻转状态
+                new_val = "1" if pre_state == "0" else "0"
+
+                read_excel_sheet.cell(
+                    row=current_row, 
+                    column=CONSTPARAM.DEFAULT_BAN_INDEX,         
+                    value=new_val
+                )
+                # 保存修改结果     
+                read_excel.save(file_read_path)
+                read_excel.close()
+                return True, CONSTPARAM.BANNED_SUCCESS
+        
+        read_excel.close()
+        return False, -1
+        
+    # 修改失败处理
+    except Exception as e:
+        log(f"修改失败: {e}")
+        if read_excel is not None:
+            read_excel.close()
+        return False, -1
+    
+# 更改账户信息
+def change_personal_info(
+        read_data_name: str,
+        file_read_path: str,
+        accountId: Optional[str],
+        changeInfo: Optional[str], 
+        changeIndex: int,
+        ) -> tuple[bool, int]:
+    
+    # 空名处理
+    if accountId == None or changeInfo == None:
+        return False, -1
+    
+    # 空白信息不能替换
+    changeInfo = str(changeInfo).replace(" ", "")
+    if not changeInfo:
+        return False, -1
+    read_excel = None
+    try:
+        #=====这里调用了下面验证Excel中玩家是否存在的函数=====#
+        #==================返回值为bool类型==================#
+        #=== 参数 (Excel工作表名字，Excel路径，查找账户ID) ===#
+        if not detect_id_excel_exist(read_data_name, file_read_path, accountId):
+            log(f"修改封禁ID不存在: {accountId}")
+            return False, -1
+        #===修改Excel表格，则Excel读取不能启用 read_only=True ===#
+        read_excel = load_workbook(file_read_path, read_only=False)
+
+        # 检查工作表存在
+        if read_data_name not in read_excel.sheetnames:
+            log(f"工作表'{read_data_name}' 不存在")
+            read_excel.close()
+            return False, -1
+        
+        #====选中工作表,获得ID(首列)列====#
+        read_excel_sheet = read_excel[read_data_name]
+        read_sheet_first = read_excel_sheet["A"]
+
+        #====遍历寻找用户ID====#
+        for current_row, cell in enumerate(read_sheet_first, start=1):
+            # 略过第一个属性名
+            if current_row == 1:
+                continue
+
+            # 将所有玩家ID放入字典，用于后续检测
+            if str(cell.value) == accountId:
+
+                read_excel_sheet.cell(
+                    row=current_row, 
+                    column=changeIndex,         
+                    value=changeInfo
+                )
+
+                # 保存修改结果     
+                read_excel.save(file_read_path)
+                read_excel.close()
+                return True, CONSTPARAM.CHANGE_SUCCESS
+        
+        read_excel.close()
+        return False, -1
+        
+    # 修改失败处理
+    except Exception as e:
+        log(f"修改失败: {e}")
+        if read_excel is not None:
+            read_excel.close()
+        return False, -1

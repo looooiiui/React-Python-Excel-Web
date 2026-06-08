@@ -9,8 +9,8 @@ class Theme {
         padding: "0 18px",
         backgroundImage: `
         url(${CONSTPARAM.NavLogo}),
-        linear-gradient(to right,#3c457a 0%,#3c457a7e 100%)`,
-        backgroundSize: "contain, 100% 70%",
+        linear-gradient(to right,#3c457a 0%,#0047AB 100%)`,
+        backgroundSize: "contain, 100% 100%",
         backgroundPosition: "center,center",
         backgroundRepeat: "no-repeat,no-repeat",
         backdropFilter: "blur(10px)",
@@ -98,7 +98,7 @@ class Theme {
         boxSizing: "border-box"
     }
 
-
+    // 底部导航栏
     static FooterCopyrightTheme = {
         width: "100%",
         backgroundColor: "#0048b3ce",
@@ -107,6 +107,33 @@ class Theme {
         fontSize: "13px",
         color: "#ffffff"
     }
+
+    // 管理后台主题
+    static ManagerBackendTheme = {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundImage: `url(${CONSTPARAM.ManagerBackground})`,
+        backgroundSize: "cover",
+        zIndex: -1,
+        backgroundColor: "#0047AB",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+    }
+
+    // 主题色(按钮)
+    static theme = {
+        primary: "#0047AB",         // 主色
+        primaryHover: "#003580",    // hover 加深
+        primaryActive: "#002455",   // 点击更深
+        default: "#e5e7eb",         // 次要按钮背景
+        defaultText: "#1f2937",     // 次要按钮文字
+        disabled: "#94a3b8",        // 禁用色
+        radius: "6px",
+        transition: "all 0.2s ease"
+    };
 
 }
 

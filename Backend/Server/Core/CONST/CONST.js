@@ -20,8 +20,6 @@ class CONSTPARAM {
     static WEBPERMESSIONERROR = 403;     // 后端权限错误
     static WEBEXISTERROR = 404;          // 后端存在错误
     static WEBSERVERERROR = 500;         // 后端服务器错误
-    //==============================================
-
 }
 
 module.exports = {

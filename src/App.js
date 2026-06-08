@@ -7,6 +7,8 @@ import Register from './page/LoginSystem/Register';
 import MainPage from './page/MainPage';
 import UserMainPage from './page/UserPage/UserMainPage';
 import UserProfile from './page/UserPage/UserProfile/UserProfile';
+import AccountManger from './page/UserPage/AdminPage/AccountManager/AccountManager';
+import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
 
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
@@ -76,6 +78,8 @@ function App() {
           <Route path={CONSTPARAM.ABOUTURL} element={<Bbout />} />
           <Route path={CONSTPARAM.LOGINURL} element={<Login />} />
           <Route path={CONSTPARAM.REGISTERURL} element={<Register />} />
+          <Route path={CONSTPARAM.TRAINEEMANAGERURL} element={<AuthRoute requireAdmin={true}><AccountManger /></AuthRoute>} />
+          <Route path={CONSTPARAM.SECURITYCENTERURL} element={<AuthRoute><SecurityCenter /></AuthRoute>} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
           <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />
