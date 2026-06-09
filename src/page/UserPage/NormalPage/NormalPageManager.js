@@ -1,4 +1,4 @@
-
+import Theme from "../../../Theme/theme";
 // 普通用户页
 function NormalPageManager() {
     return (

@@ -6,6 +6,7 @@ import Theme from "../../../Theme/theme";
 // 选择栏
 import SelectionBar from "../../../CustomComponents/SelectionBar/SelectionBar";
 import SecurityCenterBar from "../../../CustomComponents/SelectionBar/SecurityCenterBar";
+import ProjectCenterBar from "../../../CustomComponents/SelectionBar/ProjectCenterBar";
 import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 //========================================================
 
@@ -72,6 +73,9 @@ export default function UserProfile() {
                 <ThemedButton onClick={() => setTab("personalCenter")}>
                     个人中心
                 </ThemedButton>
+                <ThemedButton onClick={() => setTab("projectionCenter")}>
+                    项目中心
+                </ThemedButton>
 
                 {/* 管理员专用菜单 */}
                 {isAdmin && (
@@ -115,6 +119,12 @@ export default function UserProfile() {
                 {tab === "admin" && (
                     <div>
                         <SelectionBar />
+                    </div>
+                )}
+
+                {tab === "projectionCenter" && (
+                    <div>
+                        <ProjectCenterBar />
                     </div>
                 )}
             </div>

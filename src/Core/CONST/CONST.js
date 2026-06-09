@@ -13,6 +13,7 @@ class CONSTPARAM {
     static USERPROFILE = "/profile"; // 简介基址
     static TRAINEEMANAGERURL = "/traineesManager" // 学员管理基址
     static SECURITYCENTERURL = "/securtiyCenter" // 安全中心基址
+    static PROJECTIONCENTERURL = "/projectCenter" // 项目中心
 
     //===================后端基址==========================
     static ADMINBASE = "/admin"; //管理基址
@@ -27,10 +28,12 @@ class CONSTPARAM {
     static INTERFACEIP = "http://26.224.10.101:5001";
     static INFOIP = "";
     static LOGINIP = "";
+    static PROJECTIONCENTERIP = "";
     //================Nacos服务名字=============
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
     static NACOSINTERFACE = "Interface-Server";
+    static NACOSPROJECTION = "Projection-Server";
 
     //=================数值常量================
     static INPUTMAXLEN = 20;
@@ -43,6 +46,7 @@ class CONSTPARAM {
 //===========初始化注入IP===============
 await initializeLoginUrl()
 await initializeInfoUrl()
+await initializeProjectUrl()
 //======================================
 
 // 初始化网站与后端基址(登录系统)
@@ -75,6 +79,22 @@ async function initializeInfoUrl() {
     // 注入信息系统地址
     CONSTPARAM.INFOIP = `${data.url}`;
     DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.INFOIP}`)
+}
+
+// 初始化网站与项目基址(项目系统)
+async function initializeProjectUrl() {
+    var sendName = { serverName: CONSTPARAM.NACOSPROJECTION }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName);
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入信息系统地址
+    CONSTPARAM.PROJECTIONCENTERIP = `${data.url}`;
+    DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.PROJECTIONCENTERIP}`)
 }
 
 export default CONSTPARAM;

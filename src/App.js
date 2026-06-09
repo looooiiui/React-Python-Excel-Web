@@ -9,6 +9,7 @@ import UserMainPage from './page/UserPage/UserMainPage';
 import UserProfile from './page/UserPage/UserProfile/UserProfile';
 import AccountManger from './page/UserPage/AdminPage/AccountManager/AccountManager';
 import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
+import ProjectCenter from './page/UserPage/NormalPage/ProjectCenter';
 
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
@@ -80,6 +81,7 @@ function App() {
           <Route path={CONSTPARAM.REGISTERURL} element={<Register />} />
           <Route path={CONSTPARAM.TRAINEEMANAGERURL} element={<AuthRoute requireAdmin={true}><AccountManger /></AuthRoute>} />
           <Route path={CONSTPARAM.SECURITYCENTERURL} element={<AuthRoute><SecurityCenter /></AuthRoute>} />
+          <Route path={CONSTPARAM.PROJECTIONCENTERURL} element={<AuthRoute><ProjectCenter /></AuthRoute>} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
           <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />
@@ -104,7 +106,7 @@ function App() {
           ©2026 项目后台管理系统 版权所有 | 浙ICP备XXXX号
         </div>
       </footer>
-    </div>
+    </div >
 
   );
 }
