@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 5003;
+const port = 4002;
 
 //=======================自定义工具===============================
 const { DebugTool } = require('../../../../src/Util/DebugTool/DebugTool');
@@ -33,11 +33,11 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.PROJECTIONSERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: port },
+        { ip: CONSTPARAM.CONNECTIP, port: 5003 },
     );
 })()
 
 // 启动监听
 app.listen(port, async () => {
-    DebugTool.debugLog("代理信息后端运行中");
+    DebugTool.debugLog("项目代理信息后端运行中");
 });

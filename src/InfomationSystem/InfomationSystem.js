@@ -61,6 +61,20 @@ export class InfomationSystem {
         sendBanInfo(accountId, callback);
     }
 
+    // 项目加入指令发出
+    static sendJoinProjectionOper(projectionId, callback) {
+        DebugTool.debugLog("前端信息中心: 接收加入项目名: " + projectionId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${loginVerifyURL}`);
+
+        // 确认加入身份
+        let isAdminInt = "0";
+        if (isAdmin) {
+            isAdminInt = "2";
+        }
+
+        sendJoinProjection(projectionId, isAdminInt, callback);
+    }
+
     // 信息修改指令发出
     static sendChangeOperator(changeInfo, param, callback) {
         changeInfo = String(changeInfo).trim();
@@ -125,6 +139,31 @@ function sendLoginInfo(accountId, password, callback, adminParam) {
         })
         .catch((err) => {
             DebugTool.debugLog("前端信息中心: 登录请求失败: " + err.message + err.response?.data);
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+}
+
+// 加入项目请求
+function sendJoinProjection(projectionId, isAdminInt, callback) {
+    let accountId = String(accountInfo.accountId);
+    let isAdmin = String(isAdminInt);
+    projectionId = Number(projectionId);
+    DebugTool.debugLog("前端信息中心: 尝试加入项目: 项目ID: " + projectionId);
+
+    // 建立发送字典
+    let sendInfo = { accountId, projectionId, isAdmin };
+
+    axios.post(`${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/join`, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 项目加入请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 项目加入请求失败: " + err.message + JSON.stringify(err.response?.data));
             callback(BACKERROR);
             return BACKERROR;
         });

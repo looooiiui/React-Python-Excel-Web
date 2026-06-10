@@ -6,6 +6,9 @@ from typing import Optional
 import sys
 from CONST import CONSTPARAM
 
+#=================验证系统================
+from ExcelProcessing import verify_account_data
+
 #============= MySQL 配置 ==================#
 DB_CONFIG = {
     "host": "localhost",
@@ -30,6 +33,31 @@ default_order_pwd_index:        int = 4
 default_godot_argv_len:         int = 5
 default_no_password_argv:       int = 4
 
+
+'''规定登录系统向前端的传参:
+
+登录:
+返回值说明:
+- 元组第1位:是否校验通过(True=通过,False=不通过)
+- 元组第2位:状态码
+    - 0 : 账号验证通过
+    - 1 : 账户信息不存在
+    - 2 : 账号信息验证错误（信息不全/密码错误）
+
+注册:
+账户注册处理
+返回-1: 程序运行出错
+返回0 : 注册成功
+返回1 : 账户注册出现问题(非法字符/账户密码问题)
+返回2 : 账户已被注册
+
+后端返回标准:
+{
+    "code":
+    "message":
+    "data":
+}
+'''
 #======================================================================
 # 连接 MySQL
 #======================================================================
@@ -65,7 +93,10 @@ def login_verify(input_login_info: Optional[list[str]]) -> None:
         if not user:
             print("1")
         elif user[0] == password:
-            print("0")
+            if user[1] == "1":
+                print("3")
+            else:
+                print("0")
         else:
             print("2")
     except:
@@ -100,7 +131,10 @@ def admin_login_verify(input_login_info: Optional[list[str]]) -> None:
         elif user[0] == password and user[1] == "1":
             print("0")
         else:
-            print("2")
+            if user[1] != "1":
+                print("4")
+            else:
+                print("2")
     except:
         print("-1")
     finally:
@@ -121,7 +155,7 @@ def admin_ban_operator(accountId: Optional[str]) -> None:
         return
 
     try:
-        # 1. 先查询当前 PERMISSION 状态
+        # 1. 先查询 PERMISSION 状态
         sql_select = "SELECT PERMISSION FROM user WHERE ACCOUNTID = %s"
         cursor.execute(sql_select, (accountId,))
         result = cursor.fetchone()
@@ -131,11 +165,11 @@ def admin_ban_operator(accountId: Optional[str]) -> None:
             print("-1")
             return
 
-        # 2. 取当前状态，取反（0变1，1变0）
+        # 2. 取当前状态，取反
         current_state = result[0]
         new_state = 1 if current_state == 0 else 0
 
-        # 3. 更新到数据库（安全写法，防SQL注入）
+        # 3. 更新到数据库
         sql_update = "UPDATE user SET PERMISSION = %s WHERE ACCOUNTID = %s"
         cursor.execute(sql_update, (new_state, accountId))
         conn.commit()
@@ -197,11 +231,19 @@ def register_verify(input_register_info: Optional[list[str]]) -> None:
         return
 
     try:
+
         sql_check = "SELECT ACCOUNTID FROM user WHERE ACCOUNTID = %s"
         cursor.execute(sql_check, (account_id,))
         if cursor.fetchone():
             print("2")
             return
+        
+        # 校验账户
+        verify_reslut = verify_account_data([account_id, password])
+        if (not verify_reslut[0]):
+            print("1")
+            return
+        
 
         sql_insert = """
             INSERT INTO user (ACCOUNTID, PASSWORD, ADMIN, PERMISSION, NAME)

@@ -20,6 +20,7 @@ class CONSTPARAM {
     static LOGINBASE = "/api";  // 登录基址
     static INTERFACEBASE = "/interface"; //接口基址
     static INFOBASE = "/info" // 信息基址
+    static PROJECTBASE = "/project" //项目基址
     //==================资源地址=====================
     static NavLogo = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
     static MainBackgoundLogo = "Logo/MainLogo/BackgoundLogo/Backgound.PNG";

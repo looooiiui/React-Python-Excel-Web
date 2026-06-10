@@ -49,20 +49,7 @@ def get_account_data_from_mysql():
         rows = cursor.fetchall()
 
         # 构造和 Excel 版本完全一样的字典结构
-        data = {}
-        for row in rows:
-            account_id = str(row["ACCOUNTID"])
-            password = row["PASSWORD"]
-            name = row["NAME"]
-            admin = row["ADMIN"]
-            permission = row["PERMISSION"]
-
-            data[account_id] = {
-                "PASSWORD": password,
-                "NAME": name,
-                "ADMIN": admin,
-                "PERMISSION": permission
-            }
+        data = {row["ACCOUNTID"]: row for row in rows}
 
         return data
 
@@ -79,7 +66,7 @@ def get_account_info():
         # 从 MySQL 读取数据（替代 Excel）
         data = get_account_data_from_mysql()
 
-        # 返回字典的 JSON 形式（和原来格式完全一样！）
+        # 返回字典的 JSON 形式
         return jsonify(data)
 
     except Exception as e:
