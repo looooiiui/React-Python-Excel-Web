@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const app = express();
 const port = 5001;
 
@@ -10,6 +11,7 @@ const { CONSTPARAM } = require("./Core/CONST/CONST");
 
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 //=================Nacos服务初始化==================
 

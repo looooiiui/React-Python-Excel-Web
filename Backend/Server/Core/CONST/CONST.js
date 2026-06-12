@@ -15,6 +15,8 @@ class CONSTPARAM {
     static INFOSERVERGROUP = "INFOSERVERGROUP";
     static PROJECTIONSERVER = "Projection-Server";
     static PROJECTIONSERVERGTOUP = "PROJECTIONSERVERGTOUP";
+    static AISYSTEMSERVER = "ai-server";
+    static AISYSTEMSeRVERGROUP = "AISYSTEMSeRVERGROUP";
     //==============标准后端返回=====================
     static WEBSUCCESSCODE = 200;         // 后端请求处理成功
     static WEBARGVERROR = 400;           // 传入参数错误
@@ -22,6 +24,15 @@ class CONSTPARAM {
     static WEBPERMESSIONERROR = 403;     // 后端权限错误
     static WEBEXISTERROR = 404;          // 后端存在错误
     static WEBSERVERERROR = 500;         // 后端服务器错误
+
+    //===================后端返回标准函数=================
+    static backendResponse(code, message, data) {
+        return JSON.stringify({
+            "code": code,
+            "message": message,
+            "data": data
+        });
+    }
 }
 
 module.exports = {

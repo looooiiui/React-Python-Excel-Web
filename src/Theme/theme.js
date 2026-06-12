@@ -135,6 +135,48 @@ class Theme {
         transition: "all 0.2s ease"
     };
 
+    // ========== 表格相关样式 ==========
+    // 表格整体样式
+    static TableMainTheme = {
+        width: "100%",
+        borderCollapse: "collapse",
+        fontSize: "14px",
+        textAlign: "center",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+    }
+
+    // 表格单元格通用样式（表头+内容）
+    static TableCellTheme = {
+        border: "1px solid #e5e7eb",
+        padding: "12px 8px",
+        color: "#374151"
+    }
+
+    // 表格表头行背景
+    static TableHeadRowTheme = {
+        backgroundColor: "#f3f4f6"
+    }
+
+    // 表格内容行默认样式
+    static TableBodyRowTheme = {
+        backgroundColor: "#ffffff"
+    }
+
+    // 表格行 hover 高亮色（JS 动态切换用）
+    static TableRowHoverBg = "#f9fafb"
+
+    // 表格内操作按钮样式
+    static TableBtnTheme = {
+        padding: "5px 12px",
+        fontSize: "13px",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        backgroundColor: Theme.theme.primary,
+        color: "#fff",
+        transition: Theme.theme.transition
+    }
+
 }
 
 export default Theme;

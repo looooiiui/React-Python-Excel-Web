@@ -63,7 +63,7 @@ export class InfomationSystem {
 
     // 项目加入指令发出
     static sendJoinProjectionOper(projectionId, callback) {
-        DebugTool.debugLog("前端信息中心: 接收加入项目名: " + projectionId);
+        DebugTool.debugLog("前端信息中心: 接收加入项目ID: " + projectionId);
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${loginVerifyURL}`);
 
         // 确认加入身份
@@ -75,6 +75,24 @@ export class InfomationSystem {
         sendJoinProjection(projectionId, isAdminInt, callback);
     }
 
+    // 项目退出指令发出
+    static exitProjectOper(projectId, callback) {
+        DebugTool.debugLog("前端信息中心: 接收退出项目ID: " + projectId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/info/delete`);
+
+        exitProject(projectId, callback);
+    }
+
+    // 项目删除指令发出
+    static deleteProjectOper(projectId, callback) {
+        projectId = Number(projectId);
+
+        DebugTool.debugLog("前端信息中心: 接收删除项目ID: " + projectId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/info/delete`);
+
+        deleteProject(projectId, callback);
+    }
+
     // 信息修改指令发出
     static sendChangeOperator(changeInfo, param, callback) {
         changeInfo = String(changeInfo).trim();
@@ -83,6 +101,18 @@ export class InfomationSystem {
 
         sendChangeInfo(changeInfo, param, callback);
     }
+
+    // 验证项目加入状态
+    static veriftProjectJoinState(projectId, callback) {
+        let accountId = accountInfo.accountId
+
+        DebugTool.debugLog("前端信息中心: 接收验证项目名: " + projectId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/projectDelete`);
+
+        verifyProjectJoin(accountId, projectId, callback);
+    }
+
+    static verify
     // 得到当前登录状态
     static getCurrentLoginState() {
         return accountOnlineState;
@@ -169,6 +199,56 @@ function sendJoinProjection(projectionId, isAdminInt, callback) {
         });
 }
 
+// 退出项目请求
+function exitProject(projectId, callback) {
+    let accountId = String(InfomationSystem.getCurrentLoginInfo().accountId);
+    projectId = Number(projectId);
+    DebugTool.debugLog("前端信息中心: 尝试退出项目: 项目ID: " + projectId);
+
+    // 建立发送字典
+    let sendInfo = { accountId, projectId };
+
+    // 发送请求
+    axios.post(`${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/info/delete`, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 项目退出请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 项目退出请求失败: " + err.message + JSON.stringify(err.response?.data));
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+}
+
+// 删除项目请求
+function deleteProject(projectId, callback) {
+    projectId = Number(projectId);
+    DebugTool.debugLog("前端信息中心: 尝试退出项目: 项目ID: " + projectId);
+
+    // 建立发送字典
+    let sendInfo = { projectId };
+
+    // 发送请求
+    axios.post(`${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/projectDelete`, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 项目删除请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 项目删除请求成功: " + err.message + JSON.stringify(err.response?.data));
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+}
+
+
 // 发送更改请求
 function sendChangeInfo(changeInfo, param, callback) {
     let accountId = accountInfo.accountId;
@@ -245,6 +325,27 @@ function sendRegisterInfo(accountId, password, callback) {
         });
 }
 
+// 判断项目加入状态
+function verifyProjectJoin(accountId, projectId, callback) {
+    let listUrl = `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/verify`;
+
+    let sendInfo = { accountId, projectId }
+    // 返回的全部项目
+    axios.post(listUrl, sendInfo, {
+        timeout: 5000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: 验证请求成功, 后端返回: " + JSON.stringify(res.data));
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 验证请求失败: " + err.message + err.response?.data);
+            callback(BACKERROR);
+            return BACKERROR;
+        });
+
+}
 // 判断登录成功用于更改状态
 function verifyLoginSuccess(resultData, accountId, password, adminState) {
     if (!("data" in resultData)) {

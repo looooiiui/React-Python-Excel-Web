@@ -3,11 +3,12 @@ import { useState } from "react";
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import LogoutButton from "../../../CustomComponents/CustomButton/LogoutButton";
 import Theme from "../../../Theme/theme";
+import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 // 选择栏
 import SelectionBar from "../../../CustomComponents/SelectionBar/SelectionBar";
 import SecurityCenterBar from "../../../CustomComponents/SelectionBar/SecurityCenterBar";
 import ProjectCenterBar from "../../../CustomComponents/SelectionBar/ProjectCenterBar";
-import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+import AiSelectBar from "../../../CustomComponents/SelectionBar/AiSelectBar";
 //========================================================
 
 export default function UserProfile() {
@@ -76,7 +77,9 @@ export default function UserProfile() {
                 <ThemedButton onClick={() => setTab("projectionCenter")}>
                     项目中心
                 </ThemedButton>
-
+                <ThemedButton onClick={() => setTab("aiAssistant")}>
+                    AI助手
+                </ThemedButton>
                 {/* 管理员专用菜单 */}
                 {isAdmin && (
                     <ThemedButton onClick={() => setTab("admin")}>
@@ -127,6 +130,13 @@ export default function UserProfile() {
                         <ProjectCenterBar />
                     </div>
                 )}
+
+                {tab === "aiAssistant" && (
+                    <div>
+                        <AiSelectBar />
+                    </div>
+                )}
+
             </div>
 
         </div>

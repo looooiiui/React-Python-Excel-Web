@@ -14,6 +14,7 @@ class CONSTPARAM {
     static TRAINEEMANAGERURL = "/traineesManager" // 学员管理基址
     static SECURITYCENTERURL = "/securtiyCenter" // 安全中心基址
     static PROJECTIONCENTERURL = "/projectCenter" // 项目中心
+    static AIASSISTANTURL = "/aiAssistant" // AI中心
 
     //===================后端基址==========================
     static ADMINBASE = "/admin"; //管理基址

@@ -4,7 +4,7 @@ import { useState } from "react";
 import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 //==============信息组件
 import ProjectionList from "../../../CustomComponents/ProjectionList/ProjectionList";
-
+import SpecificProjectionList from "../../../CustomComponents/ProjectionList/SpecificProjectionList";
 
 // 普通用户页
 function ProjectCenter() {
@@ -29,10 +29,12 @@ function ProjectCenter() {
                 {tab == "ProjectionManager" && (
                     <div>
                         <h1>当前加入项目</h1>
+                        <SpecificProjectionList />
                     </div>
                 )}
                 {tab == "JoinProjection" && (
                     <div>
+                        <h1>当前所有项目</h1>
                         <ProjectionList />
                     </div>
                 )}
