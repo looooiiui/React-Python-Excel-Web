@@ -31,12 +31,13 @@ class CONSTPARAM {
     static INFOIP = "";
     static LOGINIP = "";
     static PROJECTIONCENTERIP = "";
+    static AISYSTEMIP = "";
     //================Nacos服务名字=============
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
     static NACOSINTERFACE = "Interface-Server";
     static NACOSPROJECTION = "Projection-Server";
-
+    static NACOSAIASSISTANT = "ai-server";
     //=================数值常量================
     static INPUTMAXLEN = 20;
 
@@ -46,9 +47,14 @@ class CONSTPARAM {
 }
 
 //===========初始化注入IP===============
-await initializeLoginUrl()
-await initializeInfoUrl()
-await initializeProjectUrl()
+// 检查连接
+var result = await checkUrlActive(`${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}/getServerUrl`);
+if (result) {
+    await initializeLoginUrl()
+    await initializeInfoUrl()
+    await initializeProjectUrl()
+    await initializeAiUrl()
+}
 //======================================
 
 // 初始化网站与后端基址(登录系统)
@@ -73,8 +79,9 @@ async function initializeInfoUrl() {
     // 获取接口定位
     const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
     DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
-
-    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName);
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
 
     DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
 
@@ -90,13 +97,57 @@ async function initializeProjectUrl() {
     const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
     DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
 
-    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName);
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
 
     DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
 
     // 注入信息系统地址
     CONSTPARAM.PROJECTIONCENTERIP = `${data.url}`;
     DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.PROJECTIONCENTERIP}`)
+}
+
+// 初始化网站与AI系统基址(AI系统)
+async function initializeAiUrl() {
+    var sendName = { serverName: CONSTPARAM.NACOSAIASSISTANT }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入信息系统地址
+    CONSTPARAM.AISYSTEMIP = `${data.url}`;
+    DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.PROJECTIONCENTERIP}`)
+}
+
+// 启动前探测网址存在
+/** 
+ * @param {String} url 目标地址
+ * @param {Number} timeout 超时毫秒
+ * @returns {Promise<boolean>} true 连接正常
+*/
+async function checkUrlActive(url, timeout = 3000) {
+    try {
+        DebugTool.debugLog(`试探地址: ${url}`)
+        // 发送连接测试
+        await axios.head(url, {
+            timeout: timeout,
+            validateStatus: () => true
+        });
+        DebugTool.debugLog("连接成功")
+        return true
+
+    } catch (error) {
+        // 未连接上对应服务
+        DebugTool.debugLog("连接失败");
+        return false;
+    }
 }
 
 export default CONSTPARAM;

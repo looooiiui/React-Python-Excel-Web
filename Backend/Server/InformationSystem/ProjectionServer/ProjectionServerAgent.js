@@ -9,7 +9,7 @@ const { DebugTool } = require('../../../../src/Util/DebugTool/DebugTool');
 const { CONSTPARAM } = require("../../Core/CONST/CONST");
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 
 //=================Nacos服务初始化==================
 

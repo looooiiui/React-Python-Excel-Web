@@ -74,7 +74,9 @@ function Login() {
         if (!("accountId" in currentAccountInfo)) {
             return;
         }
+
         var userId = String(currentAccountInfo.accountId);
+        DebugTool.debugLog("跳转用户网址: " + `${CONSTPARAM.USERBASEURL}/${userId}`)
         navigate(CONSTPARAM.USERBASEURL + "/" + userId);
     }
 

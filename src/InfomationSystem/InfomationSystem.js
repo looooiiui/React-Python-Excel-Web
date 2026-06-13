@@ -112,7 +112,14 @@ export class InfomationSystem {
         verifyProjectJoin(accountId, projectId, callback);
     }
 
-    static verify
+    // 向AI发送聊天信息
+    static chatMessageToAi(prompt, callback) {
+        DebugTool.debugLog("前端信息中心: 向AI发送消息: ");
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.AIASSISTANTURL}/chat`);
+
+        sendMessageToAi(prompt, callback);
+    }
+
     // 得到当前登录状态
     static getCurrentLoginState() {
         return accountOnlineState;
@@ -335,7 +342,7 @@ function verifyProjectJoin(accountId, projectId, callback) {
         timeout: 5000
     })
         .then((res) => {
-            DebugTool.debugLog("前端信息中心: 验证请求成功, 后端返回: " + JSON.stringify(res.data));
+            DebugTool.debugLog("前端信息中心: 验证请求成功, 后端返回: " + res.data);
             callback(res.data);
             return res.data;
         })
@@ -370,6 +377,27 @@ function verifyLoginSuccess(resultData, accountId, password, adminState) {
         DebugTool.debugLog("前端信息中心: 当前登录管理员权限: " + isAdmin);
 
     }
+}
+
+// 向AI发送信息
+function sendMessageToAi(prompt, callback) {
+    let listUrl = `${CONSTPARAM.AISYSTEMIP}${CONSTPARAM.AIASSISTANTURL}/chat`;
+    let sendInfo = { prompt }
+
+    // 向AI发送消息
+    axios.post(listUrl, sendInfo, {
+        timeout: 60000
+    })
+        .then((res) => {
+            DebugTool.debugLog("前端信息中心: AI请求成功, 后端返回: " + res.data);
+            callback(res.data);
+            return res.data;
+        })
+        .catch((err) => {
+            DebugTool.debugLog("前端信息中心: 验证请求失败: " + err.message + JSON.stringify(err.response?.data));
+            callback(BACKERROR);
+            return BACKERROR;
+        });
 }
 
 // 存储网页信息

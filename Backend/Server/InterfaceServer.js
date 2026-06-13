@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const morgan = require('morgan');
 const app = express();
 const port = 5001;
 
@@ -9,9 +10,11 @@ const { DebugTool } = require('../../src/Util/DebugTool/DebugTool');
 //===============================================================
 const { CONSTPARAM } = require("./Core/CONST/CONST");
 
-app.use(cors());
-app.use(express.json());
 app.use(helmet());
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json({ limit: '100kb' }));
+
 
 //=================Nacos服务初始化==================
 
