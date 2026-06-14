@@ -8,6 +8,7 @@ class CONSTPARAM {
     static LOGINURL = "/Login"; // 登录页面
     static ABOUTURL = "/Bbout"; // 关于
     static REGISTERURL = "/Register"; // 注册
+    static ARTICLEURL = "/article"
     static INFOCHANGEURL = "/infochange"
     static USERBASEURL = "/user"; // 用户基址
     static USERPROFILE = "/profile"; // 简介基址
@@ -22,22 +23,28 @@ class CONSTPARAM {
     static INTERFACEBASE = "/interface"; //接口基址
     static INFOBASE = "/info" // 信息基址
     static PROJECTBASE = "/project" //项目基址
+    static ARTICLEBASE = "/article" // 文章系统基址
+    //===============前端基址========================
+    static FRONTARTICLE = "/article"
+
     //==================资源地址=====================
     static NavLogo = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
-    static MainBackgoundLogo = "Logo/MainLogo/BackgoundLogo/Backgound.PNG";
-    static ManagerBackground = "Logo/MainLogo/BackgoundLogo/ManagerBackground/ManagerBackground.PNG";
+    static MainBackgoundLogo = "/Logo/MainLogo/BackgoundLogo/Backgound.PNG";
+    static ManagerBackground = "/Logo/MainLogo/BackgoundLogo/ManagerBackground/ManagerBackground.PNG";
     //=================服务IP==================
     static INTERFACEIP = "http://26.224.10.101:5001";
     static INFOIP = "";
     static LOGINIP = "";
     static PROJECTIONCENTERIP = "";
     static AISYSTEMIP = "";
+    static ARTICLESYSTEMIP = "";
     //================Nacos服务名字=============
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
     static NACOSINTERFACE = "Interface-Server";
     static NACOSPROJECTION = "Projection-Server";
     static NACOSAIASSISTANT = "Ai-Server";
+    static NACOSARTICLE = "Article-Server";
     //=================数值常量================
     static INPUTMAXLEN = 20;
 
@@ -54,6 +61,7 @@ if (result) {
     await initializeInfoUrl()
     await initializeProjectUrl()
     await initializeAiUrl()
+    await initializeArticleUrl();
 }
 //======================================
 
@@ -124,6 +132,24 @@ async function initializeAiUrl() {
     // 注入信息系统地址
     CONSTPARAM.AISYSTEMIP = `${data.url}`;
     DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.PROJECTIONCENTERIP}`)
+}
+
+// 初始化网站与AI系统基址(AI系统)
+async function initializeArticleUrl() {
+    var sendName = { serverName: CONSTPARAM.NACOSARTICLE }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入信息系统地址
+    CONSTPARAM.ARTICLESYSTEMIP = `${data.url}`;
+    DebugTool.debugLog(`注入文章系统: ${CONSTPARAM.ARTICLESYSTEMIP}`)
 }
 
 // 启动前探测网址存在

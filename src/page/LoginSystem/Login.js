@@ -9,7 +9,9 @@ import CONSTPARAM from "../../Core/CONST/CONST";
 import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 //============================================
 
-
+//================UI库引入=======================
+import { Button, Card, Checkbox, Input, Space, Typography } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 // 用户常量
 const INPUTMAXLEN = 20;
 
@@ -85,43 +87,61 @@ function Login() {
     }
 
     return (
-        <div>
-            <h1>请点击登录(普通/管理员)</h1>
-            <div>
-                <input
-                    type="text"
-                    maxLength={INPUTMAXLEN}
-                    value={accountId}
-                    onChange={(e) => setAccountId(e.target.value)}
-                    onKeyDown={enterPressed}
-                    placeholder="请输入账号"
-                    style={Theme.LoginSystemInputTheme}
-                /><br />
-                <input
-                    type="text"
-                    maxLength={INPUTMAXLEN}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={enterPressed}
-                    placeholder="请输入密码"
-                    style={Theme.LoginSystemInputTheme}
-                />
-                <p>{loginInfo}</p>
-            </div>
-            <div style={{ display: "flex", gap: "30px" }}>
-                <ThemedButton onClick={() => { LoginConfirm() }} style={{
-                    inlineSize: '100px'
-                }}>登录</ThemedButton>
-                <ThemedButton onClick={() => { administratorStateChange() }}>管理员</ThemedButton>
-                <input
-                    type="checkbox"
-                    checked={administrator}
-                    onChange={administratorStateChange}
-                    style={{
-                        marginLeft: "-20px"
-                    }}
-                />
-            </div>
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingTop: "80px",
+            minHeight: "55vh"
+        }}>
+            <Typography.Title level={2}>请点击登录(普通/管理员)</Typography.Title>
+            <Card>
+                <div>
+                    <Input
+                        prefix={<UserOutlined />}
+                        type="text"
+                        maxLength={INPUTMAXLEN}
+                        value={accountId}
+                        onChange={(e) => setAccountId(e.target.value)}
+                        onKeyDown={enterPressed}
+                        placeholder="请输入账号"
+                        style={{ marginBottom: 16 }}
+                        size="large"
+                    /><br />
+                    <Input
+                        prefix={<LockOutlined />}
+                        type="password"
+                        maxLength={INPUTMAXLEN}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={enterPressed}
+                        placeholder="请输入密码"
+                        style={{ marginBottom: 16 }}
+                        size="large"
+                    />
+
+                    <Typography.Text type="danger" style={{ display: "block", marginBottom: 16 }}>
+                        {loginInfo}
+                    </Typography.Text>
+
+                </div>
+                <Space size="large" align="center">
+                    <Button
+                        type="primary"
+                        onClick={LoginConfirm}
+                        style={{
+                            width: "100px",
+                        }}>登录
+                    </Button>
+
+                    <Checkbox
+                        checked={administrator}
+                        onChange={(e) => administratorStateChange(e.target.checked)}
+                    >
+                        管理员
+                    </Checkbox>
+                </Space>
+            </Card>
         </div>
     );
 }

@@ -120,6 +120,47 @@ export class InfomationSystem {
         sendMessageToAi(prompt, callback);
     }
 
+    // ========== 文章系统 全部接口方法 ==========
+    // 1. 获取所有文章列表
+    static getAllArticleOper(callback) {
+        DebugTool.debugLog("前端信息中心: 请求获取全部文章列表");
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/all`);
+        sendGetAllArticle(callback);
+    }
+
+    // 2. 根据ID 获取单篇文章详情
+    static getArticleDetailOper(articleId, callback) {
+        const id = Number(articleId);
+        DebugTool.debugLog("前端信息中心: 请求文章详情,文章ID:" + id);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/${id}`);
+        sendGetArticleDetail(id, callback);
+    }
+
+    // 3. 发布新增文章
+    static addArticleOper(title, content, callback) {
+        const accountId = accountInfo.accountId;
+        DebugTool.debugLog("前端信息中心: 请求发布新文章,作者ID:" + accountId);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/add`);
+        sendAddArticle(title, content, accountId, callback);
+    }
+
+    // 4. 编辑更新文章
+    static updateArticleOper(articleId, title, content, callback) {
+        const id = Number(articleId);
+        DebugTool.debugLog("前端信息中心: 请求编辑文章,文章ID:" + id);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/update/${id}`);
+        sendUpdateArticle(id, title, content, callback);
+    }
+
+    // 5. 删除文章
+    static deleteArticleOper(articleId, callback) {
+        const id = Number(articleId);
+        DebugTool.debugLog("前端信息中心: 请求删除文章,文章ID:" + id);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/delete/${id}`);
+        sendDeleteArticle(id, callback);
+    }
+
+
     // 得到当前登录状态
     static getCurrentLoginState() {
         return accountOnlineState;
@@ -397,6 +438,79 @@ function sendMessageToAi(prompt, callback) {
             DebugTool.debugLog("前端信息中心: 验证请求失败: " + err.message + JSON.stringify(err.response?.data));
             callback(BACKERROR);
             return BACKERROR;
+        });
+}
+
+//==========================文章系统===========================
+// 获取全部文章
+function sendGetAllArticle(callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/all`;
+    axios.get(url, { timeout: 5000 })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 获取文章列表成功，后端返回：" + res.data);
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 获取文章列表失败：" + err.message + err.response?.data);
+            callback(BACKERROR);
+        });
+}
+
+// 获取单篇文章详情
+function sendGetArticleDetail(articleId, callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/${articleId}`;
+    axios.get(url, { timeout: 5000 })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 获取文章详情成功，后端返回：" + res.data);
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 获取文章详情失败：" + err.message + err.response?.data);
+            callback(BACKERROR);
+        });
+}
+
+// 新增文章
+function sendAddArticle(title, content, authorId, callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/add`;
+    const sendInfo = { title, content, author_id: authorId };
+    axios.post(url, sendInfo, { timeout: 5000 })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 发布文章成功，后端返回：" + JSON.stringify(res.data));
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 发布文章失败：" + err.message + err.response?.data);
+            callback(BACKERROR);
+        });
+}
+
+// 更新编辑文章
+function sendUpdateArticle(articleId, title, content, callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/update/${articleId}`;
+    const sendInfo = { title, content };
+    axios.post(url, sendInfo, { timeout: 5000 })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 编辑文章成功，后端返回：" + JSON.stringify(res.data));
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 编辑文章失败：" + err.message + err.response?.data);
+            callback(BACKERROR);
+        });
+}
+
+// 删除文章
+function sendDeleteArticle(articleId, callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/delete/${articleId}`;
+    axios.post(url, { timeout: 5000 })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 删除文章成功，后端返回：" + JSON.stringify(res.data));
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 删除文章失败：" + err.message + err.response?.data);
+            callback(BACKERROR);
         });
 }
 

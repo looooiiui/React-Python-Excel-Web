@@ -11,6 +11,10 @@ import CONSTPARAM from "../../Core/CONST/CONST";
 //=============自定义组件引入================
 import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 
+//================UI库引入=======================
+import { Button, Input, Card, Typography, Space } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+
 // 用户常量
 const INPUTMAXLEN = 20;
 
@@ -73,32 +77,50 @@ function Register() {
     }
 
     return (
-        <div>
-            <h1>请点击注册(仅有普通登录)</h1>
-            <div>
-                <input
-                    type="text"
-                    maxLength={INPUTMAXLEN}
-                    value={accountId}
-                    onChange={(e) => setAccountId(e.target.value)}
-                    onKeyDown={enterPressed}
-                    placeholder="请输入账号"
-                    style={Theme.LoginSystemInputTheme}
-                /><br />
-                <input
-                    type="text"
-                    maxLength={INPUTMAXLEN}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={enterPressed}
-                    placeholder="请输入密码"
-                    style={Theme.LoginSystemInputTheme}
-                />
-                <p>{registerInfo}</p>
-            </div>
-            <ThemedButton onClick={() => { RegisterConfirm() }} style={{
-                inlineSize: "100px"
-            }}>注册</ThemedButton>
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingTop: "80px",
+            minHeight: "55vh"
+        }}>
+            <Typography.Title level={2}>请点击注册(仅有普通登录)</Typography.Title>
+            <Card>
+                <div>
+                    <Input
+                        prefix={<UserOutlined />}
+                        type="text"
+                        maxLength={INPUTMAXLEN}
+                        value={accountId}
+                        onChange={(e) => setAccountId(e.target.value)}
+                        onKeyDown={enterPressed}
+                        placeholder="请输入账号"
+                        style={{ marginBottom: 16 }}
+                        size="large"
+                    /><br />
+                    <Input
+                        prefix={<LockOutlined />}
+                        type="password"
+                        maxLength={INPUTMAXLEN}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={enterPressed}
+                        placeholder="请输入密码"
+                        style={{ marginBottom: 16 }}
+                        size="large"
+                    />
+                    <Typography.Text type="danger" style={{ display: "block", marginBottom: 20 }}>
+                        {registerInfo}
+                    </Typography.Text>
+                </div>
+                <Button
+                    type="primary"
+                    onClick={RegisterConfirm}
+                    style={{ width: "100px" }}
+                    size="large"
+                >注册
+                </Button>
+            </Card>
         </div>
     );
 }

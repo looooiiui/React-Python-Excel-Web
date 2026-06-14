@@ -8,7 +8,6 @@ from Utils.DebugTool.DebugUtil import DebugTool
 
 
 #==============基准IP==============
-NACOS_SERVER: str = "26.224.10.101:8848"
 DEFAULTURL: str = "26.224.10.101"
 DEFAULTPORT: int = 5003
 #==================================

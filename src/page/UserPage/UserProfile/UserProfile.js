@@ -11,134 +11,107 @@ import ProjectCenterBar from "../../../CustomComponents/SelectionBar/ProjectCent
 import AiSelectBar from "../../../CustomComponents/SelectionBar/AiSelectBar";
 //========================================================
 
+//===================UI=======================
+import { Button, Typography, Card, Tag, Avatar, Tabs } from "antd";
+import { UserOutlined, SafetyOutlined, UsergroupAddOutlined, ProjectOutlined, RobotOutlined, SettingOutlined } from "@ant-design/icons";
+
+const { Title, Text } = Typography;
+
 export default function UserProfile() {
     const userInfo = InfomationSystem.getCurrentLoginInfo();
     const isAdmin = InfomationSystem.getAdminState();
     const accountId = userInfo.accountId;
 
-    // 菜单切换
-    const [tab, setTab] = useState("profile");
+    // 菜单切换（改用 antd Tabs 的 activeKey）
+    const [activeTab, setActiveTab] = useState("profile");
+
+    // Tabs 配置
+    const tabItems = [
+        {
+            key: "profile",
+            label: "个人资料",
+            icon: <UserOutlined />,
+            children: (
+                <div>
+                    <Title level={4}>个人资料</Title>
+                    <p>账号：{accountId}</p>
+                    <p>权限：{isAdmin ? "管理员" : "普通用户"}</p>
+                </div>
+            )
+        },
+        {
+            key: "setting",
+            label: "安全设置",
+            icon: <SafetyOutlined />,
+            children: <SecurityCenterBar />
+        },
+        {
+            key: "personalCenter",
+            label: "个人中心",
+            icon: <UsergroupAddOutlined />,
+            children: (
+                <div>
+                    <Title level={4}>个人中心</Title>
+                    {/* 后续可以加内容 */}
+                </div>
+            )
+        },
+        {
+            key: "projectionCenter",
+            label: "项目中心",
+            icon: <ProjectOutlined />,
+            children: <ProjectCenterBar />
+        },
+        {
+            key: "aiAssistant",
+            label: "AI助手",
+            icon: <RobotOutlined />,
+            children: <AiSelectBar />
+        },
+        // 管理员专用标签
+        ...(isAdmin ? [{
+            key: "admin",
+            label: "管理员后台",
+            icon: <SettingOutlined />,
+            children: <SelectionBar />
+        }] : [])
+    ];
 
     return (
         <div style={{ maxWidth: "900px", margin: "0 auto", padding: "20px" }}>
+            <Card
+                style={{
+                    marginBottom: "20px",
+                    background: Theme.defalutColor,
+                    backdropFilter: "blur(10px)"
+                }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+                        <Avatar
+                            size={60}
+                            src="/logo512.png"
+                            icon={<UserOutlined />}
+                        />
+                        <div>
+                            <Title level={4} style={{ margin: 0 }}>{accountId}</Title>
+                            {isAdmin && <Tag color="red">管理员</Tag>}
+                        </div>
 
-            {/* ======================
-                顶部用户卡片 
-            ====================== */}
-            <div style={{
-                backgroundColor: Theme.defalutColor,
-                padding: "20px 30px",
-                borderRadius: "12px",
-                boxShadow: "0 0 10px #0000006b",
-                display: "flex",
-                justifyContent: "space-between",
-                backdropFilter: "blur(10px)",
-                alignItems: "center",
-                marginBottom: "20px"
-            }}>
-                <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                    <img
-                        src="/logo512.png"
-                        style={{ width: "60px", height: "60px", borderRadius: "50%" }}
-                    />
-                    <div>
-                        <h2 style={{ margin: 0 }}>{accountId}</h2>
-                        {isAdmin && <p style={{ color: "red", margin: "5px 0 0 0" }}>【管理员】</p>}
                     </div>
+                    <LogoutButton />
                 </div>
-
-                {/* 退出按钮 */}
-                <LogoutButton />
-            </div>
-
-            {/* ======================
-                菜单 
-            ====================== */}
-            <div style={{
-                backgroundColor: Theme.defalutColor,
-                display: "flex",
-                gap: "10px",
-                marginBottom: "20px",
-                flexWrap: "wrap",
-                borderRadius: "16px",
-                backgroundClip: "padding-box",
-                backdropFilter: "blur(10px)",
-                overflow: "hidden",
-            }}>
-                <ThemedButton onClick={() => setTab("profile")}>
-                    个人资料
-                </ThemedButton>
-                <ThemedButton onClick={() => setTab("setting")}>
-                    安全设置
-                </ThemedButton>
-                <ThemedButton onClick={() => setTab("personalCenter")}>
-                    个人中心
-                </ThemedButton>
-                <ThemedButton onClick={() => setTab("projectionCenter")}>
-                    项目中心
-                </ThemedButton>
-                <ThemedButton onClick={() => setTab("aiAssistant")}>
-                    AI助手
-                </ThemedButton>
-                {/* 管理员专用菜单 */}
-                {isAdmin && (
-                    <ThemedButton onClick={() => setTab("admin")}>
-                        管理员后台
-                    </ThemedButton>
-                )}
-            </div>
-
-            {/* ======================
-                内容区域 
-            ====================== */}
-            <div style={{
-                backdropFilter: "blur(10px)",
-                backgroundColor: Theme.defalutColor,
-                padding: "25px 30px",
-                borderRadius: "12px",
-                boxShadow: "0 0 10px #0000006b",
-                minHeight: "300px"
-            }}>
-                {tab === "profile" && (
-                    <div>
-                        <h3>个人资料</h3>
-                        <p>账号：{accountId}</p>
-                        <p>权限：{isAdmin ? "管理员" : "普通用户"}</p>
-                    </div>
-                )}
-
-                {tab === "setting" && (
-                    <div>
-                        <SecurityCenterBar />
-                    </div>
-                )}
-
-                {tab === "personalCenter" && (
-                    <div>
-                        <h3>个人中心</h3>
-                    </div>
-                )}
-
-                {tab === "admin" && (
-                    <div>
-                        <SelectionBar />
-                    </div>
-                )}
-
-                {tab === "projectionCenter" && (
-                    <div>
-                        <ProjectCenterBar />
-                    </div>
-                )}
-
-                {tab === "aiAssistant" && (
-                    <div>
-                        <AiSelectBar />
-                    </div>
-                )}
-
-            </div>
-
+            </Card>
+            <Card
+                style={{
+                    marginBottom: "20px",
+                    backgroundColor: Theme.defalutColor,
+                    backdropFilter: "blur(10px)"
+                }}>
+                <Tabs
+                    activeKey={activeTab}
+                    onChange={setActiveTab}
+                    items={tabItems} />
+            </Card>
         </div>
     );
 }

@@ -6,7 +6,8 @@ class CONSTPARAM {
     static CONNECTIP = "26.224.10.101";
     static BACKENDBASEURL = "/api";
     static INTERFACEURL = "/interface";
-    static AISYSTEMBASEURL = "/aiAssistant"
+    static AISYSTEMBASEURL = "/aiAssistant";
+    static ARTICLESYSTEMURL = "/article";
     //===========Nacos分组=============
     static LOGINSERVER = "Login-Server";
     static LOGINSERVERGROUP = "LOGINGROUP";

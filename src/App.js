@@ -11,6 +11,11 @@ import AccountManger from './page/UserPage/AdminPage/AccountManager/AccountManag
 import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
 import ProjectCenter from './page/UserPage/NormalPage/ProjectCenter';
 import AiAssistantCenter from './page/UserPage/NormalPage/AiAssistantCenter';
+// 文章组件
+import ArticleList from './page/ArticlePage/ArticleList';
+import ArticlePublish from './page/ArticlePage/ArticlePublish';
+import ArticleDetail from './page/ArticlePage/ArticleDetail';
+import ArticleEdit from './page/ArticlePage/ArticleEdit';
 
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
@@ -23,6 +28,14 @@ import CONSTPARAM from './Core/CONST/CONST';
 // 自带组件引入
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
+//=================UI=======================
+import { Layout, Menu, Avatar, Space } from 'antd';
+import { HomeOutlined, InfoOutlined, LoginOutlined, UserAddOutlined, ReadOutlined } from '@ant-design/icons';
+
+
+// 导航栏
+const { Header } = Layout;
 
 function App() {
 
@@ -49,6 +62,35 @@ function App() {
     }
   }
 
+  // 导航菜单配置
+  const menuItems = [
+    {
+      key: CONSTPARAM.MAINPAGEURL,
+      icon: <HomeOutlined />,
+      label: <Link to={CONSTPARAM.MAINPAGEURL} style={Theme.NavigateFontTheme}>首页</Link>
+    },
+    {
+      key: CONSTPARAM.ABOUTURL,
+      icon: <InfoOutlined />,
+      label: <Link to={CONSTPARAM.ABOUTURL} style={Theme.NavigateFontTheme}>关于</Link>
+    },
+    {
+      key: CONSTPARAM.LOGINURL,
+      icon: <LoginOutlined />,
+      label: <Link to={CONSTPARAM.LOGINURL} style={Theme.NavigateFontTheme}>登录</Link>
+    },
+    {
+      key: CONSTPARAM.REGISTERURL,
+      icon: <UserAddOutlined />,
+      label: <Link to={CONSTPARAM.REGISTERURL} style={Theme.NavigateFontTheme}>注册</Link>
+    },
+    {
+      key: CONSTPARAM.ARTICLEURL,
+      icon: <ReadOutlined />,
+      label: <Link to={`${CONSTPARAM.ARTICLEBASE}/list`} style={Theme.NavigateFontTheme}>文章</Link>
+    }
+  ];
+
   return (
     <div style={Theme.WrapAllTheme}>
       <div style={{
@@ -64,13 +106,32 @@ function App() {
         backgroundPosition: 'center',
       }}></div>
 
-      <nav style={Theme.NavigateTheme}>
-        <Link to={CONSTPARAM.MAINPAGEURL} style={Theme.NavigateFontTheme}>首页</Link>
-        <Link to={CONSTPARAM.ABOUTURL} style={Theme.NavigateFontTheme}>关于</Link>
-        <Link to={CONSTPARAM.LOGINURL} style={Theme.NavigateFontTheme}>登录</Link>
-        <Link to={CONSTPARAM.REGISTERURL} style={Theme.NavigateFontTheme}>注册</Link>
-        <img src="/logo512.png" alt="头像" style={Theme.AvatarTheme} onClick={avatarClick} />
-      </nav>
+      <Header style={{ ...Theme.NavigateTheme, padding: "0 24px" }}>
+        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <Menu
+            mode="horizontal"
+            items={menuItems}
+            style={{
+              flex: 1,
+              background: "transparent",
+              borderBottom: "none",
+              lineHeight: "80px"
+            }}
+          />
+
+          <Avatar
+            size={64}
+            src="/logo512.png"
+            style={{
+              ...Theme.AvatarTheme,
+              cursor: "pointer",
+              background: '#ffffff',
+              border: '1px solid #e0e0e0',
+            }}
+            onClick={avatarClick}
+          />
+        </div>
+      </Header>
 
       {/* 网站中间 */}
       <div style={Theme.ContentWrapTheme}>
@@ -84,6 +145,10 @@ function App() {
           <Route path={CONSTPARAM.SECURITYCENTERURL} element={<AuthRoute><SecurityCenter /></AuthRoute>} />
           <Route path={CONSTPARAM.PROJECTIONCENTERURL} element={<AuthRoute><ProjectCenter /></AuthRoute>} />
           <Route path={CONSTPARAM.AIASSISTANTURL} element={<AuthRoute><AiAssistantCenter /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/list`} element={<AuthRoute><ArticleList /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/publish`} element={<AuthRoute><ArticlePublish /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/detail/:id`} element={<AuthRoute><ArticleDetail /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/edit/:id`} element={<AuthRoute><ArticleEdit /></AuthRoute>} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
           <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />

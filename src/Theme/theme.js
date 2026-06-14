@@ -63,13 +63,11 @@ class Theme {
     // 头像主题
     static AvatarTheme = {
         position: "absolute",
-        top: "20px",
-        right: "80px",
-        width: "36px",
-        height: "36px",
+        top: "8px",
+        right: "60px",
         borderRadius: "50%",
         objectFit: "cover",
-        cursor: "pointer"
+        cursor: "pointer",
     }
 
     // Theme类内部追加
@@ -176,7 +174,6 @@ class Theme {
         color: "#fff",
         transition: Theme.theme.transition
     }
-
 }
 
 export default Theme;
