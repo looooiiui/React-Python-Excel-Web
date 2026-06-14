@@ -64,6 +64,7 @@ function Login() {
     // 登录跳转检验
     function LoginNavigateVerify() {
         var currentLoginState = InfomationSystem.getCurrentLoginState();
+        DebugTool.debugLog("前端登录获得当前登录状态: " + currentLoginState);
         // 登录状态跳转
         if (!currentLoginState) {
             return;
@@ -76,8 +77,11 @@ function Login() {
         }
 
         var userId = String(currentAccountInfo.accountId);
-        DebugTool.debugLog("跳转用户网址: " + `${CONSTPARAM.USERBASEURL}/${userId}`)
-        navigate(CONSTPARAM.USERBASEURL + "/" + userId);
+        const targetUrl = `${CONSTPARAM.USERBASEURL}/${userId}`;
+        DebugTool.debugLog("跳转用户网址: " + targetUrl);
+
+        // 替换 navigate整页重载防渲染顺序问题
+        window.location.href = targetUrl;
     }
 
     return (

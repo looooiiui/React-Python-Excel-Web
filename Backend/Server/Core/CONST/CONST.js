@@ -16,8 +16,10 @@ class CONSTPARAM {
     static INFOSERVERGROUP = "INFOSERVERGROUP";
     static PROJECTIONSERVER = "Projection-Server";
     static PROJECTIONSERVERGTOUP = "PROJECTIONSERVERGTOUP";
-    static AISYSTEMSERVER = "ai-server";
+    static AISYSTEMSERVER = "Ai-Server";
     static AISYSTEMSeRVERGROUP = "AISYSTEMSeRVERGROUP";
+    static ARTICLESERVER = "Article-Server";
+    static ARTICLESERVERGROUP = "ARTICLESERVERGROUP"
     //==============标准后端返回=====================
     static WEBSUCCESSCODE = 200;         // 后端请求处理成功
     static WEBARGVERROR = 400;           // 传入参数错误

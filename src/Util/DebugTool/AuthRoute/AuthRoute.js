@@ -10,16 +10,17 @@ function AuthRoute({ children, requireAdmin = false }) {
     const loc = useLocation();
     const LOGINURL = "/Login";
 
-    DebugTool.debugLog("路由拦截: 拦截预跳转网页: " + CONSTPARAM.LOGINURL);
     // 得到当前登录状态(检查登录状态)
     const isLogin = InfomationSystem.getCurrentLoginState();
     DebugTool.debugLog("路由拦截: 当前登录状态: " + isLogin);
     if (!isLogin) {
+        DebugTool.debugLog("路由拦截: 拦截预跳转网页: " + CONSTPARAM.LOGINURL + " 拦截原因: 未登录");
         return <Navigate to={LOGINURL} state={{ from: loc.pathname }} replace />
     }
 
     // 管理员权限
     if (requireAdmin && !InfomationSystem.getAdminState()) {
+        DebugTool.debugLog("路由拦截: 拦截预跳转网页: " + CONSTPARAM.LOGINURL + " 拦截原因: 不是管理员");
         return <Navigate to={LOGINURL} state={{ from: loc.pathname }} replace />
     }
 

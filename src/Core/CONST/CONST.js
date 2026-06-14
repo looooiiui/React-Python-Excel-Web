@@ -37,7 +37,7 @@ class CONSTPARAM {
     static NACOSINFO = "Info-Server";
     static NACOSINTERFACE = "Interface-Server";
     static NACOSPROJECTION = "Projection-Server";
-    static NACOSAIASSISTANT = "ai-server";
+    static NACOSAIASSISTANT = "Ai-Server";
     //=================数值常量================
     static INPUTMAXLEN = 20;
 
