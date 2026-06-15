@@ -6,7 +6,7 @@ from Utils import MySqlUtil
 
 #==============基准IP==============
 DEFAULTURL: str = "26.224.10.101"
-DEFAULTPORT: int = 5005
+DEFAULTPORT: int = 5007
 #==================================
 
 #=================基准路由===================

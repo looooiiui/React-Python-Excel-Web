@@ -2,8 +2,10 @@ import Theme from "../../../Theme/theme";
 import { useState } from "react";
 //=============自定义组件引入=======================
 import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 //==============信息组件
 import ProjectionList from "../../../CustomComponents/ProjectionList/ProjectionList";
+import ProjectionListNormal from "../../../CustomComponents/ProjectionList/ProjectionList";
 import SpecificProjectionList from "../../../CustomComponents/ProjectionList/SpecificProjectionList";
 
 //================UI库引入=======================
@@ -17,7 +19,7 @@ const { Title } = Typography;
 function ProjectCenter() {
     // 菜单切换
     const [selectedKey, setSelectedKey] = useState("ProjectionManager");
-
+    const isAdmin = InfomationSystem.getAdminState();
     // 左侧菜单配置
     const menuItems = [
         {
@@ -43,7 +45,7 @@ function ProjectCenter() {
         "JoinProjection": (
             <div>
                 <Title level={4}>当前所有项目</Title>
-                <ProjectionList />
+                {isAdmin ? <ProjectionList /> : <ProjectionListNormal />}
             </div>
         )
     };

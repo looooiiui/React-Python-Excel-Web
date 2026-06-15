@@ -9,7 +9,7 @@ from Utils.DebugTool.DebugUtil import DebugTool
 
 #==============基准IP==============
 DEFAULTURL: str = "26.224.10.101"
-DEFAULTPORT: int = 5003
+DEFAULTPORT: int = 5006
 #==================================
 
 #=================基准路由===================
@@ -162,6 +162,90 @@ def delete_project():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# 添加新项目
+@app.route(f"{DEFAULTROUTE}/oper/add", methods=["POST"])
+def add_project():
+    try:
+        DebugTool.debug_log("添加项目接收请求")
+        data = request.json
+        if not data:
+            return jsonify({"code": 400, "message": "请求参数不能为空", "data": "1"}), 400
+
+        # 校验必填字段
+        required_fields = ["project_name", "tech_stack", "start_time", "end_time", "status"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                return jsonify({"code": 400, "message": f"字段 {field} 不能为空", "data": "1"}), 400
+
+        # 提取字段
+        project_name = data["project_name"]
+        tech_stack = data["tech_stack"]
+        start_time = data["start_time"]
+        end_time = data["end_time"]
+        status = data["status"]
+
+        # 调用工具类插入数据
+        result = MySqlUtil.add_project(
+            project_name=project_name,
+            tech_stack=tech_stack,
+            start_time=start_time,
+            end_time=end_time,
+            status=status
+        )
+
+        if result[1] == "0":
+            return jsonify({"code": 200, "message": "项目添加成功", "data": "0"}), 200
+        elif result[1] == "2":
+            return jsonify({"code": 409, "message": "项目名称已存在", "data": "2"}), 200
+        else:
+            return jsonify({"code": 500, "message": "项目添加失败", "data": "-1"}), 200
+
+    except Exception as e:
+        DebugTool.debug_log(f"添加项目异常: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+    
+# 编辑项目信息
+@app.route(f"{DEFAULTROUTE}/oper/edit", methods=["POST"])
+def edit_project():
+    try:
+        DebugTool.debug_log("编辑项目接收请求")
+        data = request.json
+        if not data:
+            return jsonify({"code": 400, "message": "请求参数不能为空", "data": "1"}), 400
+
+        # 必传参数校验
+        required_fields = ["project_id", "project_name", "tech_stack", "start_time", "end_time", "status"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                return jsonify({"code": 400, "message": f"字段 {field} 不能为空", "data": "1"}), 400
+
+        project_id = data["project_id"]
+        project_name = data["project_name"]
+        tech_stack = data["tech_stack"]
+        start_time = data["start_time"]
+        end_time = data["end_time"]
+        status = data["status"]
+
+        # 调用工具类执行更新
+        result = MySqlUtil.edit_project(
+            project_id=project_id,
+            project_name=project_name,
+            tech_stack=tech_stack,
+            start_time=start_time,
+            end_time=end_time,
+            status=status
+        )
+
+        if result[1] == "0":
+            return jsonify({"code": 200, "message": "项目编辑成功", "data": "0"}), 200
+        elif result[1] == "2":
+            return jsonify({"code": 409, "message": "项目名称已存在", "data": "2"}), 200
+        else:
+            return jsonify({"code": 500, "message": "项目编辑失败", "data": "-1"}), 200
+
+    except Exception as e:
+        DebugTool.debug_log(f"编辑项目异常: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)

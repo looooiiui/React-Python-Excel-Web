@@ -11,6 +11,7 @@ import AccountManger from './page/UserPage/AdminPage/AccountManager/AccountManag
 import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
 import ProjectCenter from './page/UserPage/NormalPage/ProjectCenter';
 import AiAssistantCenter from './page/UserPage/NormalPage/AiAssistantCenter';
+import TrainingCenter from './page/UserPage/NormalPage/TrainingPage';
 // 文章组件
 import ArticleList from './page/ArticlePage/ArticleList';
 import ArticlePublish from './page/ArticlePage/ArticlePublish';
@@ -149,6 +150,7 @@ function App() {
           <Route path={`${CONSTPARAM.FRONTARTICLE}/publish`} element={<AuthRoute><ArticlePublish /></AuthRoute>} />
           <Route path={`${CONSTPARAM.FRONTARTICLE}/detail/:id`} element={<AuthRoute><ArticleDetail /></AuthRoute>} />
           <Route path={`${CONSTPARAM.FRONTARTICLE}/edit/:id`} element={<AuthRoute><ArticleEdit /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.TRAININGCENTERURL}`} element={<AuthRoute><TrainingCenter /></AuthRoute>} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
           <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />

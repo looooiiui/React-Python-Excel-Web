@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 4003;
+const port = 4004;
 
 //=======================自定义工具===============================
-const { DebugTool } = require('../../../../src/Util/DebugTool/DebugTool');
+const { DebugTool } = require('../../../src/Util/DebugTool/DebugTool');
 //===============================================================
-const { CONSTPARAM } = require("../../Core/CONST/CONST");
+const { CONSTPARAM } = require("../Core/CONST/CONST");
 
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
@@ -14,12 +14,6 @@ app.use(express.json({ limit: '100kb' }));
 //=================Nacos服务初始化==================
 
 const { NacosConfigClient, NacosNamingClient } = require("nacos");
-
-const configClient = new NacosConfigClient({
-    serverAddr: CONSTPARAM.NACOSURL,
-    namespace: "public"
-});
-
 
 // 初始注册服务
 const naming = new NacosNamingClient({
@@ -32,12 +26,12 @@ const naming = new NacosNamingClient({
 (async () => {
     await naming.ready()
     await naming.registerInstance(
-        CONSTPARAM.ARTICLESERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5007 },
+        CONSTPARAM.TRAININGSERVER,
+        { ip: CONSTPARAM.CONNECTIP, port: 5008 },
     );
 })()
 
 // 启动监听
 app.listen(port, async () => {
-    DebugTool.debugLog("文章代理信息后端运行中");
+    DebugTool.debugLog("培训代理信息后端运行中");
 });

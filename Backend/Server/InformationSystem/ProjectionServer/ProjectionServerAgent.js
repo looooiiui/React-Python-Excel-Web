@@ -33,7 +33,7 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.PROJECTIONSERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5003 },
+        { ip: CONSTPARAM.CONNECTIP, port: 5006 },
     );
 })()
 

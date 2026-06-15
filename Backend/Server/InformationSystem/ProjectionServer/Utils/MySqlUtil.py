@@ -261,3 +261,82 @@ def delete_link_project(project_id, conn, cursor):
     except Exception as e:
         DebugTool.debug_log("删除关联项目内层异常: 向上抛出")
         raise
+
+# 添加新项目
+def add_project(project_name, tech_stack, start_time, end_time, status):
+    """
+    添加新项目
+    :return: (是否执行成功, 状态码 0/2/-1)
+    """
+    conn = None
+    cursor = None
+    try:
+        conn = pymysql.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # 先检查项目名是否重复
+        check_sql = "SELECT id FROM project WHERE project_name = %s"
+        cursor.execute(check_sql, (project_name,))
+        if cursor.fetchone():
+            return False, "2"
+
+        # 插入新项目
+        insert_sql = """
+            INSERT INTO project (project_name, tech_stack, start_time, end_time, status)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(insert_sql, (project_name, tech_stack, start_time, end_time, status))
+        conn.commit()
+
+        return True, "0"
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        print(f"add_project error: {e}")
+        return False, "-1"
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+# 项目更改
+def edit_project(project_id, project_name, tech_stack, start_time, end_time, status):
+    """
+    编辑项目信息
+    :return: (执行状态, 状态码 0/2/-1)
+    """
+    conn = None
+    cursor = None
+    try:
+        conn = pymysql.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # 校验同名项目（排除自身）
+        check_sql = "SELECT id FROM project WHERE project_name = %s AND id != %s"
+        cursor.execute(check_sql, (project_name, project_id))
+        if cursor.fetchone():
+            return False, "2"
+
+        # 执行更新
+        update_sql = """
+            UPDATE project 
+            SET project_name=%s, tech_stack=%s, start_time=%s, end_time=%s, status=%s
+            WHERE id = %s
+        """
+        cursor.execute(update_sql, (project_name, tech_stack, start_time, end_time, status, project_id))
+        conn.commit()
+
+        return True, "0"
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        print(f"edit_project error: {e}")
+        return False, "-1"
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

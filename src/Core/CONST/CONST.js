@@ -15,6 +15,7 @@ class CONSTPARAM {
     static TRAINEEMANAGERURL = "/traineesManager" // 学员管理基址
     static SECURITYCENTERURL = "/securtiyCenter" // 安全中心基址
     static PROJECTIONCENTERURL = "/projectCenter" // 项目中心
+    static TRAININGCENTERURL = "/training" // 培训中心
     static AIASSISTANTURL = "/aiAssistant" // AI中心
 
     //===================后端基址==========================
@@ -24,6 +25,7 @@ class CONSTPARAM {
     static INFOBASE = "/info" // 信息基址
     static PROJECTBASE = "/project" //项目基址
     static ARTICLEBASE = "/article" // 文章系统基址
+    static TRAINBASE = "/train" // 培训系统基址
     //===============前端基址========================
     static FRONTARTICLE = "/article"
 
@@ -38,6 +40,7 @@ class CONSTPARAM {
     static PROJECTIONCENTERIP = "";
     static AISYSTEMIP = "";
     static ARTICLESYSTEMIP = "";
+    static TRAINIP = "";
     //================Nacos服务名字=============
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
@@ -45,6 +48,7 @@ class CONSTPARAM {
     static NACOSPROJECTION = "Projection-Server";
     static NACOSAIASSISTANT = "Ai-Server";
     static NACOSARTICLE = "Article-Server";
+    static NACOSTRAIN = "Training-Server";
     //=================数值常量================
     static INPUTMAXLEN = 20;
 
@@ -62,6 +66,7 @@ if (result) {
     await initializeProjectUrl()
     await initializeAiUrl()
     await initializeArticleUrl();
+    await initializeTrainUrl();
 }
 //======================================
 
@@ -150,6 +155,24 @@ async function initializeArticleUrl() {
     // 注入信息系统地址
     CONSTPARAM.ARTICLESYSTEMIP = `${data.url}`;
     DebugTool.debugLog(`注入文章系统: ${CONSTPARAM.ARTICLESYSTEMIP}`)
+}
+
+// 初始化网站与培训系统基址(AI系统)
+async function initializeTrainUrl() {
+    var sendName = { serverName: CONSTPARAM.NACOSTRAIN }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入信息系统地址
+    CONSTPARAM.TRAINIP = `${data.url}`;
+    DebugTool.debugLog(`注入培训系统: ${CONSTPARAM.TRAINIP}`)
 }
 
 // 启动前探测网址存在

@@ -8,6 +8,7 @@ class CONSTPARAM {
     static INTERFACEURL = "/interface";
     static AISYSTEMBASEURL = "/aiAssistant";
     static ARTICLESYSTEMURL = "/article";
+    static TRAININGSYSTEMURL = "/training"
     //===========Nacos分组=============
     static LOGINSERVER = "Login-Server";
     static LOGINSERVERGROUP = "LOGINGROUP";
@@ -21,6 +22,8 @@ class CONSTPARAM {
     static AISYSTEMSeRVERGROUP = "AISYSTEMSeRVERGROUP";
     static ARTICLESERVER = "Article-Server";
     static ARTICLESERVERGROUP = "ARTICLESERVERGROUP"
+    static TRAININGSERVER = "Training-Server"
+    static TRAININGGROUP = "TRAININGGROUP"
     //==============标准后端返回=====================
     static WEBSUCCESSCODE = 200;         // 后端请求处理成功
     static WEBARGVERROR = 400;           // 传入参数错误
