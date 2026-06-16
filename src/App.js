@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // 页面路由相关组件引入
 import Bbout from './page/Bbout'
 import Login from './page/LoginSystem/Login'
@@ -12,6 +12,7 @@ import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
 import ProjectCenter from './page/UserPage/NormalPage/ProjectCenter';
 import AiAssistantCenter from './page/UserPage/NormalPage/AiAssistantCenter';
 import TrainingCenter from './page/UserPage/NormalPage/TrainingPage';
+import TempTest from './page/UserPage/TempTest';
 // 文章组件
 import ArticleList from './page/ArticlePage/ArticleList';
 import ArticlePublish from './page/ArticlePage/ArticlePublish';
@@ -27,73 +28,237 @@ import './Theme/CSS/Header.css'
 import CONSTPARAM from './Core/CONST/CONST';
 
 // 自带组件引入
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 //=================UI=======================
-import { Layout, Menu, Avatar, Space } from 'antd';
-import { HomeOutlined, InfoOutlined, LoginOutlined, UserAddOutlined, ReadOutlined } from '@ant-design/icons';
+import { Layout, Menu, Avatar, Space, Tabs, Button, Dropdown } from 'antd';
+import {
+  HomeOutlined, InfoOutlined, LoginOutlined, UserAddOutlined, ReadOutlined,
+  CloseOutlined, PlusOutlined, CompressOutlined, ClearOutlined, UserOutlined,
+  FontColorsOutlined, LogoutOutlined
+} from '@ant-design/icons';
+import { Color } from 'antd/es/color-picker';
 
 
 // 导航栏
 const { Header } = Layout;
 
+// 页面标题映射（路由->显示文字）
+const ROUTE_TITLE_MAP = {
+  [CONSTPARAM.MAINPAGEURL]: "首页",
+  [CONSTPARAM.ABOUTURL]: "关于我们",
+  [CONSTPARAM.LOGINURL]: "登录",
+  [CONSTPARAM.REGISTERURL]: "注册",
+  [CONSTPARAM.TRAINEEMANAGERURL]: "用户管理",
+  [CONSTPARAM.SECURITYCENTERURL]: "安全中心",
+  [CONSTPARAM.PROJECTIONCENTERURL]: "项目中心",
+  [CONSTPARAM.AIASSISTANTURL]: "AI助手",
+  [CONSTPARAM.TRAININGCENTERURL]: "培训管理",
+  [`${CONSTPARAM.FRONTARTICLE}/list`]: "文章列表",
+  [`${CONSTPARAM.FRONTARTICLE}/publish`]: "发布文章",
+  [`${CONSTPARAM.FRONTARTICLE}/detail`]: "文章详情",
+  [`${CONSTPARAM.FRONTARTICLE}/edit`]: "编辑文章",
+  "/user": "个人主页",
+  "/user/profile": "个人资料"
+};
+
 function App() {
-
-  // 路由跳转
+  // 路由钩子
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  // 页面不存在
-  function NotFind() {
-    return <h1>404页面不存在</h1>
-  }
+  // ========== 多标签页状态 ==========
+  // 标签列表 [{ path:路由, title:标题, key:唯一标识 }]
+  const [tabList, setTabList] = useState([
+    { path: CONSTPARAM.MAINPAGEURL, title: "首页", key: CONSTPARAM.MAINPAGEURL }
+  ]);
+  // 当前激活标签key
+  const [activeTabKey, setActiveTabKey] = useState(CONSTPARAM.MAINPAGEURL);
+
+  // 根据路由获取页面标题
+  const getPageTitle = useCallback((path) => {
+    // 动态路由匹配（文章详情/编辑、用户主页）
+    if (path.startsWith(`${CONSTPARAM.FRONTARTICLE}/detail`)) return "文章详情";
+    if (path.startsWith(`${CONSTPARAM.FRONTARTICLE}/edit`)) return "编辑文章";
+    if (path.startsWith("/user/") && path.includes("/profile")) return "个人资料";
+    if (path.startsWith("/user/")) return "个人主页";
+    if (path.startsWith("/tempTest")) return "测试网址";
+    return ROUTE_TITLE_MAP[path] || "未知页面";
+  }, []);
+
+  // 监听路由变化：自动新增标签、切换激活状态
+  useEffect(() => {
+    const title = getPageTitle(currentPath);
+    const existTab = tabList.find(item => item.path === currentPath);
+    setActiveTabKey(currentPath);
+    if (!existTab) {
+      // 不存在则新增标签
+      setTabList(prev => [...prev, {
+        path: currentPath,
+        title,
+        key: currentPath
+      }]);
+    }
+  }, [currentPath, getPageTitle, tabList]);
+
+  // 打开新标签（全局通用函数，任意组件可调用跳转新开页面）
+  const openNewTab = (targetPath) => {
+    navigate(targetPath);
+  };
+
+  // 切换标签
+  const handleTabChange = (key) => {
+    navigate(key);
+  };
+
+  // 关闭单个标签
+  const handleCloseTab = (targetKey, e) => {
+    e.stopPropagation();
+    let newTabs = tabList.filter(item => item.key !== targetKey);
+    // 至少保留一个首页标签，不能全部关闭
+    if (newTabs.length === 0) {
+      newTabs = [{ path: CONSTPARAM.MAINPAGEURL, title: "首页", key: CONSTPARAM.MAINPAGEURL }];
+      navigate(CONSTPARAM.MAINPAGEURL);
+    }
+    // 如果关闭的是当前激活页，自动切换到最后一个标签
+    if (targetKey === activeTabKey) {
+      const lastTab = newTabs[newTabs.length - 1];
+      navigate(lastTab.path);
+    }
+    setTabList(newTabs);
+  };
+
+  // 标签右键下拉菜单操作
+  const tabContextMenuItems = [
+    {
+      key: "closeOther",
+      label: "关闭其他标签",
+      icon: <CompressOutlined />
+    },
+    {
+      key: "closeAll",
+      label: "关闭全部标签",
+      icon: <ClearOutlined />
+    }
+  ];
+  const handleTabMenuClick = (menuKey, tabKey) => {
+    if (menuKey === "closeOther") {
+      // 只保留当前标签 + 首页
+      const keepTabs = tabList.filter(item => item.key === tabKey || item.key === CONSTPARAM.MAINPAGEURL);
+      setTabList(keepTabs);
+      navigate(tabKey);
+    } else if (menuKey === "closeAll") {
+      // 只保留首页
+      setTabList([{ path: CONSTPARAM.MAINPAGEURL, title: "首页", key: CONSTPARAM.MAINPAGEURL }]);
+      navigate(CONSTPARAM.MAINPAGEURL);
+    }
+  };
+
+  // 对tabList根据path去重，保留第一个
+  const uniqueTabList = Array.from(new Map(tabList.map(item => [item.path, item])).values());
+  // 组装Tabs标签渲染项（带关闭按钮+右键菜单）
+  const tabItems = uniqueTabList.map(tab => ({
+    key: tab.key,
+    label: (
+      <Dropdown
+        menu={{
+          items: tabContextMenuItems,
+          onClick: (info) => handleTabMenuClick(info.key, tab.key)
+        }}
+        trigger={["contextMenu"]}
+      >
+        <Space size={6}>
+          <span>{tab.title}</span>
+          {tab.key !== CONSTPARAM.MAINPAGEURL && (
+            <CloseOutlined
+              size={12}
+              onClick={(e) => handleCloseTab(tab.key, e)}
+              style={{ color: "#999" }}
+            />
+          )}
+        </Space>
+      </Dropdown>
+    )
+  }));
 
   // 头像点击
   function avatarClick() {
     var currentLoginState = InfomationSystem.getCurrentLoginState();
     DebugTool.debugLog("路由主界面: 头像点击登录状态: " + currentLoginState);
-    // 用户登录状态判断
     if (currentLoginState) {
       var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
       var currentAccountId = currentAccountInfo.accountId;
-      DebugTool.debugLog("路由主界面: 头像点击进入用户主页: " + currentAccountId);
-      navigate(CONSTPARAM.USERBASEURL + "/" + currentAccountId + "/" + CONSTPARAM.USERPROFILE);
+      openNewTab(`/user/${currentAccountId}`);
     } else {
-      navigate(CONSTPARAM.LOGINURL);
+      openNewTab(CONSTPARAM.LOGINURL);
     }
   }
 
-  // 导航菜单配置
-  const menuItems = [
+  // 下拉菜单选项
+  const avatarMenuItems = [
+    {
+      key: "profile",
+      icon: <UserOutlined />,
+      label: "个人主页",
+      onClick: () => {
+        const info = InfomationSystem.getCurrentLoginInfo();
+        openNewTab(`/user/${info.accountId}`);
+      }
+    },
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "退出登录",
+      onClick: () => {
+        InfomationSystem.logout();
+        openNewTab(CONSTPARAM.LOGINURL);
+      }
+    }
+  ];
+  // 顶部左侧系统一级菜单（点击直接新开标签）
+  const topMenuItems = [
     {
       key: CONSTPARAM.MAINPAGEURL,
       icon: <HomeOutlined />,
-      label: <Link to={CONSTPARAM.MAINPAGEURL} style={Theme.NavigateFontTheme}>首页</Link>
+      label: "首页",
+      onClick: () => openNewTab(CONSTPARAM.MAINPAGEURL)
     },
     {
       key: CONSTPARAM.ABOUTURL,
       icon: <InfoOutlined />,
-      label: <Link to={CONSTPARAM.ABOUTURL} style={Theme.NavigateFontTheme}>关于</Link>
+      label: "关于",
+      onClick: () => openNewTab(CONSTPARAM.ABOUTURL)
     },
     {
       key: CONSTPARAM.LOGINURL,
       icon: <LoginOutlined />,
-      label: <Link to={CONSTPARAM.LOGINURL} style={Theme.NavigateFontTheme}>登录</Link>
+      label: "登录",
+      onClick: () => openNewTab(CONSTPARAM.LOGINURL)
     },
     {
       key: CONSTPARAM.REGISTERURL,
       icon: <UserAddOutlined />,
-      label: <Link to={CONSTPARAM.REGISTERURL} style={Theme.NavigateFontTheme}>注册</Link>
+      label: "注册",
+      onClick: () => openNewTab(CONSTPARAM.REGISTERURL)
     },
     {
-      key: CONSTPARAM.ARTICLEURL,
+      key: `${CONSTPARAM.FRONTARTICLE}/list`,
       icon: <ReadOutlined />,
-      label: <Link to={`${CONSTPARAM.ARTICLEBASE}/list`} style={Theme.NavigateFontTheme}>文章</Link>
+      label: "文章中心",
+      onClick: () => openNewTab(`${CONSTPARAM.FRONTARTICLE}/list`)
+    },
+    {
+      key: "/tempTest",
+      label: "测试网址",
+      onClick: () => openNewTab("/tempTest")
     }
   ];
 
   return (
     <div style={Theme.WrapAllTheme}>
+      {/* 全屏背景图 */}
       <div style={{
         position: "absolute",
         top: 0,
@@ -107,34 +272,71 @@ function App() {
         backgroundPosition: 'center',
       }}></div>
 
-      <Header style={{ ...Theme.NavigateTheme, padding: "0 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+      {/* 顶部Header区域：左侧主菜单 + 中间多标签Tab栏 + 右侧头像 */}
+      <Header style={{
+        ...Theme.NavigateTheme,
+        padding: "0 16px",
+        height: "auto",
+      }}>
+        {/* 第一行：系统一级导航 + 头像 */}
+        <div style={{ display: "flex", alignItems: "center", width: "100%", height: 80 }}>
+          {/* 左侧横向主菜单 */}
           <Menu
             mode="horizontal"
-            items={menuItems}
+            items={topMenuItems}
             style={{
               flex: 1,
               background: "transparent",
               borderBottom: "none",
-              lineHeight: "80px"
+              lineHeight: "80px",
+              fontSize: "20px",
             }}
+            theme='dark'
           />
+          {/* 右侧头像 */}
+          <Dropdown
+            menu={{ items: avatarMenuItems }}
+            trigger={["hover"]} // hover 悬浮触发，click 是点击触发
+          >
+            <Avatar
+              size={64}
+              src="/logo512.png"
+              style={{
+                ...Theme.AvatarTheme,
+                background: '#ffffff',
+                border: '1px solid #e0e0e0',
+              }}
+            />
+          </Dropdown>
+        </div>
 
-          <Avatar
-            size={64}
-            src="/logo512.png"
-            style={{
-              ...Theme.AvatarTheme,
-              cursor: "pointer",
-              background: '#ffffff',
-              border: '1px solid #e0e0e0',
-            }}
-            onClick={avatarClick}
-          />
+        {/* 第二行：多页面Tab标签栏（核心，用来开一堆页面） */}
+        <div style={{ background: "#f5f7fa", padding: "4px 8px" }}>
+          <Space size={8} align="center">
+            {/* 快速新开首页按钮 */}
+            <Button
+              size="small"
+              icon={<PlusOutlined />}
+              onClick={() => openNewTab(CONSTPARAM.MAINPAGEURL)}
+            >
+              新页面
+            </Button>
+            {/* 可横向滚动的标签栏 */}
+            <div style={{ flex: 1, overflowX: "auto" }}>
+              <Tabs
+                size="small"
+                hideAdd
+                items={tabItems}
+                activeKey={activeTabKey}
+                onChange={handleTabChange}
+                tabBarStyle={{ marginBottom: 0 }}
+              />
+            </div>
+          </Space>
         </div>
       </Header>
 
-      {/* 网站中间 */}
+      {/* 网站中间页面内容区域 */}
       <div style={Theme.ContentWrapTheme}>
         <Routes>
           <Route path='/' element={<Navigate to="/MainPage" replace />} />
@@ -151,6 +353,7 @@ function App() {
           <Route path={`${CONSTPARAM.FRONTARTICLE}/detail/:id`} element={<AuthRoute><ArticleDetail /></AuthRoute>} />
           <Route path={`${CONSTPARAM.FRONTARTICLE}/edit/:id`} element={<AuthRoute><ArticleEdit /></AuthRoute>} />
           <Route path={`${CONSTPARAM.TRAININGCENTERURL}`} element={<AuthRoute><TrainingCenter /></AuthRoute>} />
+          <Route path='/tempTest' element={<TempTest />} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />
           <Route path='/user/:id/profile' element={<AuthRoute><UserProfile /></AuthRoute>} />
           <Route path="*" element={<NotFind />} />
@@ -178,6 +381,11 @@ function App() {
     </div >
 
   );
+}
+
+// 404页面组件
+function NotFind() {
+  return <h1>404页面不存在</h1>
 }
 
 export default App;

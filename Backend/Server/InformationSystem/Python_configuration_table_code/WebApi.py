@@ -1,76 +1,181 @@
-# Web后端工具，系统工具
-#=======三方库===========
-from flask import Flask, jsonify, Response
+# Web后端接口层 用户账号模块
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import pymysql
-
-#==================== MySQL 配置 ===================
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "!Qq3303220151",    # 改成你的 MySQL 密码
-    "database": "my_project",# 库名
-    "charset": "utf8mb4"
-}
-#====================================================
+#==============自定义工具引入================
+from Utils.DebugTool.DebugUtil import DebugTool
+from Utils import MySqlUtil
 
 #==============基准IP==============
-NACOS_SERVER: str = "26.224.10.101:8848"
 DEFAULTURL: str = "26.224.10.101"
 DEFAULTPORT: int = 5002
 #==================================
 
 #=================基准路由===================
-DEFAULTROUTE: str = "/info/accountInfo"
+DEFAULTROUTE: str = "/api/info/accountInfo"
 
 #==========Python后端创建===================
 app = Flask(__name__)
 CORS(app)
+# 全局固定错误码
+BACK_ERR_CODE = "99"
+SUCCESS_CODE = "0"
 
-#==================== MySQL 工具 ====================
-def get_db_connection():
-    try:
-        conn = pymysql.connect(**DB_CONFIG)
-        cursor = conn.cursor(pymysql.cursors.DictCursor)  # 直接返回字典
-        return conn, cursor
-    except Exception as e:
-        print(f"数据库连接失败: {e}")
-        return None, None
-
-# 从 MySQL 读取用户数据，返回和 Excel 完全一样的字典格式
-def get_account_data_from_mysql():
-    conn, cursor = get_db_connection()
-    if not conn:
-        return {}
-
-    try:
-        sql = "SELECT ACCOUNTID, PASSWORD, NAME, ADMIN, PERMISSION FROM user"
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-
-        # 构造和 Excel 版本完全一样的字典结构
-        data = {row["ACCOUNTID"]: row for row in rows}
-
-        return data
-
-    finally:
-        cursor.close()
-        conn.close()
-
-#==================== 接口 ====================
-# 请求处(路由)
-# 前端提供接口(这个接口是简要信息接口，端口5002)
+# 1. 查询全部用户（原有兼容接口）
 @app.route(DEFAULTROUTE, methods=["GET"])
-def get_account_info():
+def get_all_account():
     try:
-        # 从 MySQL 读取数据（替代 Excel）
-        data = get_account_data_from_mysql()
-
-        # 返回字典的 JSON 形式
-        return jsonify(data)
-
+        data = MySqlUtil.get_all_accounts()
+        return jsonify({
+            "success": True,
+            "code": SUCCESS_CODE,
+            "messsage": "查询成功",
+            "data": data
+        })
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        DebugTool.debug_log(f"查询所有用户异常: {e}")
+        return jsonify({
+            "success": False,
+            "code": BACK_ERR_CODE,
+            "messsage": f"查询失败:{str(e)}",
+            "data": {}
+        }), 500
+
+# 2. 根据ACCOUNTID查询单用户详情
+@app.route(f"{DEFAULTROUTE}/<string:accountId>", methods=["GET"])
+def get_account_detail(accountId):
+    try:
+        data = MySqlUtil.get_account_by_id(accountId)
+        if not data:
+            return jsonify({
+                "success": False,
+                "code": BACK_ERR_CODE,
+                "message": "该账号不存在",
+                "data": None
+            })
+        return jsonify({
+            "success": True,
+            "code": SUCCESS_CODE,
+            "message": "查询成功",
+            "data": data
+        })
+    except Exception as e:
+        DebugTool.debug_log(f"查询用户详情异常: {e}")
+        return jsonify({
+            "success": False,
+            "code": BACK_ERR_CODE,
+            "messsage": f"查询失败:{str(e)}",
+            "data": None
+        }), 500
+
+# 3. 新增用户
+@app.route(f"{DEFAULTROUTE}/add", methods=["POST"])
+def add_account():
+    try:
+        req_data = request.get_json()
+        # 必传字段校验
+        required = ["ACCOUNTID", "PASSWORD", "NAME"]
+        for field in required:
+            if field not in req_data or str(req_data[field]).strip() == "":
+                return jsonify({
+                    "success": False,
+                    "code": BACK_ERR_CODE,
+                    "message": f"缺少必填参数:{field}",
+                    "data": None
+                })
+        accountId = str(req_data["ACCOUNTID"]).strip()
+        password = str(req_data["PASSWORD"]).strip()
+        name = str(req_data["NAME"]).strip()
+        admin = str(req_data.get("ADMIN", "0")).strip()
+        permission = int(req_data.get("PERMISSION", 0))
+
+        success, code = MySqlUtil.add_account(accountId, password, name, admin, permission)
+        if success:
+            return jsonify({
+                "success": True,
+                "code": SUCCESS_CODE,
+                "message": "新增用户成功",
+                "data": {"id": code}
+            })
+        else:
+            msg = "账号已存在，无法重复新增" if code == "2" else "新增失败"
+            return jsonify({
+                "success": False,
+                "code": code,
+                "message": msg,
+                "data": None
+            })
+    except Exception as e:
+        DebugTool.debug_log(f"新增用户异常: {e}")
+        return jsonify({
+            "success": False,
+            "code": BACK_ERR_CODE,
+            "message": f"新增失败:{str(e)}",
+            "data": None
+        }), 500
+
+# 4. 更新用户
+@app.route(f"{DEFAULTROUTE}/update/<string:accountId>", methods=["POST"])
+def update_account(accountId):
+    try:
+        req_data = request.get_json()
+        success, code = MySqlUtil.update_account(
+            accountId,
+            password=req_data.get("PASSWORD"),
+            name=req_data.get("NAME"),
+            admin=req_data.get("ADMIN"),
+            permission=req_data.get("PERMISSION")
+        )
+        if success:
+            return jsonify({
+                "success": True,
+                "code": SUCCESS_CODE,
+                "msg": "用户信息更新成功",
+                "data": None
+            })
+        else:
+            msg = "待编辑账号不存在" if code == "2" else "未传入任何可更新字段/更新失败"
+            return jsonify({
+                "success": False,
+                "code": code,
+                "msg": msg,
+                "data": None
+            })
+    except Exception as e:
+        DebugTool.debug_log(f"更新用户异常: {e}")
+        return jsonify({
+            "success": False,
+            "code": BACK_ERR_CODE,
+            "msg": f"更新失败:{str(e)}",
+            "data": None
+        }), 500
+
+# 5. 删除用户
+@app.route(f"{DEFAULTROUTE}/delete/<string:accountId>", methods=["POST"])
+def delete_account(accountId):
+    try:
+        success = MySqlUtil.delete_account(accountId)
+        if success:
+            return jsonify({
+                "success": True,
+                "code": SUCCESS_CODE,
+                "msg": "用户删除成功",
+                "data": None
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "code": BACK_ERR_CODE,
+                "msg": "待删除账号不存在",
+                "data": None
+            })
+    except Exception as e:
+        DebugTool.debug_log(f"删除用户异常: {e}")
+        return jsonify({
+            "success": False,
+            "code": BACK_ERR_CODE,
+            "msg": f"删除失败:{str(e)}",
+            "data": None
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)

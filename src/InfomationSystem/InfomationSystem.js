@@ -4,6 +4,7 @@ import { DebugTool } from "../Util/DebugTool/DebugTool";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CONSTPARAM from "../Core/CONST/CONST";
+
 // 仅引入底层请求函数
 import {
     sendLoginInfo,
@@ -65,6 +66,15 @@ import {
     trainDeleteScore,
     trainGetScoreByClass
 } from "./TrainingOper/TrainingOper";
+
+// 导入用户账号底层请求
+import {
+    sendGetAllAccount,
+    sendGetAccountDetail,
+    sendAddAccount,
+    sendUpdateAccount,
+    sendDeleteAccount
+} from "./UserOper/UserOper"
 
 // ====================== 接口地址常量（全部留在主文件） ======================
 const loginVerifyURL = "/user/login";
@@ -368,7 +378,7 @@ export class InfomationSystem {
         trainGetEnrollByClass(classId, callback);
     }
     static trainGetEnrollByUserOper(userId, callback) {
-        DebugTool.debugLog("前端信息中心: 根据用户查询报名");
+        DebugTool.debugLog("前端信息中心: 根据用户查询报名: id: " + userId);
         trainGetEnrollByUser(userId, callback);
     }
 
@@ -418,6 +428,37 @@ export class InfomationSystem {
     }
     static trainGetScoreByClassOper(classId, callback) {
         trainGetScoreByClass(classId, callback);
+    }
+
+    // ===================== 新增：系统用户账号CRUD对外操作方法 =====================
+    // 获取全部系统用户列表
+    static getAllAccountOper(callback) {
+        DebugTool.debugLog("前端信息中心：调用获取全部系统用户接口");
+        sendGetAllAccount(callback);
+    }
+
+    // 根据账号ACCOUNTID 查询单条系统用户详情
+    static getAccountDetailOper(accountId, callback) {
+        DebugTool.debugLog("前端信息中心：调用查询系统用户详情接口，账号：" + accountId);
+        sendGetAccountDetail(accountId, callback);
+    }
+
+    // 新增系统用户
+    static addAccountOper(accountId, password, name, admin, permission, callback) {
+        DebugTool.debugLog("前端信息中心：调用新增系统用户接口，账号：" + accountId);
+        sendAddAccount(accountId, password, name, admin, permission, callback);
+    }
+
+    // 更新系统用户（仅传需要修改的字段）
+    static updateAccountOper(accountId, updateData, callback) {
+        DebugTool.debugLog("前端信息中心：调用更新系统用户接口，账号：" + accountId);
+        sendUpdateAccount(accountId, updateData, callback);
+    }
+
+    // 删除系统用户
+    static deleteAccountOper(accountId, callback) {
+        DebugTool.debugLog("前端信息中心：调用删除系统用户接口，账号：" + accountId);
+        sendDeleteAccount(accountId, callback);
     }
 }
 

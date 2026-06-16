@@ -158,7 +158,7 @@ export function trainGetClassById(classId, callback) {
     const url = `${CONSTPARAM.TRAINIP}${CONSTPARAM.TRAINBASE}/class/info/${classId}`;
     axios.get(url, { timeout: 5000 })
         .then(res => {
-            DebugTool.debugLog("前端培训模块: 获取班次详情成功，ID：" + classId);
+            DebugTool.debugLog("前端培训模块: 获取班次详情成功,ID:" + classId);
             callback(res.data);
         })
         .catch(err => {

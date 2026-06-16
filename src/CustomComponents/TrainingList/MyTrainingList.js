@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, Table, Space, Button, message } from "antd";
+import { Layout, Table, Space, Button, message, Spin } from "antd";
 import dayjs from "dayjs";
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
@@ -9,6 +9,7 @@ const { Content } = Layout;
 function MyTrainingList() {
     const [trainingList, setTrainingList] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [loading, setLoading] = useState(false); // 加载状态
 
     const columns = [
         {
@@ -51,70 +52,104 @@ function MyTrainingList() {
             title: "创建时间",
             dataIndex: "create_time",
             key: "create_time",
-            width: 170
+            width: 170,
+            // 时间格式化
+            render: (time) => time ? dayjs(time).format("YYYY-MM-DD HH:mm:ss") : "-"
         },
         {
             title: "操作",
             key: "action",
             width: 120,
-            render: () => (
+            render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => message.info("详情弹窗待开发")}>查看详情</Button>
+                    <Button onClick={() => message.info(`详情弹窗待开发，课程ID：${record.id}`)}>查看详情</Button>
                 </Space>
             )
         }
     ];
 
-    useEffect(() => {
+    // 封装数据拉取函数，方便手动刷新
+    const fetchMyTrainData = () => {
+        setLoading(true);
         const userId = InfomationSystem.getCurrentLoginInfo().accountId;
+        // 根据用户ID获取所有报名记录
         InfomationSystem.trainGetEnrollByUserOper(userId, (res) => {
             DebugTool.debugLog("前端培训-我的培训：获取用户报名记录回调：" + JSON.stringify(res));
-            if (!res || res.length === 0) {
+            setLoading(false);
+            // 无报名数据直接清空列表
+            if (!res || Object.keys(res).length === 0) {
                 setTrainingList([]);
                 return;
             }
             const enrollArr = Array.isArray(res) ? res : Object.values(res);
-            // 组装课程+班次名称
             const finalList = [];
             let finishCount = 0;
             const totalCount = enrollArr.length;
+            const backErr = InfomationSystem.getBackError();
 
             enrollArr.forEach(enrollItem => {
-                // 根据课程ID拿课程信息
-                InfomationSystem.trainGetCourseDetailOper(enrollItem.course_id, (courseRes) => {
-                    // 根据班次ID拿班次名称
-                    InfomationSystem.trainGetClassDetailOper(enrollItem.class_id, (classRes) => {
-                        finishCount++;
-                        if (courseRes && classRes) {
-                            finalList.push({
-                                id: courseRes.id,
-                                course_name: courseRes.course_name,
-                                course_type: courseRes.course_type,
-                                class_hour: courseRes.class_hour,
-                                status: courseRes.status,
-                                create_time: courseRes.create_time,
-                                class_name: classRes.class_name
-                            });
+                // =========修复1：参数传错，改用班次id查询班次信息=========
+                const targetClassId = enrollItem.class_id;
+                InfomationSystem.trainGetClassDetailOper(targetClassId, (classRes) => {
+                    finishCount++;
+                    // 班次接口失败直接跳过本条
+                    if (classRes === backErr || !classRes?.course_id) {
+                        DebugTool.debugLog(`班次${targetClassId}查询失败，跳过`);
+                        if (finishCount === totalCount) setTrainingList(finalList);
+                        return;
+                    }
+                    // 用班次内的course_id 查询课程（核心修复：之前传user_id）
+                    const targetCourseId = classRes.course_id;
+                    InfomationSystem.trainGetCourseDetailOper(targetCourseId, (courseRes) => {
+                        // 课程接口失败直接跳过
+                        if (courseRes === backErr) {
+                            DebugTool.debugLog(`课程${targetCourseId}查询失败，跳过`);
+                            if (finishCount === totalCount) setTrainingList(finalList);
+                            return;
                         }
+                        // 组装完整行数据
+                        finalList.push({
+                            id: courseRes.id,
+                            course_name: courseRes.course_name,
+                            course_type: courseRes.course_type,
+                            class_hour: courseRes.class_hour,
+                            status: courseRes.status,
+                            create_time: courseRes.create_time,
+                            class_name: classRes.class_name
+                        });
+                        // 全部请求完成后更新表格
                         if (finishCount === totalCount) {
-                            setTrainingList(finalList);
+                            setTrainingList([...finalList]);
                         }
                     });
                 });
             });
         });
+    };
+
+    // 页面加载/刷新触发请求
+    useEffect(() => {
+        fetchMyTrainData();
     }, [refresh]);
+
+    // 手动刷新按钮（补充，方便用户刷新）
+    const handleRefresh = () => setRefresh(!refresh);
 
     return (
         <Layout style={{ padding: 16 }}>
             <Content style={{ background: "#fff" }}>
-                <Table
-                    rowKey="id"
-                    dataSource={trainingList}
-                    columns={columns}
-                    bordered
-                    pagination={{ pageSize: 10 }}
-                />
+                <Space style={{ marginBottom: 16 }}>
+                    <Button onClick={handleRefresh}>刷新我的培训</Button>
+                </Space>
+                <Spin spinning={loading}>
+                    <Table
+                        rowKey="id"
+                        dataSource={trainingList}
+                        columns={columns}
+                        bordered
+                        pagination={{ pageSize: 10 }}
+                    />
+                </Spin>
             </Content>
         </Layout>
     );

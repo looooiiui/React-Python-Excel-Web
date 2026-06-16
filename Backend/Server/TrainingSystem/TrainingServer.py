@@ -327,8 +327,9 @@ def get_enroll_by_class(class_id):
 # 扩展接口：根据用户ID查该用户所有报名班次
 @app.route(f"{ENROLL_ROUTE}/byUser/<int:user_id>", methods=["GET"])
 def get_enroll_by_user(user_id):
+    DebugTool.debug_log("查询单个用户培训信息: " + str(user_id))
     try:
-        data = enroll.get_enroll_by_id(user_id)
+        data = enroll.get_enroll_by_user(user_id)
         return jsonify(data)
     except Exception as e:
         DebugTool.debug_log(f"根据用户查询报名异常: {e}")
