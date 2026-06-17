@@ -261,7 +261,7 @@ function ProjectionList() {
                             label="技术栈"
                             rules={[{ required: true, message: "请输入技术栈" }]}
                         >
-                            <TextArea rows={3} placeholder="例如：React + Flask + MySQL" />
+                            <TextArea rows={3} placeholder="例如:React + Flask + MySQL" />
                         </Form.Item>
 
                         <Form.Item

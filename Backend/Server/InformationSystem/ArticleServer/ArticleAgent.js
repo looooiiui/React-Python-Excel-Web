@@ -4,7 +4,7 @@ const app = express();
 const port = 4003;
 
 //=======================自定义工具===============================
-const { DebugTool } = require('../../../../src/Util/DebugTool/DebugTool');
+const { DebugTool } = require("../../DebugTool/DebugTool");
 //===============================================================
 const { CONSTPARAM } = require("../../Core/CONST/CONST");
 

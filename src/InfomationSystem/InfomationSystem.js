@@ -132,12 +132,19 @@ export class InfomationSystem {
         }
     }
 
+    // 存储账户信息
     static storeAccountInfo(accountId, adminFlag) {
         localStorage.setItem("loginUser", accountId);
         localStorage.setItem("isAdmin", adminFlag);
         DebugTool.debugLog("前端信息中心: 存储账户信息");
     }
 
+    // 设置账号ID(请在登录成功以后)
+    static setAccountId(accountId) {
+        accountInfo.accountId = accountId;
+    }
+
+    // 初始化账户信息(从浏览器本地)
     static initializeAccountInfo() {
         const userId = localStorage.getItem("loginUser");
         const admin = localStorage.getItem("isAdmin");
@@ -154,7 +161,6 @@ export class InfomationSystem {
 
     // ========== 对外暴露业务操作方法（原有逻辑完全不变） ==========
     static sentAccountInfo(accountId, password, param, callback) {
-        accountInfo.accountId = String(accountId).trim();
         DebugTool.debugLog("前端信息中心: 账号信息接收数组: " + JSON.stringify(accountInfo));
         DebugTool.debugLog("前端信息中心: 后端地址: " + CONSTPARAM.LOGINIP + CONSTPARAM.LOGINBASE);
         if (param === 0) {
@@ -166,6 +172,7 @@ export class InfomationSystem {
         }
     }
 
+    // 封禁操作请求
     static sendBanOperator(accountId, callback) {
         accountId = String(accountId).trim();
         DebugTool.debugLog("前端信息中心: 账号信息接收账户名: " + accountId);
@@ -173,6 +180,7 @@ export class InfomationSystem {
         sendBanInfo(accountId, callback);
     }
 
+    // 加入项目请求
     static sendJoinProjectionOper(projectionId, callback) {
         DebugTool.debugLog("前端信息中心: 接收加入项目ID: " + projectionId);
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.LOGINIP}${CONSTPARAM.LOGINBASE}${loginVerifyURL}`);
@@ -183,12 +191,14 @@ export class InfomationSystem {
         sendJoinProjection(projectionId, isAdminInt, callback);
     }
 
+    // 离开项目请求
     static exitProjectOper(projectId, callback) {
         DebugTool.debugLog("前端信息中心: 接收退出项目ID: " + projectId);
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/info/delete`);
         exitProject(projectId, callback);
     }
 
+    // 删除项目请求
     static deleteProjectOper(projectId, callback) {
         projectId = Number(projectId);
         DebugTool.debugLog("前端信息中心: 接收删除项目ID: " + projectId);
@@ -196,6 +206,7 @@ export class InfomationSystem {
         deleteProject(projectId, callback);
     }
 
+    // 发送更改操作请求
     static sendChangeOperator(changeInfo, param, callback) {
         changeInfo = String(changeInfo).trim();
         DebugTool.debugLog("前端信息中心: 接收修改信息名: " + changeInfo);

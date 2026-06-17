@@ -18,7 +18,7 @@ const INPUTMAXLEN = 20;
 // 登录界面
 function Login() {
     // =================进入界面初始化===================
-    InfomationSystem.clearOnlineState();
+    //InfomationSystem.clearOnlineState();
     //==================================================
 
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
@@ -52,7 +52,7 @@ function Login() {
             // 更新网站验证信息
             setLoginInfo(result.message);
             // 重定向验证
-            LoginNavigateVerify();
+            LoginNavigateVerify(result);
         });
         setPassword("");
     }
@@ -64,20 +64,15 @@ function Login() {
     }
 
     // 登录跳转检验
-    function LoginNavigateVerify() {
+    function LoginNavigateVerify(result) {
+        var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
         var currentLoginState = InfomationSystem.getCurrentLoginState();
         DebugTool.debugLog("前端登录获得当前登录状态: " + currentLoginState);
-        // 登录状态跳转
-        if (!currentLoginState) {
+
+        // 验证后端返回结果
+        if (result.data != "0") {
             return;
         }
-
-        // 跳转用户网址
-        var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
-        if (!("accountId" in currentAccountInfo)) {
-            return;
-        }
-
         var userId = String(currentAccountInfo.accountId);
         const targetUrl = `${CONSTPARAM.USERBASEURL}/${userId}`;
         DebugTool.debugLog("跳转用户网址: " + targetUrl);

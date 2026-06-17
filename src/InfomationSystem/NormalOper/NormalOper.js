@@ -17,6 +17,10 @@ export function sendLoginInfo(accountId, password, callback, adminParam) {
         .then((res) => {
             DebugTool.debugLog("前端信息中心: 登录请求成功, 后端返回: " + JSON.stringify(res.data));
             InfomationSystem.verifyLoginSuccess(res.data, accountId, password, adminParam);
+            // 成功则更新信息中心存储的账号
+            if (res.data == "0") {
+                InfomationSystem.setAccountId(String(accountId).trim());
+            }
             callback(res.data);
             return res.data;
         })
@@ -144,6 +148,10 @@ export function sendRegisterInfo(accountId, password, callback) {
         .then((res) => {
             DebugTool.debugLog("前端信息中心: 注册请求成功, 后端返回: " + JSON.stringify(res.data));
             InfomationSystem.verifyLoginSuccess(res.data, accountId, password, InfomationSystem.getNormalParma());
+            // 成功则更新信息中心存储的账号
+            if (res.data == "0") {
+                InfomationSystem.setAccountId(String(accountId).trim());
+            }
             callback(res.data);
             return res.data;
         })
@@ -288,3 +296,4 @@ export function sendDeleteArticle(articleId, callback) {
             callback(InfomationSystem.getBackError());
         });
 }
+

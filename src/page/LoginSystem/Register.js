@@ -21,7 +21,7 @@ const INPUTMAXLEN = 20;
 // 注册界面
 function Register() {
     // =================进入界面初始化===================
-    InfomationSystem.clearOnlineState();
+    //InfomationSystem.clearOnlineState();
     //==================================================
 
     const [accountId, setAccountId] = useState(""); // 绑定账号ID
@@ -47,27 +47,22 @@ function Register() {
             // 更新网站验证信息
             setRegisterInfo([result.message]);
             // 重定向验证
-            RegisterNavigateVerify();
+            RegisterNavigateVerify(result);
         });
 
         setPassword("");
     }
 
     // 登录跳转检验
-    function RegisterNavigateVerify() {
-        var currentLoginState = InfomationSystem.getCurrentLoginState();
-        DebugTool.debugLog("前端注册获得当前登录状态: " + currentLoginState);
-        // 登录状态跳转
-        if (!currentLoginState) {
-            return;
-        }
-
-        // 跳转用户网址
+    function RegisterNavigateVerify(result) {
         var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
-        if (!("accountId" in currentAccountInfo)) {
+        var currentLoginState = InfomationSystem.getCurrentLoginState();
+        DebugTool.debugLog("前端登录获得当前登录状态: " + currentLoginState);
+
+        // 验证后端返回结果
+        if (result.data != "0") {
             return;
         }
-
         var userId = String(currentAccountInfo.accountId);
         const targetUrl = `${CONSTPARAM.USERBASEURL}/${userId}`;
         DebugTool.debugLog("跳转用户网址: " + targetUrl);

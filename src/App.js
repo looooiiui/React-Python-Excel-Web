@@ -22,7 +22,7 @@ import ArticleEdit from './page/ArticlePage/ArticleEdit';
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
 import { InfomationSystem } from './InfomationSystem/InfomationSystem';
-import AuthRoute from './Util/DebugTool/AuthRoute/AuthRoute';
+import AuthRoute from './Util/AuthRoute/AuthRoute';
 import Theme from './Theme/theme';
 import './Theme/CSS/Header.css'
 import CONSTPARAM from './Core/CONST/CONST';
@@ -183,19 +183,6 @@ function App() {
     )
   }));
 
-  // 头像点击
-  function avatarClick() {
-    var currentLoginState = InfomationSystem.getCurrentLoginState();
-    DebugTool.debugLog("路由主界面: 头像点击登录状态: " + currentLoginState);
-    if (currentLoginState) {
-      var currentAccountInfo = InfomationSystem.getCurrentLoginInfo();
-      var currentAccountId = currentAccountInfo.accountId;
-      openNewTab(`/user/${currentAccountId}`);
-    } else {
-      openNewTab(CONSTPARAM.LOGINURL);
-    }
-  }
-
   // 下拉菜单选项
   const avatarMenuItems = [
     {
@@ -231,18 +218,18 @@ function App() {
       label: "关于",
       onClick: () => openNewTab(CONSTPARAM.ABOUTURL)
     },
-    {
+    ...(InfomationSystem.getCurrentLoginState() ? [] : [{
       key: CONSTPARAM.LOGINURL,
       icon: <LoginOutlined />,
       label: "登录",
       onClick: () => openNewTab(CONSTPARAM.LOGINURL)
-    },
-    {
+    }]),
+    ...(InfomationSystem.getCurrentLoginState() ? [] : [{
       key: CONSTPARAM.REGISTERURL,
       icon: <UserAddOutlined />,
       label: "注册",
       onClick: () => openNewTab(CONSTPARAM.REGISTERURL)
-    },
+    }]),
     {
       key: `${CONSTPARAM.FRONTARTICLE}/list`,
       icon: <ReadOutlined />,
@@ -254,7 +241,7 @@ function App() {
       label: "测试网址",
       onClick: () => openNewTab("/tempTest")
     }
-  ];
+  ].filter(Boolean);;
 
   return (
     <div style={Theme.WrapAllTheme}>

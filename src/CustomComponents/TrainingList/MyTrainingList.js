@@ -62,7 +62,7 @@ function MyTrainingList() {
             width: 120,
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => message.info(`详情弹窗待开发，课程ID：${record.id}`)}>查看详情</Button>
+                    <Button onClick={() => message.info(`详情弹窗待开发,课程ID:${record.id}`)}>查看详情</Button>
                 </Space>
             )
         }

@@ -97,11 +97,11 @@ def add_account():
                 "data": {"id": code}
             })
         else:
-            msg = "账号已存在，无法重复新增" if code == "2" else "新增失败"
+            message = "账号已存在，无法重复新增" if code == "2" else "新增失败"
             return jsonify({
                 "success": False,
                 "code": code,
-                "message": msg,
+                "message": message,
                 "data": None
             })
     except Exception as e:
@@ -129,15 +129,15 @@ def update_account(accountId):
             return jsonify({
                 "success": True,
                 "code": SUCCESS_CODE,
-                "msg": "用户信息更新成功",
+                "message": "用户信息更新成功",
                 "data": None
             })
         else:
-            msg = "待编辑账号不存在" if code == "2" else "未传入任何可更新字段/更新失败"
+            message = "待编辑账号不存在" if code == "2" else "未传入任何可更新字段/更新失败"
             return jsonify({
                 "success": False,
                 "code": code,
-                "msg": msg,
+                "message": message,
                 "data": None
             })
     except Exception as e:
@@ -145,7 +145,7 @@ def update_account(accountId):
         return jsonify({
             "success": False,
             "code": BACK_ERR_CODE,
-            "msg": f"更新失败:{str(e)}",
+            "message": f"更新失败:{str(e)}",
             "data": None
         }), 500
 
@@ -158,14 +158,14 @@ def delete_account(accountId):
             return jsonify({
                 "success": True,
                 "code": SUCCESS_CODE,
-                "msg": "用户删除成功",
+                "message": "用户删除成功",
                 "data": None
             })
         else:
             return jsonify({
                 "success": False,
                 "code": BACK_ERR_CODE,
-                "msg": "待删除账号不存在",
+                "message": "待删除账号不存在",
                 "data": None
             })
     except Exception as e:
@@ -173,7 +173,7 @@ def delete_account(accountId):
         return jsonify({
             "success": False,
             "code": BACK_ERR_CODE,
-            "msg": f"删除失败:{str(e)}",
+            "message": f"删除失败:{str(e)}",
             "data": None
         }), 500
 
