@@ -26,6 +26,7 @@ class CONSTPARAM {
     static PROJECTBASE = "/project" //项目基址
     static ARTICLEBASE = "/article" // 文章系统基址
     static TRAINBASE = "/train" // 培训系统基址
+    static RESOURCEBASE = "/resource" // 非文本资源基址
     //===============前端基址========================
     static FRONTARTICLE = "/article"
 
@@ -41,6 +42,7 @@ class CONSTPARAM {
     static AISYSTEMIP = "";
     static ARTICLESYSTEMIP = "";
     static TRAINIP = "";
+    static RESOURCEIP = "";
     //================Nacos服务名字=============
     static NACOSLOGIN = "Login-Server";
     static NACOSINFO = "Info-Server";
@@ -49,6 +51,7 @@ class CONSTPARAM {
     static NACOSAIASSISTANT = "Ai-Server";
     static NACOSARTICLE = "Article-Server";
     static NACOSTRAIN = "Training-Server";
+    static NACOSRESOURCE = "Resource-Server";
     //=================数值常量================
     static INPUTMAXLEN = 20;
 
@@ -67,6 +70,7 @@ if (result) {
     await initializeAiUrl()
     await initializeArticleUrl();
     await initializeTrainUrl();
+    await initializeResourceUrl();
 }
 //======================================
 
@@ -174,6 +178,25 @@ async function initializeTrainUrl() {
     CONSTPARAM.TRAINIP = `${data.url}`;
     DebugTool.debugLog(`注入培训系统: ${CONSTPARAM.TRAINIP}`)
 }
+
+// 初始化网站与资源信息系统基址(AI系统)
+async function initializeResourceUrl() {
+    var sendName = { serverName: CONSTPARAM.NACOSRESOURCE }
+    // 获取接口定位
+    const interfaceUrl = `${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}`;
+    DebugTool.debugLog("前端信息中心: 拼接接口地址: " + interfaceUrl + "/getServerUrl");
+
+    const { data } = await axios.post(`${interfaceUrl}/getServerUrl`, sendName, {
+        timeout: 10000
+    });
+
+    DebugTool.debugLog("前端信息中心: 获得后端基址: " + data.url);
+
+    // 注入资源信息系统地址
+    CONSTPARAM.RESOURCEIP = `${data.url}`;
+    DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.RESOURCEIP}`)
+}
+
 
 // 启动前探测网址存在
 /** 

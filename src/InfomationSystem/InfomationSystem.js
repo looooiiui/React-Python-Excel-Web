@@ -214,6 +214,7 @@ export class InfomationSystem {
         sendChangeInfo(changeInfo, param, callback);
     }
 
+    // 鉴别项目加入状态请求(用ID做为查找键)
     static veriftProjectJoinState(projectId, callback) {
         let accountId = accountInfo.accountId
         DebugTool.debugLog("前端信息中心: 接收验证项目名: " + projectId);
@@ -221,18 +222,21 @@ export class InfomationSystem {
         verifyProjectJoin(accountId, projectId, callback);
     }
 
+    // 发送项目加入信息
     static sendAddProjectOper(projectData, callback) {
         DebugTool.debugLog("前端信息中心: 接收添加项目数据");
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/add`);
         addProject(projectData, callback);
     }
 
+    // 发送项目编辑信息
     static sendEditProjectOper(editData, callback) {
         DebugTool.debugLog("前端信息中心: 接收编辑项目数据");
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.PROJECTBASE}/oper/edit`);
         editProject(editData, callback);
     }
 
+    // 向聊天AI发送消息
     static chatMessageToAi(prompt, callback) {
         DebugTool.debugLog("前端信息中心: 向AI发送消息: ");
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.PROJECTIONCENTERIP}${CONSTPARAM.AIASSISTANTURL}/chat`);

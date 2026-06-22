@@ -3,8 +3,8 @@ import { useState } from "react";
 //=============自定义组件引入=======================
 import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
-import ProjectionList from "../../../CustomComponents/ProjectionList/ProjectionListNormal";
-import ProjectionListNormal from "../../../CustomComponents/ProjectionList/ProjectionList";
+import ProjectionList from "../../../CustomComponents/ProjectionList/ProjectionList";
+import ProjectionListNormal from "../../../CustomComponents/ProjectionList/ProjectionListNormal";
 import SpecificProjectionList from "../../../CustomComponents/ProjectionList/SpecificProjectionList";
 
 //================UI库引入=======================

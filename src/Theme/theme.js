@@ -70,7 +70,7 @@ class Theme {
         minHeight: "100vh",
         width: "100%",
         boxSizing: "border-box",
-        paddingTop: "80px",
+        paddingTop: "100px",
     }
 
     // 路由主体容器：删除多余 paddingTop:80px，只留左右下内边距

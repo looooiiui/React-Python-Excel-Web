@@ -4,7 +4,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
-const MarkdownMathRender = ({ content }) => {
+const MarkdownWithMath = ({ content }) => {
     return (
         <div className="markdown-content">
             <ReactMarkdown
@@ -29,4 +29,4 @@ const MarkdownMathRender = ({ content }) => {
     );
 };
 
-export default MarkdownMathRender;
+export default MarkdownWithMath;

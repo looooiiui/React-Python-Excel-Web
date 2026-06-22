@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
 import Theme from '../../Theme/theme';
 import CONSTPARAM from '../../Core/CONST/CONST';
+import MDEditor from '@uiw/react-md-editor';
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
@@ -138,7 +139,10 @@ function ArticleDetail() {
 
                     {/* Markdown正文渲染 */}
                     <div style={{ fontSize: 16, lineHeight: 2.1, color: '#222' }}>
-                        <ReactMarkdown>{article.content}</ReactMarkdown>
+                        <MDEditor.Markdown
+                            source={article.content || ""}
+                            style={{ padding: "16px" }}
+                        />
                     </div>
                 </Content>
 

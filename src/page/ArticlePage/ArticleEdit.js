@@ -8,6 +8,7 @@ import MDEditor from '@uiw/react-md-editor';
 import Theme from '../../Theme/theme';
 import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
 import CONSTPARAM from '../../Core/CONST/CONST';
+import NormalTool from '../../Util/NormalUtils/NormalTool';
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
@@ -187,6 +188,8 @@ function ArticleEdit() {
                             rules={[{ required: true, message: '文章内容不能为空' }]}
                         >
                             <MDEditor
+                                onDrop={(e) => (NormalTool.uploadByDrop(e, form, "content"))}
+                                onPaste={(e) => (NormalTool.uploadByPaste(e, form, "content"))}
                                 value={form.getFieldValue('content')}
                                 onChange={(val) => form.setFieldsValue({ content: val })}
                                 height={620}

@@ -7,6 +7,7 @@ import MDEditor from '@uiw/react-md-editor';
 //===================自定义工具=======================
 import Theme from '../../Theme/theme';
 import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
+import NormalTool from '../../Util/NormalUtils/NormalTool';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -100,6 +101,8 @@ function ArticlePublish() {
                         {/* 正文编辑区 */}
                         <Form.Item name="content" rules={[{ required: true }]}>
                             <MDEditor
+                                onDrop={(e) => (NormalTool.uploadByDrop(e, form, "content"))}
+                                onPaste={(e) => (NormalTool.uploadByPaste(e, form, "content"))}
                                 value={form.getFieldValue('content')}
                                 onChange={(val) => form.setFieldsValue({ content: val })}
                                 height={600}

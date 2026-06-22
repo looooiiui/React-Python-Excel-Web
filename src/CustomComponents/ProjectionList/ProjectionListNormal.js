@@ -11,7 +11,7 @@ import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
 const { Content } = Layout;
 
 // 项目列表（普通成员版：仅查看、加入项目，无新增/编辑/删除项目权限）
-function ProjectionList() {
+function ProjectionListNormal() {
     // 项目列表数据
     const [projectionList, setProjectionList] = useState([]);
     // 项目加入状态映射
@@ -141,4 +141,4 @@ function ProjectionList() {
     );
 }
 
-export default ProjectionList;
+export default ProjectionListNormal;

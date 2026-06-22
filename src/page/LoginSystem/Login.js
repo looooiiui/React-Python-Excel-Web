@@ -59,8 +59,10 @@ function Login() {
 
     // 管理员状态转换
     function administratorStateChange() {
-        setadministrator(prev => !prev);
-        DebugTool.debugLog("登录前端: 当前选择管理员状态: " + administrator);
+        setadministrator(prev => {
+            DebugTool.debugLog("登录前端: 当前选择管理员状态: " + !prev);
+            return !prev;
+        });
     }
 
     // 登录跳转检验

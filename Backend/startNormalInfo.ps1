@@ -1,4 +1,4 @@
-.\const.ps1
+. .\Backend\const.ps1
 
 # 接口服务启动路径拼接
 $ServerStartPath = Join-Path $startPath $LocNormalInfoSystem

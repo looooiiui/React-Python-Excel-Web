@@ -16,6 +16,7 @@ $LocInfoAgent = "\InformationSystem\WebApiInfo\"
 $LocNormalInfoSystem = "\InformationSystem\WebApiInfo\"
 $LocProjectionServer = "\InformationSystem\ProjectionServer\"
 $LocArticleServer = "\InformationSystem\ArticleServer\"
+$LocTrainingServer = "\TrainingSystem"
 $LocAiSystem = "\AiSystem\"
 
 # =============================实际服务名==============================

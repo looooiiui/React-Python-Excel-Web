@@ -241,7 +241,25 @@ function App() {
       label: "测试网址",
       onClick: () => openNewTab("/tempTest")
     }
-  ].filter(Boolean);;
+  ].filter(Boolean);
+  // 导航顶部其他展示框
+  const topChooseNav = [
+    {
+      key: "/1",
+      label: "成果展示",
+      children: [
+        {
+          key: "//11",
+          label: "没什么",
+        },
+        {
+          key: "//12",
+          label: "没什么",
+        }
+      ]
+    },
+  ]
+
 
   return (
     <div style={Theme.WrapAllTheme}>
@@ -297,7 +315,30 @@ function App() {
           </Dropdown>
         </div>
 
-        {/* 第二行：多页面Tab标签栏（核心，用来开一堆页面） */}
+        {/* 第二行 */}
+        <Menu
+          mode="horizontal"
+          theme="dark"
+          items={topChooseNav}
+          popupRender={(menus) => (
+            <div style={{
+              fontSize: "14px",
+              background: "#0047AB",
+            }}>
+              {menus}
+            </div>
+          )}
+          style={{
+            flex: 1,
+            background: "transparent",
+            borderBottom: "none",
+            lineHeight: "40px",
+            fontSize: "20px",
+          }}
+        >
+        </Menu>
+
+        {/* 第三行：多页面Tab标签栏（核心，用来开一堆页面） */}
         <div style={{ background: "#f5f7fa", padding: "4px 8px" }}>
           <Space size={8} align="center">
             {/* 快速新开首页按钮 */}

@@ -7,7 +7,7 @@ import Theme from "../../Theme/theme";
 import "../../Theme/CSS/AiChat/AiChat.css";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
 // Ai渲染样式
-import MarkdownWithMath from "./MarkDown";
+import MarkdownWithMath from "../../Util/NormalUtils/MarkDown";
 
 // ========== Ant Design 组件 ==========
 import { Card, Input, Button, Space, Typography } from "antd";
