@@ -105,7 +105,7 @@ function ArticleList() {
                 ) : articleData.length === 0 ? (
                     <Empty description="暂无发布的文章，点击右上角发布第一篇" style={{ padding: '80px 0' }} />
                 ) : (
-                    // 网格卡片布局，一行4块，和CSDN资讯块状一致
+                    // 网格卡片布局，一行4块
                     <Row gutter={[20, 24]}>
                         {articleData.map((article) => (
                             <Col xs={24} sm={12} md={8} lg={6} key={article.id}>

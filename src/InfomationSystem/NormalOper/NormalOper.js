@@ -253,6 +253,24 @@ export function sendGetArticleDetail(articleId, callback) {
         });
 }
 
+// 获取单篇文章详情(通过标题)
+export function sendGetArticleDetailbyTitle(articleTitle, callback) {
+    const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/title`;
+    // GET 参数放在 params 中
+    axios.get(url, {
+        params: { title: articleTitle },
+        timeout: 5000
+    })
+        .then(res => {
+            DebugTool.debugLog("前端信息中心: 获取文章详情成功(标题)，后端返回：" + res.data);
+            callback(res.data);
+        })
+        .catch(err => {
+            DebugTool.debugLog("前端信息中心: 获取文章详情失败(标题)：" + err.message + err.response?.data);
+            callback(InfomationSystem.getBackError());
+        });
+}
+
 // 新增文章
 export function sendAddArticle(title, content, authorId, callback) {
     const url = `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/add`;

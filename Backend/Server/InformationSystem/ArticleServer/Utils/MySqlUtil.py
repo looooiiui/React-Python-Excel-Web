@@ -80,6 +80,27 @@ def get_article_by_id(article_id):
         if conn:
             conn.close()
 
+# 2.2. 获取单篇文章详情（根据文章标题）
+def get_article_by_title(article_title):
+    conn, cursor = get_db_connection()
+    if not conn:
+        return None
+    
+    try:
+        sql = "SELECT * FROM article WHERE title=%s"
+        cursor.execute(sql, (article_title,))
+        row = cursor.fetchone()
+        return row  # 单条数据，直接返回字典
+    
+    except Exception as e:
+        DebugTool.debug_log(f"获取文章详情失败: {e}")
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 # 3. 发布新文章（新增接口）
 def add_article(title, content, author_id):
@@ -190,6 +211,33 @@ def increase_views(article_id):
         sql = "UPDATE article SET views = views + 1 WHERE id=%s"
         cursor.execute(sql, (article_id,))
         conn.commit()
+        return True
+    
+    except Exception as e:
+        conn.rollback()
+        DebugTool.debug_log(f"增加阅读量失败: {e}")
+        return False
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+# 6.2. 增加阅读量（查看文章时调用）(标题)
+def increase_views_title(article_title):
+    conn, cursor = get_db_connection()
+    if not conn:
+        return False
+    
+    try:
+        sql = "UPDATE article SET views = views + 1 WHERE title=%s"
+        cursor.execute(sql, (article_title,))
+        conn.commit()
+        # cursor.rowcount 获取本次SQL影响的行数
+        if cursor.rowcount == 0:
+            DebugTool.debug_log(f"阅读量更新：无匹配标题 {article_title}，未更新数据")
+            return False
         return True
     
     except Exception as e:

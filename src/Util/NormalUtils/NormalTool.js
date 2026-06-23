@@ -4,11 +4,10 @@ import CONSTPARAM from "../../Core/CONST/CONST";
 
 // 三方工具引入
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // 常用工具类
-
 class NormalTool {
-
     // =======================单次图片上传===================
     static uploadByDrop = async (e, form, fieldName) => {
         if (!e || !form || !fieldName) {
@@ -66,7 +65,7 @@ class NormalTool {
             }
         }
     };
-
 }
+
 
 export default NormalTool;

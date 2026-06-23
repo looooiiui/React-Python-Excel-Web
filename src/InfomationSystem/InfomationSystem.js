@@ -20,6 +20,7 @@ import {
     sendMessageToAi,
     sendGetAllArticle,
     sendGetArticleDetail,
+    sendGetArticleDetailbyTitle,
     sendAddArticle,
     sendUpdateArticle,
     sendDeleteArticle
@@ -254,6 +255,12 @@ export class InfomationSystem {
         DebugTool.debugLog("前端信息中心: 请求文章详情,文章ID:" + id);
         DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/${id}`);
         sendGetArticleDetail(id, callback);
+    }
+    static getArticleDetailByTitleOper(articleTitle, callback) {
+        const title = String(articleTitle);
+        DebugTool.debugLog("前端信息中心: 请求文章详情,文章标题:" + title);
+        DebugTool.debugLog("前端信息中心: 后端地址: " + `${CONSTPARAM.ARTICLESYSTEMIP}${CONSTPARAM.ARTICLEBASE}/info/${title}`);
+        sendGetArticleDetailbyTitle(title, callback);
     }
     static addArticleOper(title, content, callback) {
         const accountId = accountInfo.accountId;

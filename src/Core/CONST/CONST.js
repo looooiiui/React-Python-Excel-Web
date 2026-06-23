@@ -17,6 +17,7 @@ class CONSTPARAM {
     static PROJECTIONCENTERURL = "/projectCenter" // 项目中心
     static TRAININGCENTERURL = "/training" // 培训中心
     static AIASSISTANTURL = "/aiAssistant" // AI中心
+    static RESULTSHOWCASEURL = "/showcase" // 成果展示
 
     //===================后端基址==========================
     static ADMINBASE = "/admin"; //管理基址
@@ -29,6 +30,7 @@ class CONSTPARAM {
     static RESOURCEBASE = "/resource" // 非文本资源基址
     //===============前端基址========================
     static FRONTARTICLE = "/article"
+    static FRONTRESULTSHOWPAGE = "/detail"  // 拼接成果展示后成果展示基址
 
     //==================资源地址=====================
     static NavLogo = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
@@ -58,12 +60,17 @@ class CONSTPARAM {
     //===================信息修改传输基本参数===============
     static PASSWORDCHANGE = "4";
 
+    //===================固定资源定位========================
+    static IMGRESOURCEURL = "";
+    static MAINPAGEIMGURL = "";
 }
 
 //===========初始化注入IP===============
 // 检查连接
 var result = await checkUrlActive(`${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}/getServerUrl`);
 if (result) {
+
+    //=============服务初始化=============
     await initializeLoginUrl()
     await initializeInfoUrl()
     await initializeProjectUrl()
@@ -71,6 +78,10 @@ if (result) {
     await initializeArticleUrl();
     await initializeTrainUrl();
     await initializeResourceUrl();
+
+    //============资源初始化=============
+    syncResource();
+
 }
 //======================================
 
@@ -197,6 +208,13 @@ async function initializeResourceUrl() {
     DebugTool.debugLog(`注入信息系统: ${CONSTPARAM.RESOURCEIP}`)
 }
 
+function syncResource() {
+    CONSTPARAM.IMGRESOURCEURL = `${CONSTPARAM.RESOURCEIP}/static/Img`;
+    CONSTPARAM.MAINPAGEIMGURL = `${CONSTPARAM.RESOURCEIP}/static/Img/MainPageImg`;
+
+    DebugTool.debugLog("获得后端图像URL基址: " + CONSTPARAM.IMGRESOURCEURL);
+    DebugTool.debugLog("获得后端主页图像URL基址: " + CONSTPARAM.MAINPAGEIMGURL);
+}
 
 // 启动前探测网址存在
 /** 

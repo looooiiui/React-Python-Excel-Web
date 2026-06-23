@@ -12,15 +12,22 @@ import SecurityCenter from './page/UserPage/NormalPage/SecurityCenter';
 import ProjectCenter from './page/UserPage/NormalPage/ProjectCenter';
 import AiAssistantCenter from './page/UserPage/NormalPage/AiAssistantCenter';
 import TrainingCenter from './page/UserPage/NormalPage/TrainingPage';
+
+//=============================成果展示组件===========================
+import ResultShowPage from './page/ResultShowcase/ResultShowPage';
+import ResultShow from './page/ResultShowcase/ResultShow';
+import ResultShowNormal from './page/ResultShowcase/ResultShowNormal';
 import TempTest from './page/UserPage/TempTest';
 // 文章组件
 import ArticleList from './page/ArticlePage/ArticleList';
 import ArticlePublish from './page/ArticlePage/ArticlePublish';
+import ArticleDetailNormal from './page/ArticlePage/ArticleDetailNormal';
 import ArticleDetail from './page/ArticlePage/ArticleDetail';
 import ArticleEdit from './page/ArticlePage/ArticleEdit';
 
 // 其他自定义组件引入
 import { DebugTool } from './Util/DebugTool/DebugTool';
+import NormalTool from './Util/NormalUtils/NormalTool';
 import { InfomationSystem } from './InfomationSystem/InfomationSystem';
 import AuthRoute from './Util/AuthRoute/AuthRoute';
 import Theme from './Theme/theme';
@@ -39,6 +46,7 @@ import {
   FontColorsOutlined, LogoutOutlined
 } from '@ant-design/icons';
 import { Color } from 'antd/es/color-picker';
+import { CONTAINER_MAX_OFFSET } from 'antd/es/_util/hooks';
 
 
 // 导航栏
@@ -82,6 +90,7 @@ function App() {
     // 动态路由匹配（文章详情/编辑、用户主页）
     if (path.startsWith(`${CONSTPARAM.FRONTARTICLE}/detail`)) return "文章详情";
     if (path.startsWith(`${CONSTPARAM.FRONTARTICLE}/edit`)) return "编辑文章";
+    if (path.startsWith(`${CONSTPARAM.RESULTSHOWCASEURL}`)) return "成果展示";
     if (path.startsWith("/user/") && path.includes("/profile")) return "个人资料";
     if (path.startsWith("/user/")) return "个人主页";
     if (path.startsWith("/tempTest")) return "测试网址";
@@ -242,40 +251,35 @@ function App() {
       onClick: () => openNewTab("/tempTest")
     }
   ].filter(Boolean);
+
   // 导航顶部其他展示框
   const topChooseNav = [
     {
-      key: "/1",
-      label: "成果展示",
-      children: [
-        {
-          key: "//11",
-          label: "没什么",
-        },
-        {
-          key: "//12",
-          label: "没什么",
-        }
-      ]
+      key: "/showcase1",
+      label: "成果展示主页",
+      onClick: () => openNewTab(`${CONSTPARAM.RESULTSHOWCASEURL}`)
     },
-  ]
+    {
+      key: "/showcase2",
+      label: "研究院介绍",
+      onClick: () => openNewTab(`${CONSTPARAM.RESULTSHOWCASEURL}`)
+    },
+    {
+      key: "/showcase3",
+      label: "成果展示",
+      onClick: () => openNewTab(`${CONSTPARAM.RESULTSHOWCASEURL}`)
+    },
+    {
+      key: "/showcase4",
+      label: "风采展示",
+      onClick: () => openNewTab(`${CONSTPARAM.RESULTSHOWCASEURL}`)
+    },
+  ].filter(Boolean);
 
 
   return (
     <div style={Theme.WrapAllTheme}>
       {/* 全屏背景图 */}
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: -1,
-        backgroundImage: `url(${CONSTPARAM.MainBackgoundLogo})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: 'center',
-      }}></div>
 
       {/* 顶部Header区域：左侧主菜单 + 中间多标签Tab栏 + 右侧头像 */}
       <Header style={{
@@ -283,9 +287,26 @@ function App() {
         padding: "0 16px",
         height: "auto",
       }}>
-        {/* 第一行：系统一级导航 + 头像 */}
-        <div style={{ display: "flex", alignItems: "center", width: "100%", height: 80 }}>
-          {/* 左侧横向主菜单 */}
+        {/* 第一行：左侧LOGO + 一级文字菜单 + 头像 */}
+        <div style={{ display: "flex", alignItems: "center", width: "100%", height: 80, gap: 24 }}>
+          {/* 固定左侧LOGO区块（温大同款布局） */}
+          <div style={{
+            width: 280,
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}>
+            <img
+              src={CONSTPARAM.NavLogo}
+              alt="研究院LOGO"
+              style={{
+                height: 50,
+                width: "auto",
+              }}
+            />
+          </div>
+
+          {/* 中间横向文字导航菜单 */}
           <Menu
             mode="horizontal"
             items={topMenuItems}
@@ -294,54 +315,45 @@ function App() {
               background: "transparent",
               borderBottom: "none",
               lineHeight: "80px",
-              fontSize: "20px",
+              fontSize: "16px",
+              paddingLeft: "200px"
             }}
             theme='dark'
           />
+
           {/* 右侧头像 */}
           <Dropdown
             menu={{ items: avatarMenuItems }}
-            trigger={["hover"]} // hover 悬浮触发，click 是点击触发
+            trigger={["hover"]}
           >
             <Avatar
-              size={64}
+              size={56}
               src="/logo512.png"
               style={{
-                ...Theme.AvatarTheme,
                 background: '#ffffff',
                 border: '1px solid #e0e0e0',
+                right: 30
               }}
             />
           </Dropdown>
         </div>
 
-        {/* 第二行 */}
+        {/* 第二行：成果展示次级导航菜单*/}
         <Menu
           mode="horizontal"
           theme="dark"
           items={topChooseNav}
-          popupRender={(menus) => (
-            <div style={{
-              fontSize: "14px",
-              background: "#0047AB",
-            }}>
-              {menus}
-            </div>
-          )}
           style={{
-            flex: 1,
             background: "transparent",
             borderBottom: "none",
             lineHeight: "40px",
-            fontSize: "20px",
+            fontSize: "15px",
           }}
-        >
-        </Menu>
+        />
 
-        {/* 第三行：多页面Tab标签栏（核心，用来开一堆页面） */}
+        {/* 第三行：多页面Tab标签栏 */}
         <div style={{ background: "#f5f7fa", padding: "4px 8px" }}>
           <Space size={8} align="center">
-            {/* 快速新开首页按钮 */}
             <Button
               size="small"
               icon={<PlusOutlined />}
@@ -349,7 +361,6 @@ function App() {
             >
               新页面
             </Button>
-            {/* 可横向滚动的标签栏 */}
             <div style={{ flex: 1, overflowX: "auto" }}>
               <Tabs
                 size="small"
@@ -363,7 +374,6 @@ function App() {
           </Space>
         </div>
       </Header>
-
       {/* 网站中间页面内容区域 */}
       <div style={Theme.ContentWrapTheme}>
         <Routes>
@@ -376,10 +386,13 @@ function App() {
           <Route path={CONSTPARAM.SECURITYCENTERURL} element={<AuthRoute><SecurityCenter /></AuthRoute>} />
           <Route path={CONSTPARAM.PROJECTIONCENTERURL} element={<AuthRoute><ProjectCenter /></AuthRoute>} />
           <Route path={CONSTPARAM.AIASSISTANTURL} element={<AuthRoute><AiAssistantCenter /></AuthRoute>} />
-          <Route path={`${CONSTPARAM.FRONTARTICLE}/list`} element={<AuthRoute><ArticleList /></AuthRoute>} />
-          <Route path={`${CONSTPARAM.FRONTARTICLE}/publish`} element={<AuthRoute><ArticlePublish /></AuthRoute>} />
-          <Route path={`${CONSTPARAM.FRONTARTICLE}/detail/:id`} element={<AuthRoute><ArticleDetail /></AuthRoute>} />
-          <Route path={`${CONSTPARAM.FRONTARTICLE}/edit/:id`} element={<AuthRoute><ArticleEdit /></AuthRoute>} />
+          <Route path={CONSTPARAM.RESULTSHOWCASEURL} element={<AuthRoute><ResultShow /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.RESULTSHOWCASEURL}/detail?`} element={<AuthRoute><ResultShowNormal /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/list`} element={<AuthRoute requireAdmin={true}><ArticleList /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/publish`} element={<AuthRoute requireAdmin={true}><ArticlePublish /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/detailnormal/:id?`} element={<AuthRoute><ArticleDetailNormal /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/detail/:id?`} element={<AuthRoute requireAdmin={true}><ArticleDetail /></AuthRoute>} />
+          <Route path={`${CONSTPARAM.FRONTARTICLE}/edit/:id`} element={<AuthRoute requireAdmin={true}><ArticleEdit /></AuthRoute>} />
           <Route path={`${CONSTPARAM.TRAININGCENTERURL}`} element={<AuthRoute><TrainingCenter /></AuthRoute>} />
           <Route path='/tempTest' element={<TempTest />} />
           <Route path='/user/:id' element={<AuthRoute><UserMainPage /></AuthRoute>} />

@@ -86,17 +86,20 @@ def login_verify(input_login_info: Optional[list[str]]) -> None:
         return
 
     try:
-        sql = "SELECT PASSWORD, ADMIN FROM user WHERE ACCOUNTID = %s"
+        sql = "SELECT PASSWORD, ADMIN, PERMISSION FROM user WHERE ACCOUNTID = %s"
         cursor.execute(sql, (account_id,))
         user = cursor.fetchone()
-
         if not user:
             print("1")
         elif user[0] == password:
             if user[1] == "1":
                 print("3")
+            # 检查封禁的地方(早期代码，看起来不是很好看)
             else:
-                print("0")
+                if str(user[2]) == "1":
+                    print("5")
+                else:
+                    print("0")
         else:
             print("2")
     except:
@@ -122,14 +125,18 @@ def admin_login_verify(input_login_info: Optional[list[str]]) -> None:
         return
 
     try:
-        sql = "SELECT PASSWORD, ADMIN FROM user WHERE ACCOUNTID = %s"
+        sql = "SELECT PASSWORD, ADMIN, PERMISSION FROM user WHERE ACCOUNTID = %s"
         cursor.execute(sql, (account_id,))
         user = cursor.fetchone()
 
         if not user:
             print("1")
         elif user[0] == password and user[1] == "1":
-            print("0")
+            # 检查封禁的地方(早期代码，看起来不是很好看)
+            if str(user[2]) == "1":
+                print("5")
+            else:
+                print("0")
         else:
             if user[1] != "1":
                 print("4")

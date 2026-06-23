@@ -9,7 +9,6 @@ import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
 import Theme from '../../Theme/theme';
 import CONSTPARAM from '../../Core/CONST/CONST';
 import { DebugTool } from '../../Util/DebugTool/DebugTool';
-import Toast from '../../CustomComponents/CustomIntegration/Toast/Toast';
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;
@@ -100,25 +99,6 @@ function ArticleDetail() {
         return article.content.replace(/\s/g, '').length;
     };
 
-    // 编辑（仅ID模式可用，标题模式无编辑入口）
-    const goEdit = () => {
-        if (!id) return message.warn("首页只读模式，不可编辑");
-        navigate(`${CONSTPARAM.ARTICLEBASE}/edit/${id}`);
-    };
-
-    // 删除（仅ID模式可用）
-    const delArticle = () => {
-        if (!id) return message.warn("首页只读模式，不可删除");
-        InfomationSystem.deleteArticleOper(id, res => {
-            if (res.success) {
-                message.success("删除成功");
-                navigate(`${CONSTPARAM.ARTICLEBASE}/list`);
-            } else {
-                message.error("删除失败");
-            }
-        })
-    };
-
     // 加载中
     if (loading) {
         return (
@@ -135,8 +115,8 @@ function ArticleDetail() {
         <div style={{ minHeight: '100vh', background: '#f5f7fa', padding: 16 }}>
             {/* 顶部操作栏 */}
             <Space style={{ marginBottom: 16 }}>
-                <Button icon={<LeftOutlined />} onClick={() => navigate(`${CONSTPARAM.ARTICLEBASE}/list`)}>
-                    返回文章列表
+                <Button icon={<LeftOutlined />} onClick={() => navigate(`${CONSTPARAM.RESULTSHOWCASEURL}`)}>
+                    返回成果列表
                 </Button>
                 <Button icon={<ReloadOutlined />} onClick={refreshData}>
                     重新加载
@@ -192,16 +172,6 @@ function ArticleDetail() {
 
                 {/* 右侧信息栏 */}
                 <Sider width={260} style={{ background: '#fafafa', padding: 16 }}>
-                    <Card size="small" title="文章操作" bordered={false}>
-                        <Space direction="vertical" style={{ width: '100%' }}>
-                            <Button block type="primary" icon={<EditOutlined />} onClick={goEdit}>
-                                编辑文章
-                            </Button>
-                            <Button block danger icon={<DeleteOutlined />} onClick={delArticle}>
-                                删除文章
-                            </Button>
-                        </Space>
-                    </Card>
 
                     <Card size="small" title="文章信息" bordered={false} style={{ marginTop: 16 }}>
                         <div style={{ fontSize: 13, color: '#444' }}>

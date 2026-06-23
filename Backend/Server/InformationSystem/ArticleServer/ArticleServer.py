@@ -34,11 +34,30 @@ def get_article_detail(article_id):
         MySqlUtil.increase_views(article_id)
         data = MySqlUtil.get_article_by_id(article_id)
         if not data:
-            return jsonify({"error": "文章不存在"}), 404
+            return jsonify({"error": "文章不存在", "code": "-2"}), 200
         return jsonify(data)
     except Exception as e:
         DebugTool.debug_log(f"查询文章详情异常: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "code": "-1"}), 500
+
+# 2. 根据标题查询单篇文章（详情）
+@app.route(f"{DEFAULTROUTE}/info/title", methods=["GET"])
+def get_article_detail_by_title():
+    try:
+        # 接收查询参数
+        article_title = request.args.get("title", "").strip()
+        if not article_title:
+            return jsonify({"error": "缺少文章标题参数"}), 400
+        
+        # 阅读量+1
+        MySqlUtil.increase_views_title(article_title)
+        data = MySqlUtil.get_article_by_title(article_title)
+        if not data:
+            return jsonify({"error": "文章不存在", "code": "-2"}), 200
+        return jsonify(data)
+    except Exception as e:
+        DebugTool.debug_log(f"查询文章详情异常: {e}")
+        return jsonify({"error": str(e), "code": "-1"}), 500
 
 # 3. 新增文章
 @app.route(f"{DEFAULTROUTE}/add", methods=["POST"])

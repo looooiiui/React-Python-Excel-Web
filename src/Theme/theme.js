@@ -2,16 +2,13 @@ import CONSTPARAM from "../Core/CONST/CONST"
 
 // 主题类
 class Theme {
-    static defaultColor = "#5565b1cb";
+    static defaultColor = "#154299";
 
     // 导航栏主题（修复fixed+flex冲突，移除固定height，适配双层Header）
     static NavigateTheme = {
         padding: "0 30px",
-        backgroundImage: `
-        url(${CONSTPARAM.NavLogo}),
-        linear-gradient(to right,#3c457a 0%,#0047AB 100%)`,
+        backgroundColor: "#154299",
         backgroundSize: "auto 60px, 100% 100%",
-        backgroundPosition: "center",
         backgroundRepeat: "no-repeat,no-repeat",
         backdropFilter: "blur(10px)",
         boxShadow: "0 0px 20px rgba(0, 0, 0, 0.5)",
@@ -70,7 +67,7 @@ class Theme {
         minHeight: "100vh",
         width: "100%",
         boxSizing: "border-box",
-        paddingTop: "100px",
+        paddingTop: "110px",
     }
 
     // 路由主体容器：删除多余 paddingTop:80px，只留左右下内边距
@@ -83,7 +80,7 @@ class Theme {
     // 底部大footer
     static FooterBigTheme = {
         width: "100%",
-        backgroundColor: "#0052ccd5",
+        backgroundColor: "#154299",
         color: "#fff",
         padding: "15px 15%",
         boxSizing: "border-box"
@@ -92,7 +89,7 @@ class Theme {
     // 底部导航栏
     static FooterCopyrightTheme = {
         width: "100%",
-        backgroundColor: "#0048b3ce",
+        backgroundColor: "#154299",
         textAlign: "center",
         padding: "12px 0",
         fontSize: "13px",
@@ -116,7 +113,7 @@ class Theme {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#0047AB",
+        backgroundColor: "#154299",
         zIndex: -1,
     }
 

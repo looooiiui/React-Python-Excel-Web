@@ -1,9 +1,9 @@
 import { use, useState } from "react";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem"
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { useNavigate } from "react-router-dom";
 
 //==========自定义工具组引入===================
+import { InfomationSystem } from "../../InfomationSystem/InfomationSystem"
+import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import Theme from "../../Theme/theme";
 import CONSTPARAM from "../../Core/CONST/CONST";
 import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
