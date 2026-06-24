@@ -1,0 +1,164 @@
+.ai-page-container {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    min-height: calc(100vh - 120px);
+    background-color: #0052cc;
+    /* 和你页面的蓝色背景匹配 */
+}
+
+/* Ai 标题 */
+.ai-page-title {
+    color: #fff;
+    font-size: 24px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* 外层容器 - 整体聊天面板 */
+.ai-chat-wrapper {
+    --primary-color: #1677ff;
+    --bg-page: #f5f7fa;
+    --msg-user-bg: #1677ff;
+    --msg-ai-bg: #f0f2f5;
+    --text-normal: #333;
+    --text-white: #fff;
+
+    width: 90%;
+    max-width: 700px;
+    height: 80vh;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+
+/* 聊天头部标题栏 */
+.ai-chat-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-normal);
+}
+
+/* 聊天记录滚动区域 */
+.ai-chat-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    border-bottom: 1px solid #eee;
+}
+
+/* 单条消息容器 */
+.chat-msg {
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+
+/* 用户消息 右对齐 */
+.msg-user {
+    text-align: right;
+}
+
+/* AI 消息 左对齐 */
+.msg-ai {
+    text-align: left;
+}
+
+/* 消息气泡 */
+.msg-bubble {
+    display: inline-block;
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+
+.msg-user .msg-bubble {
+    background-color: var(--msg-user-bg);
+    color: var(--text-white);
+    border-bottom-right-radius: 4px;
+}
+
+.msg-ai .msg-bubble {
+    background-color: var(--msg-ai-bg);
+    color: var(--text-normal);
+    border-bottom-left-radius: 4px;
+}
+
+/* 加载提示文字 */
+.chat-loading {
+    color: #999;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* 输入区域外层 */
+.ai-chat-input-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 大尺寸多行输入框（核心） */
+.chat-textarea {
+    width: 96%;
+    height: 80px;
+    /* 大输入框高度 */
+    padding: 14px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    font-size: 15px;
+    resize: none;
+    /* 禁止拖动改变大小 */
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+.chat-textarea:focus {
+    border-color: var(--primary-color);
+}
+
+/* 按钮组 */
+.chat-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.chat-btn {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+/* 发送按钮 */
+.btn-send {
+    background-color: var(--primary-color);
+    color: var(--text-white);
+}
+
+.btn-send:hover {
+    background-color: #0958d9;
+}
+
+/* 清空按钮 */
+.btn-clear {
+    background-color: #eee;
+    color: #666;
+}
+
+.btn-clear:hover {
+    background-color: #ddd;
+}

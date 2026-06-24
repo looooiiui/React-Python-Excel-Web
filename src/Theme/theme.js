@@ -2,21 +2,15 @@ import CONSTPARAM from "../Core/CONST/CONST"
 
 // 主题类
 class Theme {
-    static defalutColor = "#5565b1cb";
+    static defaultColor = "#154299";
 
-    // 导航栏主题
+    // 导航栏主题（修复fixed+flex冲突，移除固定height，适配双层Header）
     static NavigateTheme = {
-        padding: "0 18px",
-        backgroundImage: `
-        url(${CONSTPARAM.NavLogo}),
-        linear-gradient(to right,#3c457a 0%,#0047AB 100%)`,
-        backgroundSize: "contain, 100% 100%",
-        backgroundPosition: "center,center",
+        padding: "0 30px",
+        backgroundColor: "#154299",
+        backgroundSize: "auto 60px, 100% 100%",
         backgroundRepeat: "no-repeat,no-repeat",
         backdropFilter: "blur(10px)",
-        display: "flex",
-        gap: "18px",
-        fontSize: '18px',
         boxShadow: "0 0px 20px rgba(0, 0, 0, 0.5)",
         alignItems: "center",
         position: "fixed",
@@ -25,7 +19,6 @@ class Theme {
         width: "100%",
         zIndex: 999,
         margin: 0,
-        height: "80px",
     }
 
     // 导航字体主题
@@ -50,49 +43,44 @@ class Theme {
         flex: 1,
         width: "100%",
         minHeight: "100vh",
-        paddingTop: "80px",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
         fontFamily: "system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif",
         fontSize: '16px',
-        color: '#3b3838ff', // 全局默认文字白色（匹配原图字体）
+        color: '#3b3838ff',
     }
 
-    // 头像主题
+    // 头像主题（移除absolute，交给内部flex布局控制，避免遮挡Tab）
     static AvatarTheme = {
-        position: "absolute",
-        top: "20px",
-        right: "80px",
-        width: "36px",
-        height: "36px",
+        right: "25px",
         borderRadius: "50%",
         objectFit: "cover",
-        cursor: "pointer"
+        cursor: "pointer",
     }
 
-    // Theme类内部追加
-    // 最外层全局flex容器
+    // 最外层全局flex容器：只预留顶部固定导航高度80px，不重复叠加
     static WrapAllTheme = {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        width: "100%",
+        width: "95%",
         boxSizing: "border-box",
-        paddingTop: "80px",
+        paddingTop: "110px",
     }
-    // 路由主体容器
+
+    // 路由主体容器：删除多余 paddingTop:80px，只留左右下内边距
     static ContentWrapTheme = {
         flex: 1,
-        paddingTop: "80px",
-        padding: "30px",
+        paddingTop: "60px",
         boxSizing: "border-box"
     }
+
     // 底部大footer
     static FooterBigTheme = {
         width: "100%",
-        backgroundColor: "#0052ccd5",
+        backgroundColor: "#154299",
         color: "#fff",
         padding: "15px 15%",
         boxSizing: "border-box"
@@ -101,26 +89,32 @@ class Theme {
     // 底部导航栏
     static FooterCopyrightTheme = {
         width: "100%",
-        backgroundColor: "#0048b3ce",
+        backgroundColor: "#154299",
         textAlign: "center",
         padding: "12px 0",
         fontSize: "13px",
         color: "#ffffff"
     }
 
-    // 管理后台主题
+    // 管理后台页面容器主题（修复fixed全屏脱离文档流问题，改为相对背景层）
     static ManagerBackendTheme = {
-        position: "fixed",
+        position: "relative",
+        minHeight: "calc(100vh - 80px)",
+        padding: "16px",
+    }
+    // 管理页面背景层（单独抽离给内层div使用，不污染外层布局）
+    static ManagerBgOverlay = {
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         backgroundImage: `url(${CONSTPARAM.ManagerBackground})`,
         backgroundSize: "cover",
-        zIndex: -1,
-        backgroundColor: "#0047AB",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        backgroundColor: "#154299",
+        zIndex: -1,
     }
 
     // 主题色(按钮)
@@ -135,6 +129,41 @@ class Theme {
         transition: "all 0.2s ease"
     };
 
+    // ========== 表格相关样式 ==========
+    static TableMainTheme = {
+        width: "100%",
+        borderCollapse: "collapse",
+        fontSize: "14px",
+        textAlign: "center",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+    }
+
+    static TableCellTheme = {
+        border: "1px solid #e5e7eb",
+        padding: "12px 8px",
+        color: "#374151"
+    }
+
+    static TableHeadRowTheme = {
+        backgroundColor: "#f3f4f6"
+    }
+
+    static TableBodyRowTheme = {
+        backgroundColor: "#ffffff"
+    }
+
+    static TableRowHoverBg = "#f9fafb"
+
+    static TableBtnTheme = {
+        padding: "5px 12px",
+        fontSize: "13px",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        backgroundColor: Theme.theme.primary,
+        color: "#fff",
+        transition: Theme.theme.transition
+    }
 }
 
 export default Theme;

@@ -288,7 +288,6 @@ def verify_account_data(acc_info: list[str]) -> tuple[bool, str]:
     # any() 只要其中检测的元素不为空则返回true，也就是有非法字符返回true
     if any(per_char in r'\/:*?"<>|“”‘’。+-=*，$%#@!^&*()__++]\';/.,/., （）()/【】、‘' for per_char in acc_id):
         return False, "账号ID包含非法特殊字符"
-    
 
     #====密码校验====#
     if not acc_password:

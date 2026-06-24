@@ -1,215 +1,299 @@
-#=================openpyxl库================#
-#       本文用来处理Excel的python的库       #
 #===========================================#
-from openpyxl.worksheet.worksheet import Worksheet
-
-# 以下为子Python脚本引入的处理函数(这里简要解释)
-from ExcelProcessing import read_from_excel             # 返回指定的Excel工作表
-from ExcelProcessing import write_new_account           # 向Excel写入新账号信息,返回 tuple[bool, int] 元组
-from ExcelProcessing import change_ban_state            # 封禁账户
-from ExcelProcessing import change_personal_info        # 修改个人信息
-from JsonProcessing import convert_excel_to_account     # 将Excel中读取的数据转化为固定字典格式 {"ID": [password, name]}
-from JsonProcessing import detect_login_information     # 校验登录信息，返回 tuple[bool, int] 元组
-# 引入常量工具
-from CONST import CONSTPARAM
-# Optional 为类型注解标记，可以用于规定函数传参传限定类型内的参数如 Optional[int | str] 指参数可以传入 int，str，None类型的  
+#       现在全部使用 MYSQL 数据库
+#===========================================#
+import pymysql
 from typing import Optional
-# 这个是Python用来接收系统传参的类，其中 sys.argv 为收到的参数
 import sys
-import os
-#=============默认存档名============#
-default_save_exc_name       = "AccountInfomation.xlsx"  # 手动调用脚本时的Excel路径
-default_exc_data_player     = "PlayerData"              # 默认取打开Excel中的工作表的名字为 PlayerData
-default_json_out            = "PlayerGameData.json"     # 存档转化出的Json位置
-#=============默认存档名============#
+from CONST import CONSTPARAM
 
-#=============指定参数==============#         # 这里所有的位置都是Godot中传来参数中对应参数的索引
-# 五参数
-default_order_index:            int = 2       # 这里是默认从godot获得的参数中取第2位为指令参数
-default_excel_path_index:       int = 1       # 默认Excel位置
-default_order_name_index:       int = 3       # 默认名字位置
-default_order_pwd_index:        int = 4       # 默认密码位置
-default_godot_argv_len:         int = 5       # 默认传参长度
-# 四参数
-default_no_password_argv:       int = 4       # 无密码参数
-#=============指定参数==============#
+#=================验证系统================
+from ExcelProcessing import verify_account_data
 
-#=============指定命令==============#
-web_login:              str = "0"                 # 指定web登录命令为 "0"
-web_register:           str = "1"                 # 指定web注册命令为 "1"
-web_admin_login:        str = "2"                 # 指定管理员信息验证为 "2"
-web_ban:                str = "3"                 # 指定封禁命令为 "3"
-web_password_change:    str = "4"                 # 指定修改密码参数为 "4"
-#=============指定命令==============#
+#============= MySQL 配置 ==================#
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "root",          
+    "password": "!Qq3303220151",    # 你自己的MySQL密码
+    "database": "my_project",# 你刚才建的库
+    "charset": "utf8mb4"
+}
 
-"""
-以下所有函数面向Godot返回
-此时Python中print的内容就是Godot接收到的返回值+-
-全部使用print
-"""
+#=============固定命令======================#
+web_login:              str = "0"
+web_register:           str = "1"
+web_admin_login:        str = "2"
+web_ban:                str = "3"
+web_password_change:    str = "4"
 
-"""
+#=============参数索引======================#
+default_order_index:            int = 2
+default_excel_path_index:       int = 1
+default_order_name_index:       int = 3
+default_order_pwd_index:        int = 4
+default_godot_argv_len:         int = 5
+default_no_password_argv:       int = 4
+
+
+'''规定登录系统向前端的传参:
+
+登录:
 返回值说明:
 - 元组第1位:是否校验通过(True=通过,False=不通过)
 - 元组第2位:状态码
     - 0 : 账号验证通过
     - 1 : 账户信息不存在
     - 2 : 账号信息验证错误（信息不全/密码错误）
-"""
 
-# 登录验证器
-def login_verify(input_login_info: Optional[list[str]]) -> None:
-    if input_login_info is None:
-        return None
-    
-    try:
-        # 得到账户表格
-        read_sheet = read_from_excel(default_save_exc_name, default_exc_data_player)
-        stored_info_dict = convert_excel_to_account(read_sheet)
-        # 验证登录信息
-        verify_result: tuple =  detect_login_information(stored_info_dict, input_login_info, "0")
-        # 通过验证
-        print(str(verify_result[1]))
-    except Exception as e:
-        # 登录程序运行失败
-        print("-1")
-
-# 管理员验证器
-def admin_login_verify(input_login_info: Optional[list[str]]) -> None:
-    if input_login_info is None:
-        return None
-    
-    try:
-        # 得到账户表格
-        read_sheet = read_from_excel(default_save_exc_name, default_exc_data_player)
-        stored_info_dict = convert_excel_to_account(read_sheet)
-        # 验证登录信息
-        verify_result: tuple =  detect_login_information(stored_info_dict, input_login_info, "1")
-        # 通过验证
-        print(str(verify_result[1]))
-    except Exception as e:
-        # 登录程序运行失败
-        print("-1")
-
-# 封禁操作器
-def admin_ban_operator(accountId: Optional[str]) -> None:
-    if accountId is None:
-        return None
-    
-    # 更改账户封禁状态
-    try:
-
-        # 更改封禁信息
-        ban_result: tuple = change_ban_state(
-            default_exc_data_player, 
-            default_save_exc_name, 
-            accountId
-        )
-
-        # 修改结果
-        print(str(ban_result[1]))
-
-    except Exception as e:
-        # 封禁程序运行失败
-        print("-1")
-
-# 修改任意参数操作器
-def change_info_any(account_id: Optional[str], change_info: Optional[str], param: int) -> None:
-    if account_id is None or change_info is None:
-        return None
-
-    # 更改账户个人信息
-    try:
-        # 更改个人信息
-        ban_result: tuple = change_personal_info(
-            default_exc_data_player, 
-            default_save_exc_name, 
-            account_id,
-            change_info,
-            param
-        )
-
-        # 修改结果
-        print(str(ban_result[1]))
-
-    except Exception as e:
-        # 封禁程序运行失败
-        print("-1")
-
-"""
+注册:
 账户注册处理
 返回-1: 程序运行出错
 返回0 : 注册成功
 返回1 : 账户注册出现问题(非法字符/账户密码问题)
 返回2 : 账户已被注册
-"""
-# 注册验证器
-def register_verify(input_register_info: Optional[list[str]]) -> None:
-    if input_register_info is None:
-        return None
-    
+
+后端返回标准:
+{
+    "code":
+    "message":
+    "data":
+}
+'''
+#======================================================================
+# 连接 MySQL
+#======================================================================
+def get_db_connection():
     try:
-        # 验证注册信息并写入
-        verify_result: tuple = write_new_account(
-            default_exc_data_player, 
-            default_save_exc_name, 
-            input_register_info
-        )
-        print(str(verify_result[1]))
+        conn = pymysql.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+        return conn, cursor
+    except:
+        return None, None
+
+#======================================================================
+# 登录验证
+#======================================================================
+def login_verify(input_login_info: Optional[list[str]]) -> None:
+    if not input_login_info:
+        print("-1")
+        return
+
+    account_id = input_login_info[0]
+    password = input_login_info[1]
+
+    conn, cursor = get_db_connection()
+    if not conn:
+        print("-1")
+        return
+
+    try:
+        sql = "SELECT PASSWORD, ADMIN, PERMISSION FROM user WHERE ACCOUNTID = %s"
+        cursor.execute(sql, (account_id,))
+        user = cursor.fetchone()
+        if not user:
+            print("1")
+        elif user[0] == password:
+            if user[1] == "1":
+                print("3")
+            # 检查封禁的地方(早期代码，看起来不是很好看)
+            else:
+                if str(user[2]) == "1":
+                    print("5")
+                else:
+                    print("0")
+        else:
+            print("2")
+    except:
+        print("-1")
+    finally:
+        cursor.close()
+        conn.close()
+
+#======================================================================
+# 管理员登录验证
+#======================================================================
+def admin_login_verify(input_login_info: Optional[list[str]]) -> None:
+    if not input_login_info:
+        print("-1")
+        return
+
+    account_id = input_login_info[0]
+    password = input_login_info[1]
+
+    conn, cursor = get_db_connection()
+    if not conn:
+        print("-1")
+        return
+
+    try:
+        sql = "SELECT PASSWORD, ADMIN, PERMISSION FROM user WHERE ACCOUNTID = %s"
+        cursor.execute(sql, (account_id,))
+        user = cursor.fetchone()
+
+        if not user:
+            print("1")
+        elif user[0] == password and user[1] == "1":
+            # 检查封禁的地方(早期代码，看起来不是很好看)
+            if str(user[2]) == "1":
+                print("5")
+            else:
+                print("0")
+        else:
+            if user[1] != "1":
+                print("4")
+            else:
+                print("2")
+    except:
+        print("-1")
+    finally:
+        cursor.close()
+        conn.close()
+
+#======================================================================
+# 封禁账户（修复版：切换状态：0 ↔ 1）
+#======================================================================
+def admin_ban_operator(accountId: Optional[str]) -> None:
+    if not accountId:
+        print("-1")
+        return
+
+    conn, cursor = get_db_connection()
+    if not conn:
+        print("-1")
+        return
+
+    try:
+        # 1. 先查询 PERMISSION 状态
+        sql_select = "SELECT PERMISSION FROM user WHERE ACCOUNTID = %s"
+        cursor.execute(sql_select, (accountId,))
+        result = cursor.fetchone()
+
+        # 用户不存在
+        if not result:
+            print("-1")
+            return
+
+        # 2. 取当前状态，取反
+        current_state = result[0]
+        new_state = 1 if current_state == 0 else 0
+
+        # 3. 更新到数据库
+        sql_update = "UPDATE user SET PERMISSION = %s WHERE ACCOUNTID = %s"
+        cursor.execute(sql_update, (new_state, accountId))
+        conn.commit()
+
+        print("0")  # 成功
 
     except Exception as e:
-        # 注册程序运行失败
         print("-1")
-    
-"""
-返回 -1 为程序运行出错
-返回 -2 为程序输入变量不足
-"""
-# 主函数进入
+    finally:
+        cursor.close()
+        conn.close()
+
+#======================================================================
+# 修改信息（密码、名字等）
+#======================================================================
+def change_info_any(account_id: Optional[str], change_info: Optional[str], param: int) -> None:
+    if not account_id or not change_info:
+        print("-1")
+        return
+
+    conn, cursor = get_db_connection()
+    if not conn:
+        print("-1")
+        return
+
+    try:
+        if param == CONSTPARAM.DEFAULT_PASSWORD_INDEX:
+            sql = "UPDATE user SET PASSWORD = %s WHERE ACCOUNTID = %s"
+        elif param == 3:
+            sql = "UPDATE user SET NAME = %s WHERE ACCOUNTID = %s"
+        else:
+            print("-1")
+            return
+
+        cursor.execute(sql, (change_info, account_id))
+        conn.commit()
+        print("0")
+    except:
+        print("-1")
+    finally:
+        cursor.close()
+        conn.close()
+
+#======================================================================
+# 注册账号
+#======================================================================
+def register_verify(input_register_info: Optional[list[str]]) -> None:
+    if not input_register_info:
+        print("-1")
+        return
+
+    account_id = input_register_info[0]
+    password = input_register_info[1]
+    name = input_register_info[4]
+
+    conn, cursor = get_db_connection()
+    if not conn:
+        print("-1")
+        return
+
+    try:
+
+        sql_check = "SELECT ACCOUNTID FROM user WHERE ACCOUNTID = %s"
+        cursor.execute(sql_check, (account_id,))
+        if cursor.fetchone():
+            print("2")
+            return
+        
+        # 校验账户
+        verify_reslut = verify_account_data([account_id, password])
+        if (not verify_reslut[0]):
+            print("1")
+            return
+        
+
+        sql_insert = """
+            INSERT INTO user (ACCOUNTID, PASSWORD, ADMIN, PERMISSION, NAME)
+            VALUES (%s, %s, 0, 0, %s)
+        """
+        cursor.execute(sql_insert, (account_id, password, name))
+        conn.commit()
+        print("0")
+    except:
+        print("-1")
+    finally:
+        cursor.close()
+        conn.close()
+
+#======================================================================
+# 主入口
+#======================================================================
 if __name__ == "__main__":
     if len(sys.argv) >= default_godot_argv_len:
-        # 将Web传参转至本地
-        receive_params: list[str] = sys.argv
+        receive_params = sys.argv
         web_order = receive_params[default_order_index]
-        # 格式化传参内容
-        default_save_exc_name   = receive_params[default_excel_path_index]      # 获得收到的Excel地址
-        input_name              = receive_params[default_order_name_index]      # 获得收到的账号ID
-        input_pwd               = receive_params[default_order_pwd_index]       # 获得收到的密码
-        input_info: list[str] = [input_name, input_pwd]
+        input_name = receive_params[default_order_name_index]
+        input_pwd = receive_params[default_order_pwd_index]
+        input_info = [input_name, input_pwd]
 
-        # 登录注册验证请求
         if web_order == web_login:
             login_verify(input_info)
         if web_order == web_register:
-            register_info: list[str] = [input_name, input_pwd, "0", "0", input_name]
+            register_info = [input_name, input_pwd, "0", "0", input_name]
             register_verify(register_info)
-        # 管理员登录验证
         if web_order == web_admin_login:
             admin_login_verify(input_info)
-        # 修改密码操作
         if web_order == web_password_change:
             change_info_any(input_name, input_pwd, CONSTPARAM.DEFAULT_PASSWORD_INDEX)
-
-        # 程序结束
         sys.exit()
 
-    #====================参数没有密码(4参数状态)=============
     if len(sys.argv) >= default_no_password_argv:
-        # 将Web传参转至本地
-        receive_params: list[str] = sys.argv
+        receive_params = sys.argv
         web_order = receive_params[default_order_index]
+        input_name = receive_params[default_order_name_index]
 
-        # 格式化传参内容
-        default_save_exc_name   = receive_params[default_excel_path_index]      # 获得收到的Excel地址
-        input_name              = receive_params[default_order_name_index]      # 获得收到的账号ID
-
-        # 封禁操作
         if web_order == web_ban:
             admin_ban_operator(input_name)
-
-        # 程序结束
         sys.exit()
 
-    # 参数不够传 -2
-    else:
-        print("-2")
+    print("-2")

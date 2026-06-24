@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 const app = express();
 const port = 5000;
 
@@ -16,8 +18,11 @@ const { pythonInfoChange } = require("./LoginSystem");
 //===============================================================
 const { CONSTPARAM } = require("../Core/CONST/CONST");
 
+app.use(helmet());
 app.use(cors());
-app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.json({ limit: '100kb' }));
+
 
 /*
 规定登录系统向前端的传参:
@@ -116,11 +121,8 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/login`, async (req, res) => {
         DebugTool.debugLog("后端主程序: 接收登录参数: " + adminParam);
         // 检验输入账号或者密码是否为空
         if (!verifyAccountNotEmpty(accountId.trim(), password.trim())) {
-            return res.json({
-                "code": WEBSUCCESSCODE,
-                "message": "账户密码不能为空",
-                "data": ACCOUNT_INFO_INCOMPLETE
-            });
+            let response = CONSTPARAM.backendResponse(WEBSUCCESSCODE, "账户密码不能为空", ACCOUNT_INFO_INCOMPLETE);
+            return res.send(response);
         }
 
         // 等待命令完成(登录校验传入"0"代表普通登录, 传入"1"为管理员登录)
@@ -146,13 +148,9 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/login`, async (req, res) => {
         return res.json(originalResult);
 
     } catch (err) {
-        return res.status(500).json({
-            "code": WEBSERVERERROR,
-            "message": "校验错误",
-            "data": "-3"
-        });
+        let response = CONSTPARAM.backendResponse(WEBSERVERERROR, "校验错误", "-3");
+        return res.status(500).send(response);
     }
-
 });
 
 // 注册信息送入
@@ -163,11 +161,8 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/register`, async (req, res) => {
 
         // 检验输入账号或者密码是否为空
         if (!verifyAccountNotEmpty(accountId.trim(), password.trim())) {
-            return res.json({
-                "code": WEBSUCCESSCODE,
-                "message": "账户密码不能为空",
-                "data": ACCOUNT_INFO_INCOMPLETE
-            });
+            let response = CONSTPARAM.backendResponse(WEBSUCCESSCODE, "账户密码不能为空", ACCOUNT_INFO_INCOMPLETE);
+            return res.send(response);
         }
 
         // 等待命令完成
@@ -187,11 +182,8 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/register`, async (req, res) => {
         return res.json(originalResult);
 
     } catch (err) {
-        return res.status(500).json({
-            "code": WEBSERVERERROR,
-            "message": "校验错误",
-            "data": "-3"
-        });
+        let response = CONSTPARAM.backendResponse(WEBSERVERERROR, "校验错误", "-3");
+        return res.status(500).send(response);
     }
 });
 
@@ -216,11 +208,8 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/admin/ban`, async (req, res) => {
         return res.json(originalResult);
 
     } catch (err) {
-        return res.status(500).json({
-            "code": WEBSERVERERROR,
-            "message": "封禁错误",
-            "data": "-3"
-        });
+        let response = CONSTPARAM.backendResponse(WEBSERVERERROR, "校验错误", "-3");
+        return res.status(500).send(response);
     }
 })
 
@@ -244,11 +233,8 @@ app.post(`${CONSTPARAM.BACKENDBASEURL}/user/infochange`, async (req, res) => {
         // 返回结果
         return res.json(originalResult);
     } catch (error) {
-        return res.status(500).json({
-            "code": WEBSERVERERROR,
-            "message": "信息更新错误",
-            "data": returnValue
-        });
+        let response = CONSTPARAM.backendResponse(WEBSERVERERROR, "信息更新错误", returnValue);
+        return res.status(500).send(response);
     }
 })
 
