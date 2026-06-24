@@ -1,15 +1,14 @@
-. .\Backend\const.ps1
 
 # 接口服务启动路径拼接
-$ServerStartPath = Join-Path $startPath $LocProjectionServer
+$ServerStartPath = $PSScriptRoot
 
 Write-Host  GetInterfaceServerPath :: $ServerStartPath
 
 # 拼接启动命令
-$UsePath = Join-Path $ServerStartPath $ProjectionServerAgent
+$UsePath = Join-Path $ServerStartPath "ProjectionServerAgent.js"
 $UseCmd = "node " + $UsePath
 
-$UseRealPath = Join-Path $ServerStartPath $ProjectionServer
+$UseRealPath = Join-Path $ServerStartPath "ProjectionServer.py"
 $UseRealCmd = "python " + $UseRealPath
 Write-Host startWebApiAgentServer
 

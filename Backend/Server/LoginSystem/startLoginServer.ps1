@@ -1,12 +1,11 @@
-. .\Backend\const.ps1
 
 # 接口服务启动路径拼接
-$ServerStartPath = Join-Path $startPath $LocLoginServer
+$ServerStartPath = $PSScriptRoot
 
 Write-Host  GetInterfaceServerPath :: $ServerStartPath
 
 # 拼接启动命令
-$UsePath = Join-Path $ServerStartPath $LoginSystem
+$UsePath = Join-Path $ServerStartPath "loginServer.js"
 $UseCmd = "node " + $UsePath
 Write-Host startLoginServer
 

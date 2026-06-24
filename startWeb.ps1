@@ -2,28 +2,28 @@ Write-Host start Backend
 
 #================后端程序====================
 Write-Host start InterfaceServer
-. .\Backend\startInterface.ps1
+. .\Backend\Server\startInterface.ps1
 
 Write-Host start LoginSystem
-. .\Backend\startLoginServer.ps1
+. .\Backend\Server\LoginSystem\startLoginServer.ps1
 
 Write-Host start WebApiInfo
-. .\Backend\startNormalInfo.ps1
+. .\Backend\Server\InformationSystem\WebApiInfo\startNormalInfo.ps1
 
 Write-Host start ProjectionServer
-. .\Backend\startProjectionServer.ps1
+. .\Backend\Server\InformationSystem\ProjectionServer\startProjectionServer.ps1
 
 Write-Host start ArticleServer
-. .\Backend\startArticleServer.ps1
+. .\Backend\Server\InformationSystem\ArticleServer\startArticleServer.ps1
 
 Write-Host start AiSystem
-. .\Backend\startAiSystem.ps1
+. .\Backend\Server\AiSystem\startAiSystem.ps1
 
 Write-Host start TrainingServer
-. .\Backend\startTrainSystem.ps1
+. .\Backend\Server\TrainingSystem\startTrainSystem.ps1
 
 Write-Host start ResourceServer
-. .\Backend\startResourceSystem.ps1
+. .\Backend\Server\ResourceServer\startResourceSystem.ps1
 
 #================前端启动==============
 

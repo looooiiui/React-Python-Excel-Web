@@ -1,15 +1,14 @@
-. .\Backend\const.ps1
 
 # 接口服务启动路径拼接
-$ServerStartPath = Join-Path $startPath $LocArticleServer
+$ServerStartPath = $PSScriptRoot
 
 Write-Host  GetInterfaceServerPath :: $ServerStartPath
 
 # 拼接启动命令
-$UsePath = Join-Path $ServerStartPath $ArticleServerAgent
+$UsePath = Join-Path $ServerStartPath "ArticleAgent.js"
 $UseCmd = "node " + $UsePath
 
-$UseRealPath = Join-Path $ServerStartPath $ArticleServer
+$UseRealPath = Join-Path $ServerStartPath "ArticleServer.py"
 $UseRealCmd = "python " + $UseRealPath
 Write-Host startWebApiAgentServer
 

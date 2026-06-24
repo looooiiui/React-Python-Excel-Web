@@ -1,15 +1,14 @@
-. .\Backend\const.ps1
 
 # 接口服务启动路径拼接
-$ServerStartPath = Join-Path $startPath $LocResourceServer
+$ServerStartPath = $PSScriptRoot
 
 Write-Host  GetResourceServerPath :: $ServerStartPath
 
 # 拼接启动命令
-$UsePath = Join-Path $ServerStartPath $ResourceServerAgent
+$UsePath = Join-Path $ServerStartPath "ResourceServerAgent.js"
 $UseCmd = "node " + $UsePath
 
-$UseRealPath = Join-Path $ServerStartPath $ResourceServer
+$UseRealPath = Join-Path $ServerStartPath "ResourceServer.py"
 $UseRealCmd = "python " + $UseRealPath
 Write-Host startResourceSystemAgentServer
 
