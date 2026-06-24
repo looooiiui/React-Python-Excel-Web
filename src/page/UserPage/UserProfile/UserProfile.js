@@ -89,7 +89,7 @@ export default function UserProfile() {
                     <div style={{ padding: "8px 12px" }}>
                         <Title level={3} style={{ color: Theme.theme.primary, marginBottom: 24 }}>个人资料</Title>
                         <Space size={24} direction="vertical">
-                            <Card bordered={false} style={{ width: "100%" }}>
+                            <Card style={{ width: "100%" }}>
                                 <Space size={16} align="start">
                                     <Avatar size={90} src="/logo512.png" icon={<UserOutlined />} />
                                     <div>
@@ -174,7 +174,7 @@ export default function UserProfile() {
                         <Paragraph type="secondary">查看、编辑、发布本人创建的研究院新闻、学术成果、技术随笔</Paragraph>
                         <Divider />
                         <Space size={16} direction="vertical" style={{ width: "100%" }}>
-                            <Card bordered={false}>
+                            <Card>
                                 <Space size={12} align="center">
                                     <BookOutlined style={{ fontSize: 28, color: Theme.theme.primary }} />
                                     <div>
@@ -184,7 +184,7 @@ export default function UserProfile() {
                                     <ThemedButton style={{ marginLeft: "auto" }}>进入文章管理</ThemedButton>
                                 </Space>
                             </Card>
-                            <Card bordered={false}>
+                            <Card>
                                 <Space size={12} align="center">
                                     <BarChartOutlined style={{ fontSize: 28, color: "#13c2c2" }} />
                                     <div>

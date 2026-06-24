@@ -230,7 +230,6 @@ function ProjectionList() {
                     rowKey="id"
                     dataSource={projectionList}
                     columns={columns}
-                    bordered
                     pagination={{ pageSize: 10 }}
                 />
 

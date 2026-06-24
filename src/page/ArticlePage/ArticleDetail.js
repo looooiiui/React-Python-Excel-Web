@@ -192,8 +192,8 @@ function ArticleDetail() {
 
                 {/* 右侧信息栏 */}
                 <Sider width={260} style={{ background: '#fafafa', padding: 16 }}>
-                    <Card size="small" title="文章操作" bordered={false}>
-                        <Space direction="vertical" style={{ width: '100%' }}>
+                    <Card size="small" title="文章操作">
+                        <Space style={{ width: '100%' }}>
                             <Button block type="primary" icon={<EditOutlined />} onClick={goEdit}>
                                 编辑文章
                             </Button>

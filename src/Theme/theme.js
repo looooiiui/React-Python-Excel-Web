@@ -65,7 +65,7 @@ class Theme {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        width: "100%",
+        width: "95%",
         boxSizing: "border-box",
         paddingTop: "110px",
     }

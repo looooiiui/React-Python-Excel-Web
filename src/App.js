@@ -33,6 +33,7 @@ import AuthRoute from './Util/AuthRoute/AuthRoute';
 import Theme from './Theme/theme';
 import './Theme/CSS/Header.css'
 import CONSTPARAM from './Core/CONST/CONST';
+import SideAssistant from './CustomComponents/AiChat/SideAssistant';
 
 // 自带组件引入
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -279,8 +280,6 @@ function App() {
 
   return (
     <div style={Theme.WrapAllTheme}>
-      {/* 全屏背景图 */}
-
       {/* 顶部Header区域：左侧主菜单 + 中间多标签Tab栏 + 右侧头像 */}
       <Header style={{
         ...Theme.NavigateTheme,
@@ -332,7 +331,7 @@ function App() {
               style={{
                 background: '#ffffff',
                 border: '1px solid #e0e0e0',
-                right: 30
+                right: 130
               }}
             />
           </Dropdown>
@@ -376,6 +375,7 @@ function App() {
       </Header>
       {/* 网站中间页面内容区域 */}
       <div style={Theme.ContentWrapTheme}>
+        <SideAssistant visible={true} />
         <Routes>
           <Route path='/' element={<Navigate to="/MainPage" replace />} />
           <Route path={CONSTPARAM.MAINPAGEURL} element={<MainPage />} />
@@ -400,7 +400,6 @@ function App() {
           <Route path="*" element={<NotFind />} />
         </Routes>
       </div>
-
       {/* 底部信息栏 */}
       <footer>
         <div style={Theme.FooterBigTheme}>

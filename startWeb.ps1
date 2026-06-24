@@ -22,6 +22,9 @@ Write-Host start AiSystem
 Write-Host start TrainingServer
 . .\Backend\startTrainSystem.ps1
 
+Write-Host start ResourceServer
+. .\Backend\startResourceSystem.ps1
+
 #================前端启动==============
 
 Write-Host start frontend

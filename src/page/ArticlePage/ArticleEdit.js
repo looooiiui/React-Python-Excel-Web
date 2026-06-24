@@ -174,7 +174,6 @@ function ArticleEdit() {
                         >
                             <Input
                                 placeholder="请输入文章标题 (5 ~ 100个字)"
-                                bordered={false}
                                 style={{ fontSize: 26, fontWeight: 500, padding: '12px 0', borderBottom: '1px solid #eee' }}
                                 maxLength={100}
                                 allowClear

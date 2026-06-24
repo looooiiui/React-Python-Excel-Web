@@ -16,7 +16,8 @@ $LocInfoAgent = "\InformationSystem\WebApiInfo\"
 $LocNormalInfoSystem = "\InformationSystem\WebApiInfo\"
 $LocProjectionServer = "\InformationSystem\ProjectionServer\"
 $LocArticleServer = "\InformationSystem\ArticleServer\"
-$LocTrainingServer = "\TrainingSystem"
+$LocTrainingServer = "\TrainingSystem\"
+$LocResourceServer = "\ResourceServer\"
 $LocAiSystem = "\AiSystem\"
 
 # =============================实际服务名==============================
@@ -27,9 +28,11 @@ $TrainingServer = "TrainingServer.py"
 $WebApiInfo = "WebApi.py"
 $ProjectionServer = "ProjectionServer.py"
 $ArticleServer = "ArticleServer.py"
+$ResourceServer = "ResourceServer.py"
 
 # ======================代理服务=====================
 $TrainingServerAgent = "TrainingServerAgent.js"
 $WebApiInfoAgent = "InfoAgent.js"
 $ProjectionServerAgent = "ProjectionServerAgent.js"
 $ArticleServerAgent = "ArticleAgent.js"
+$ResourceServerAgent = "ResourceServerAgent.js"

@@ -229,7 +229,6 @@ function TrainingList() {
                         rowKey="id"
                         dataSource={trainingList}
                         columns={columns}
-                        bordered
                         pagination={{ pageSize: 10 }}
                     />
                 </Spin>

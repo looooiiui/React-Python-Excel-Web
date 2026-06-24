@@ -188,7 +188,6 @@ function AccountLists() {
                         rowKey="ACCOUNTID"
                         dataSource={accountList}
                         columns={columns}
-                        bordered
                         pagination={{ pageSize: 10 }}
                     />
                 </Spin>

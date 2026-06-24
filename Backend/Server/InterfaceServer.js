@@ -59,20 +59,28 @@ const naming = new NacosNamingClient({
 
 //===========获得服务接口地址===============
 app.post(`${CONSTPARAM.INTERFACEURL}/getServerUrl`, async (req, res) => {
-    const { serverName } = req.body;
+    try {
+        const { serverName } = req.body;
+        if (!serverName) {
+            return res.status(400).json({ msg: "serverName 不能为空" });
+        }
 
-    // 寻找 Nacos 实例
-    const instances = await naming.selectInstances(
-        serverName,
-    );
+        const instances = await naming.selectInstances(serverName);
+        const targetInstance = instances?.length > 0 ? instances : [{ ip: "127.0.0.1", port: "8080" }];
+        const instance = targetInstance[0];
 
-    // 返回活着的第一个实例后端
-    const instance = instances[0];
-    res.json({
-        url: `http://${instance.ip}:${instance.port}`
-    });
-});
-
+        DebugTool.debugLog(`服务[${serverName}]选中实例：${instance.ip}:${instance.port}`);
+        res.json({
+            url: `http://${instance.ip}:${instance.port}`
+        });
+    } catch (err) {
+        DebugTool.debugLog("获取Nacos实例异常：", err);
+        // 异常时直接返回本地兜底地址
+        res.json({
+            url: "http://127.0.0.1:8080"
+        });
+    }
+})
 // 启动监听
 app.listen(port, async () => {
     DebugTool.debugLog("接口后端运行中");

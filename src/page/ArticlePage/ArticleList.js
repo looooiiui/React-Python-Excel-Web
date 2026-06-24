@@ -111,7 +111,6 @@ function ArticleList() {
                             <Col xs={24} sm={12} md={8} lg={6} key={article.id}>
                                 <Card
                                     hoverable
-                                    bordered={false}
                                     style={{ height: '100%' }}
                                     bodyStyle={{ padding: 16 }}
                                 >

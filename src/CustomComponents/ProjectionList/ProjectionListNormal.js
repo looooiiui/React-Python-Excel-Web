@@ -133,7 +133,6 @@ function ProjectionListNormal() {
                     rowKey="id"
                     dataSource={projectionList}
                     columns={columns}
-                    bordered
                     pagination={{ pageSize: 10 }}
                 />
             </Content>

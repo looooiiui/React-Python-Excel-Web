@@ -89,7 +89,6 @@ function SpecificProjectionList() {
                     dataSource={projectionList}
                     columns={columns}
                     pagination={{ pageSize: 10 }}
-                    bordered
                     size="middle"
                     locale={{ emptyText: "暂无已加入项目" }}
                 />

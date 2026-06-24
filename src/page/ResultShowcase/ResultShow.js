@@ -121,7 +121,6 @@ function ResultShow() {
                                 <Col xs={24} md={12} lg={8} key={article.id}>
                                     <Card
                                         hoverable
-                                        bordered={false}
                                         variant="borderless"
                                         style={{ height: '100%', boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}
                                         onClick={() => goDetail(article.title)}

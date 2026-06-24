@@ -243,7 +243,6 @@ function TrainClassList() {
                         rowKey="id"
                         dataSource={classList}
                         columns={columns}
-                        bordered
                         pagination={{ pageSize: 10 }}
                     />
                 </Spin>

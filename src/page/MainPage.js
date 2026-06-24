@@ -234,7 +234,7 @@ function MainPage() {
                                 style={{ display: "flex", gap: 12, padding: "10px 0", borderBottom: "1px solid #eee", cursor: "pointer" }}
                                 onClick={() => goShowCaseDetail(item.title)}
                             >
-                                <Tag bordered color="default" style={{ width: 40, height: 40, textAlign: "center", lineHeight: "40px", padding: 0, borderColor: Theme.theme.primary, color: Theme.theme.primary }}>
+                                <Tag color="default" style={{ width: 40, height: 40, textAlign: "center", lineHeight: "40px", padding: 0, borderColor: Theme.theme.primary, color: Theme.theme.primary }}>
                                     {item.dateShort}
                                 </Tag>
                                 <div style={{ flex: 1, fontSize: 14, color: "#333", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -286,7 +286,7 @@ function MainPage() {
                                 style={{ display: "flex", gap: 12, padding: "8px 0", cursor: "pointer" }}
                                 onClick={() => goShowCaseDetail(item.title)}
                             >
-                                <Tag bordered color="default" style={{ width: 40, height: 40, textAlign: "center", lineHeight: "40px", padding: 0, borderColor: Theme.theme.primary, color: Theme.theme.primary }}>
+                                <Tag color="default" style={{ width: 40, height: 40, textAlign: "center", lineHeight: "40px", padding: 0, borderColor: Theme.theme.primary, color: Theme.theme.primary }}>
                                     {item.dateShort}
                                 </Tag>
                                 <div style={{ flex: 1, fontSize: 14, color: "#333" }}>{item.title}</div>
