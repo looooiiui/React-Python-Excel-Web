@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 //===============自定义组件引入============================
 import { InfomationSystem } from "../../../InfomationSystem/InfomationSystem";
 import LogoutButton from "../../../CustomComponents/CustomButton/LogoutButton";
 import Theme from "../../../Theme/theme";
 import ThemedButton from "../../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+
 // 分栏页面组件
 import SelectionBar from "../../../CustomComponents/SelectionBar/SelectionBar";
 import SecurityCenterBar from "../../../CustomComponents/SelectionBar/SecurityCenterBar";
@@ -28,14 +30,17 @@ import {
     ThunderboltOutlined,
     BarChartOutlined
 } from "@ant-design/icons";
+import CONSTPARAM from "../../../Core/CONST/CONST";
 
 const { Title, Text, Paragraph } = Typography;
 const { Sider, Content } = Layout;
+
 
 export default function UserProfile() {
     const userInfo = InfomationSystem.getCurrentLoginInfo();
     const isAdmin = InfomationSystem.getAdminState();
     const accountId = userInfo.accountId;
+    const navigate = useNavigate();
 
     // 当前侧边菜单选中key
     const [activeKey, setActiveKey] = useState("profile");
@@ -181,7 +186,12 @@ export default function UserProfile() {
                                         <Title level={5} style={{ margin: 0 }}>成果文章管理</Title>
                                         <Text type="secondary">可新建图文成果、修改已发布文章、删除废弃内容，首页自动展示已公开文章</Text>
                                     </div>
-                                    <ThemedButton style={{ marginLeft: "auto" }}>进入文章管理</ThemedButton>
+                                    <ThemedButton
+                                        style={{ marginLeft: "auto" }}
+                                        onClick={() => { navigate(`${CONSTPARAM.ARTICLEURL}/list`) }}
+                                    >
+                                        进入文章管理
+                                    </ThemedButton>
                                 </Space>
                             </Card>
                             <Card>

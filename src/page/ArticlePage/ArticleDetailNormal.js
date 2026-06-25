@@ -26,7 +26,7 @@ function ArticleDetail() {
     // 1. 根据ID加载文章
     const fetchById = () => {
         setLoading(true);
-        DebugTool.debugLog("文章详细: 查询文章ID: " + id);
+        DebugTool.debugLog("文章: 查询文章ID: " + id);
         InfomationSystem.getArticleDetailOper(id, (res) => {
             if (unmountRef.current) return;
             setLoading(false);

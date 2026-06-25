@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { Layout, Table, Space, Button, message, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+
+//=======================自定义工具============================
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM from "../../Core/CONST/CONST";
+import { ReconciliationFilled } from "@ant-design/icons";
 
 const { Content } = Layout;
 
@@ -10,6 +15,18 @@ function MyTrainingList() {
     const [trainingList, setTrainingList] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false); // 加载状态
+    const navigate = useNavigate();
+
+    // 课程跳转
+    function navToDetail(title) {
+        DebugTool.debugLog(`查找课程详细: 标题: ${title}`);
+        const params = new URLSearchParams();
+        params.append("title", title);
+        navigate({
+            pathname: `${CONSTPARAM.FRONTARTICLE}/detailnormal`,
+            search: `?${params.toString()}`
+        });
+    }
 
     const columns = [
         {
@@ -62,7 +79,7 @@ function MyTrainingList() {
             width: 120,
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => message.info(`详情弹窗待开发,课程ID:${record.id}`)}>查看详情</Button>
+                    <Button onClick={() => { navToDetail(record.course_name) }}>查看详情</Button>
                 </Space>
             )
         }

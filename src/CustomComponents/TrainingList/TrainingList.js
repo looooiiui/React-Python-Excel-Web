@@ -1,8 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Layout, Table, Button, Modal, Form, Input, InputNumber, Select, Space, message, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+
+//=========================自定义工具============================
 import { DebugTool } from "../../Util/DebugTool/DebugTool";
 import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM from "../../Core/CONST/CONST";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -21,6 +25,18 @@ function TrainingList() {
     const [currentTrain, setCurrentTrain] = useState(null);
     const [form] = Form.useForm();
     const BACK_ERR = InfomationSystem.getBackError();
+
+    const navigate = useNavigate();
+
+    function navToDetail(title) {
+        DebugTool.debugLog(`查找课程详细: 标题: ${title}`);
+        const params = new URLSearchParams();
+        params.append("title", title);
+        navigate({
+            pathname: `${CONSTPARAM.FRONTARTICLE}/detailnormal`,
+            search: `?${params.toString()}`
+        });
+    }
 
     const columns = [
         {
@@ -66,7 +82,7 @@ function TrainingList() {
             width: 260,
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => message.info(`课程${record.id}详情弹窗待开发`)}>查看详情</Button>
+                    <Button onClick={() => { navToDetail(record.course_name) }}>查看详情</Button>
                     <Button onClick={() => handleEdit(record)}>编辑</Button>
                     <Button danger onClick={() => deleteTrain(record.id)}>删除课程</Button>
                 </Space>
@@ -267,7 +283,6 @@ function TrainingList() {
                             <InputNumber min={1} style={{ width: "100%" }} placeholder="填写数字课时" disabled={submitLoading} />
                         </Form.Item>
 
-                        {/* 关联开课班次下拉（纯展示筛选，不提交后端） */}
                         <Form.Item
                             label="关联开课班次"
                             extra="仅用于查看当前课程下属班次，班次需在班次管理页面新增"
