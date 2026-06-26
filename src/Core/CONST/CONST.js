@@ -51,7 +51,7 @@ class CONSTPARAM {
     static ManagerBackground = "/Logo/MainLogo/BackgoundLogo/ManagerBackground.PNG";
 
     //================Nacos网关固定IP==================
-    static INTERFACEIP = "http://26.224.10.101:5001";
+    static INTERFACEIP = "http://127.0.0.1:5001";
 
     // ==================== 动态IP代理字段（外部裸连代码）====================
     static get INFOIP() { return ServerIpStore.INFOIP; }

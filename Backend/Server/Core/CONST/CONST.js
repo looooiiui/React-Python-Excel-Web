@@ -2,8 +2,8 @@
 // 全局常量存储
 class CONSTPARAM {
     //===========IP常量===============
-    static NACOSURL = "26.224.10.101:8848";
-    static CONNECTIP = "26.224.10.101";
+    static NACOSURL = "127.0.0.1:8848";
+    static CONNECTIP = "127.0.0.1";
     static BACKENDBASEURL = "/api";
     static INTERFACEURL = "/interface";
     static AISYSTEMBASEURL = "/aiAssistant";

@@ -6,7 +6,7 @@ import time
 
 from Utils.DebugTool.DebugUtil import DebugTool
 # ==================基准IP================
-DEFAULT_URL: str = "26.224.10.101"
+DEFAULT_URL: str = "127.0.0.1"
 DEFAULT_PORT: int = 5009
 
 app = Flask(__name__, static_folder="Static", static_url_path="/static")

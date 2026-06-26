@@ -6,7 +6,7 @@ from Utils.DebugTool.DebugUtil import DebugTool
 from Utils import MySqlUtil
 
 #==============基准IP==============
-DEFAULTURL: str = "26.224.10.101"
+DEFAULTURL: str = "127.0.0.1"
 DEFAULTPORT: int = 5002
 #==================================
 
