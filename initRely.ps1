@@ -1,7 +1,10 @@
 
-# 修复终端中文乱码
+# 脚本最顶部强制控制台编码，消除中文符号乱码
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
+chcp 65001 | Out-Null
+$env:PYTHONUTF8 = 1
+$env:PYTHONIOENCODING = "utf-8"
 
 <# ================================ Node与Nacos等模块安装 ================================#>
 
@@ -126,22 +129,138 @@ if (-not (Test-Path $nacos2Dir)) {
     Write-Host "Nacos 2.3.2 already exists, skipping deployment" -ForegroundColor Green
 }#>
 
-# 目标存放目录，路径对齐
-$nacosRoot = "D:\WorkCode\WebReact"
-$targetPath = "$nacosRoot\nacos-2.3.2"
-$zipTemp = "$env:TEMP\nacos-2.3.2.zip"
+# 目标存放目录
+$nacosRoot = Split-Path $projectRoot -Parent
+$targetPath = Join-Path $nacosRoot "nacos-2.3.2"
+$zipTemp = Join-Path $env:TEMP "nacos-2.3.2.zip"
+$tempUnzip = Join-Path $env:TEMP "nacos-tmp"
 
-# Check whether it is already installed; if so, skip download and extraction
-if (Test-Path "$targetPath") {
+# 目标存放目录，路径对齐
+if (Test-Path (Join-Path $targetPath "bin\startup.cmd")) {
     Write-Host "Nacos 2.3.2 already exists, starting directly" -ForegroundColor Green
 }
 else {
-    Write-Host "Downloading the Nacos 2.3.2 package" -ForegroundColor Cyan
-    # Download Nacos 2.3.2 package
-    Invoke-WebRequest -Uri "https://github.com/alibaba/nacos/releases/download/2.3.2/nacos-server-2.3.2.zip" -OutFile $zipTemp -UseBasicParsing
+    Write-Host "Start downloading the Nacos 2.3.2 zip file" -ForegroundColor Cyan
+    # 下载残留删除
+    if(Test-Path $zipTemp){ Remove-Item $zipTemp -Force }
+    # github下载，虽然下的很慢
+    Invoke-WebRequest -Uri "https://github.com/alibaba/nacos/releases/download/2.3.2/nacos-server-2.3.2.zip" -OutFile $zipTemp -UseBasicParsing -TimeoutSec 120
 
     Write-Host "Extracting files to $targetPath" -ForegroundColor Cyan
-    Expand-Archive -Path $zipTemp -DestinationPath $nacosRoot -Force
-    # Remove temporary zip file
+    $tempUnzip = "$env:TEMP\nacos-tmp"
+    if(Test-Path $tempUnzip){Remove-Item $tempUnzip -Recurse -Force}
+    Expand-Archive -Path $zipTemp -DestinationPath $tempUnzip -Force
+
+    # 移动内部 nacos 文件夹并重命名为 nacos-2.3.2
+    $innerNacos = "$tempUnzip\nacos"
+    Move-Item -Path $innerNacos -Destination $targetPath -Force
+
+    # 清理临时文件
     Remove-Item $zipTemp -Force
+    Remove-Item $tempUnzip -Recurse -Force
+    Write-Host "Extraction complete, directory: $targetPath" -ForegroundColor Green
+}
+
+
+# 这里就不自动启动了，放后面
+<# 
+Set-Location "$targetPath\bin"
+.\startup.cmd -m standalone 
+#>
+
+# MySQL CE 一键检测+安装脚本
+$mysqlAppId = "Oracle.MySQL"
+
+# 检查 winget 是否可用
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    Write-Host "winget was not detected, so MySQL CE can't be installed automatically. Please install it manually or enable the Windows package management feature." -ForegroundColor Yellow
+}
+else {
+    # 检查本机是否已安装 MySQL Community Server
+    winget list --id $mysqlAppId -e > $null 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Detected that MySQL Community Server is already installed, skipping download and installation" -ForegroundColor Green
+    }
+    else {
+        Write-Host "Detected that MySQL CE is not installed, starting automatic installation" -ForegroundColor Cyan
+        winget install --id $mysqlAppId -e --accept-source-agreements --accept-package-agreements
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "MySQL CE installation completed" -ForegroundColor Green
+        }
+        else {
+            Write-Host "MySQL CE installation failed. Please check your network/permissions and consider running the terminal as an administrator." -ForegroundColor Red
+            Write-Host "If the issue persists, please download and install manually from: https://dev.mysql.com/downloads/mysql/" -ForegroundColor Yellow
+        }
+    }
+}
+
+# MySQL全局配置
+$mysqlPwd = "!Qq3303220151"
+# 兼容powershell 5.X
+$mysqlCmd = Get-Command mysql.exe -ErrorAction SilentlyContinue
+if ($mysqlCmd) {
+    $mysqlBin = $mysqlCmd.Source
+} else {
+    $mysqlBin = $null
+}
+if (-not $mysqlBin) {
+    $possibleMysqlBins = @(
+        "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe",
+        "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe",
+        "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql.exe",
+        "C:\Program Files (x86)\MySQL\MySQL Server 8.0\bin\mysql.exe",
+        "C:\Program Files (x86)\MySQL\MySQL Server 5.7\bin\mysql.exe"
+    )
+    $mysqlBin = $possibleMysqlBins | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+
+if (-not $mysqlBin) {
+    Write-Host "Error: MySQL executable file mysql.exe not found. Please ensure MySQL is installed and added to PATH or manually set `$mysqlBin." -ForegroundColor Red
+    exit 1
+}
+
+# ---------------------- 业务库初始化 ----------------------
+$useSql = Join-Path $ProjectRoot "initConf\WebSql.sql"
+# 校验业务SQL文件是否存在
+if (-not (Test-Path $useSql)) {
+    Write-Host "Error: Business SQL file does not exist $useSql" -ForegroundColor Red
+} else {
+    # 创建两个业务库
+    & $mysqlBin -uroot -p"$mysqlPwd" -e "CREATE DATABASE IF NOT EXISTS my_project DEFAULT CHARACTER SET utf8mb4;"
+    $createExit1 = $LASTEXITCODE
+    & $mysqlBin -uroot -p"$mysqlPwd" -e "CREATE DATABASE IF NOT EXISTS train_manage DEFAULT CHARACTER SET utf8mb4;"
+    $createExit2 = $LASTEXITCODE
+
+    # 关键修复：Get-Content 指定 UTF8 读取，中文不乱码
+    Get-Content $useSql -Encoding UTF8 | & $mysqlBin -uroot -p"$mysqlPwd" my_project
+    $importExit1 = $LASTEXITCODE
+    Get-Content $useSql -Encoding UTF8 | & $mysqlBin -uroot -p"$mysqlPwd" train_manage
+    $importExit2 = $LASTEXITCODE
+
+    if ($createExit1 -eq 0 -and $createExit2 -eq 0 -and $importExit1 -eq 0 -and $importExit2 -eq 0) {
+        Write-Host "✅ MySQL databases and tables initialized successfully (Databases: my_project, train_manage)" -ForegroundColor Green
+    } else {
+        Write-Host "❌ MySQL business database init failed, check above error logs" -ForegroundColor Red
+    }
+}
+
+# ---------------------- Nacos专用库初始化 ----------------------
+$nacosDb = "nacos_config"
+$nacosSql = Join-Path $targetPath "conf\mysql-schema.sql"
+# 校验Nacos官方SQL文件
+if (-not (Test-Path $nacosSql)) {
+    Write-Host "Error: Nacos schema SQL file does not exist $nacosSql" -ForegroundColor Red
+} else {
+    & $mysqlBin -uroot -p"$mysqlPwd" -e "CREATE DATABASE IF NOT EXISTS $nacosDb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    $nacosCreateExit = $LASTEXITCODE
+
+    # 同样加 -Encoding UTF8 读取官方SQL
+    Get-Content $nacosSql -Encoding UTF8 | & $mysqlBin -uroot -p"$mysqlPwd" $nacosDb
+    $nacosImportExit = $LASTEXITCODE
+
+    if ($nacosCreateExit -eq 0 -and $nacosImportExit -eq 0) {
+        Write-Host "Nacos database nacos_config table structure import completed" -ForegroundColor Green
+    } else {
+        Write-Host "Nacos database init failed, check above error logs" -ForegroundColor Red
+    }
 }
