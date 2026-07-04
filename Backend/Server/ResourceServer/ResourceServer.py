@@ -1,5 +1,5 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask          import Flask, jsonify, request
+from flask_cors     import CORS
 
 import os
 import time
@@ -16,6 +16,11 @@ CORS(app)
 UPLOAD_IMG_FOLDER = os.path.join(app.root_path, "Static/Img")
 os.makedirs(UPLOAD_IMG_FOLDER, exist_ok=True)
 
+@app.route("/resource/getPic/<path:filename>", methods=["GET"])
+def get_pic(filename):
+    # 返回静态图片资源
+    return app.send_static_file(f"Img/{filename}")
+
 @app.route("/resource/upload", methods=["POST"])
 def upload():
     # 取出图片字段资源
@@ -29,13 +34,14 @@ def upload():
     # 时间戳+原文件名
     timestamp = int(time.time() * 1000)
     filename = f"{timestamp}_{img_file.filename}"
+    filename = filename.replace(" ", "_")  # 替换空格为下划线，避免路径问题
     save_path = os.path.join(UPLOAD_IMG_FOLDER, filename)
 
     # 保存图片
     img_file.save(save_path)
 
     # 返回给前端的后端资源地址
-    img_url = f"http://{DEFAULT_URL}:{DEFAULT_PORT}/static/Img/{filename}"
+    img_url = f"http://{DEFAULT_URL}:5001/resource/getPic/{filename}"
     return jsonify({
         "code": 0,
         "message": "资源上传成功",
@@ -46,4 +52,4 @@ def upload():
 
 if __name__ == "__main__":
     DebugTool.debug_log("初始化图片资源地址: " + UPLOAD_IMG_FOLDER)
-    app.run(host="0.0.0.0", port=DEFAULT_PORT, debug=True)
+    app.run(host="0.0.0.0", port=DEFAULT_PORT, debug=True, threaded=True)

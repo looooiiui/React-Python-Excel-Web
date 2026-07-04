@@ -1,3 +1,36 @@
+﻿##[Ps1 To Exe]
+##
+##Kd3HDZOFADWE8uO1
+##Nc3NCtDXTlGDjoXa8T9U6k/rfl8ubPeeuLWz+LO5/un49hXAXZIbRxlSjir5CAaKXPAuReAXuNgSaRsrOfsI7byeEuSmJQ==
+##Kd3HFJGZHWLWoLaVvnQnhQ==
+##LM/RF4eFHHGZ7/K1
+##K8rLFtDXTiW5
+##OsHQCZGeTiiZ4NI=
+##OcrLFtDXTiW5
+##LM/BD5WYTiiZ4tI=
+##McvWDJ+OTiiZ4tI=
+##OMvOC56PFnzN8u+Vs1Q=
+##M9jHFoeYB2Hc8u+Vs1Q=
+##PdrWFpmIG2HcofKIo2QX
+##OMfRFJyLFzWE8uK1
+##KsfMAp/KUzWJ0g==
+##OsfOAYaPHGbQvbyVvnQX
+##LNzNAIWJGmPcoKHc7Do3uAuO
+##LNzNAIWJGnvYv7eVvnQX
+##M9zLA5mED3nfu77Q7TV64AuzAgg=
+##NcDWAYKED3nfu77Q7TV64AuzAgg=
+##OMvRB4KDHmHQvbyVvnQX
+##P8HPFJGEFzWE8tI=
+##KNzDAJWHD2fS8u+Vgw==
+##P8HSHYKDCX3N8u+Vgw==
+##LNzLEpGeC3fMu77Ro2k3hQ==
+##L97HB5mLAnfMu77Ro2k3hQ==
+##P8HPCZWEGmaZ7/K1
+##L8/UAdDXTlGDjoXa8T9U6k/rfl8ubPeeuLWz+LO5/un49hXAXZIbRxlSjir5CAaKXPAuXPscoOMUWQRkKuoOgg==
+##Kc/BRM3KXxU=
+##
+##
+##fd6a9f26a06ea3bc99616d4851b372ba
 
 # 脚本最顶部强制控制台编码，消除中文符号乱码
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -253,7 +286,7 @@ if (-not (Test-Path $nacosSql)) {
 } else {
     & $mysqlBin -uroot -p"$mysqlPwd" -e "CREATE DATABASE IF NOT EXISTS $nacosDb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
     $nacosCreateExit = $LASTEXITCODE
-
+    
     # 同样加 -Encoding UTF8 读取官方SQL
     Get-Content $nacosSql -Encoding UTF8 | & $mysqlBin -uroot -p"$mysqlPwd" $nacosDb
     $nacosImportExit = $LASTEXITCODE

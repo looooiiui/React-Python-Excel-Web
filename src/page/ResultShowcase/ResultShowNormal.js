@@ -1,16 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef }              from 'react';
+import { useNavigate, useSearchParams }             from 'react-router-dom';
 import { Layout, Typography, Spin, Empty, Divider } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
-import { message } from 'antd';
-import dayjs from 'dayjs';
-import MDEditor from '@uiw/react-md-editor';
+import { LeftOutlined }         from '@ant-design/icons';
+import { message }              from 'antd';
+import dayjs                    from 'dayjs';
+import MDEditor                 from '@uiw/react-md-editor';
 
 //==========================自定义工具==========================
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import { DebugTool } from '../../Util/DebugTool/DebugTool';
-import Theme from '../../Theme/theme';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import { DebugTool }            from '../../Util/DebugTool/DebugTool';
+import Theme                    from '../../Theme/theme';
 
 const { Sider, Content } = Layout;
 const { Title, Text } = Typography;

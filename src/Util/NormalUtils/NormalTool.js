@@ -1,10 +1,10 @@
 // 自定义工具引入
-import { DebugTool } from "../DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
+import { DebugTool }        from "../DebugTool/DebugTool";
+import CONSTPARAM           from "../../Core/CONST/CONST";
 
 // 三方工具引入
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios                from "axios";
+import { useNavigate }      from "react-router-dom";
 
 // 常用工具类
 class NormalTool {

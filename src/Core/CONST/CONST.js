@@ -14,41 +14,42 @@ export const ServerIpStore = {
     MAINPAGEIMGURL: "",
 };
 
-// ===================== 只读常量类，对外兼容原有裸连写法 =====================
+// ===================== 只读常量类，对外兼容裸连写法 =====================
 class CONSTPARAM {
     //==============前端页面路由URL===============================
-    static MAINPAGEURL = "/MainPage";
-    static LOGINURL = "/Login";
-    static ABOUTURL = "/Bbout";
-    static REGISTERURL = "/Register";
-    static ARTICLEURL = "/article"
-    static INFOCHANGEURL = "/infochange"
-    static USERBASEURL = "/user";
-    static USERPROFILE = "/profile";
-    static TRAINEEMANAGERURL = "/traineesManager"
-    static SECURITYCENTERURL = "/securityCenter"
-    static PROJECTIONCENTERURL = "/projectCenter"
-    static TRAININGCENTERURL = "/training"
-    static AIASSISTANTURL = "/aiAssistant"
-    static RESULTSHOWCASEURL = "/showcase"
+    static MAINPAGEURL          = "/MainPage";
+    static LOGINURL             = "/Login";
+    static ABOUTURL             = "/Bbout";
+    static REGISTERURL          = "/Register";
+    static ARTICLEURL           = "/article"
+    static INFOCHANGEURL        = "/infochange"
+    static USERBASEURL          = "/user";
+    static USERPROFILE          = "/profile";
+    static TRAINEEMANAGERURL    = "/traineesManager"
+    static SECURITYCENTERURL    = "/securityCenter"
+    static PROJECTIONCENTERURL  = "/projectCenter"
+    static TRAININGCENTERURL    = "/training"
+    static AIASSISTANTURL       = "/aiAssistant"
+    static RESULTSHOWCASEURL    = "/showcase"
 
     //===================后端基址==========================
-    static ADMINBASE = "/admin";
-    static LOGINBASE = "/api";
-    static INTERFACEBASE = "/interface";
-    static INFOBASE = "/info"
-    static PROJECTBASE = "/project"
-    static ARTICLEBASE = "/article"
-    static TRAINBASE = "/train"
-    static RESOURCEBASE = "/resource"
+    static ADMINBASE            = "/admin";
+    static LOGINBASE            = "/api";
+    static INTERFACEBASE        = "/interface";
+    static INFOBASE             = "/info"
+    static PROJECTBASE          = "/project"
+    static ARTICLEBASE          = "/article"
+    static TRAINBASE            = "/train"
+    static RESOURCEBASE         = "/resource"
+    static AISYSTEMBASE         = "/aiAssistant"
     //===============前端基址========================
-    static FRONTARTICLE = "/article"
-    static FRONTRESULTSHOWPAGE = "/detail"
+    static FRONTARTICLE         = "/article"
+    static FRONTRESULTSHOWPAGE  = "/detail"
 
     //==================资源地址=====================
-    static NavLogo = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
-    static MainBackgoundLogo = "/Logo/MainLogo/BackgoundLogo/Backgound.PNG";
-    static ManagerBackground = "/Logo/MainLogo/BackgoundLogo/ManagerBackground.PNG";
+    static NavLogo              = "/Logo/MainLogo/NavLogo/NavLogo.jpg";
+    static MainBackgoundLogo    = "/Logo/MainLogo/BackgoundLogo/Backgound.PNG";
+    static ManagerBackground    = "/Logo/MainLogo/BackgoundLogo/ManagerBackground.PNG";
 
     //================Nacos网关固定IP==================
     static INTERFACEIP = "http://127.0.0.1:5001";
@@ -81,16 +82,6 @@ class CONSTPARAM {
     static get MAINPAGEIMGURL() { return ServerIpStore.MAINPAGEIMGURL; }
     static set MAINPAGEIMGURL(val) { ServerIpStore.MAINPAGEIMGURL = val; }
 
-    //================Nacos服务名字=============
-    static NACOSLOGIN = "Login-Server";
-    static NACOSINFO = "Info-Server";
-    static NACOSINTERFACE = "Interface-Server";
-    static NACOSPROJECTION = "Projection-Server";
-    static NACOSAIASSISTANT = "Ai-Server";
-    static NACOSARTICLE = "Article-Server";
-    static NACOSTRAIN = "Training-Server";
-    static NACOSRESOURCE = "Resource-Server";
-
     //=================数值常量================
     static INPUTMAXLEN = 20;
     static PASSWORDCHANGE = "4";
@@ -99,8 +90,8 @@ class CONSTPARAM {
 // checkUrlActive / initializeAnyUrl / syncResource
 function syncResource() {
     // 这里赋值依然写 CONSTPARAM.IMGRESOURCEURL，内部自动同步到ServerIpStore
-    CONSTPARAM.IMGRESOURCEURL = `${CONSTPARAM.RESOURCEIP}/static/Img`;
-    CONSTPARAM.MAINPAGEIMGURL = `${CONSTPARAM.RESOURCEIP}/static/Img/MainPageImg`;
+    CONSTPARAM.IMGRESOURCEURL = `${CONSTPARAM.RESOURCEIP}/resource/getPic`;
+    CONSTPARAM.MAINPAGEIMGURL = `${CONSTPARAM.RESOURCEIP}/resource/getPic`;
     DebugTool.debugLog("获得后端图像URL基址: " + CONSTPARAM.IMGRESOURCEURL);
     DebugTool.debugLog("获得后端主页图像URL基址: " + CONSTPARAM.MAINPAGEIMGURL);
 }
@@ -121,7 +112,7 @@ async function checkUrlActive(url, timeout = 3000) {
             timeout: timeout,
             validateStatus: () => true
         });
-        DebugTool.debugLog("连接成功")
+        DebugTool.debugLog("连接成功");
         return true
     } catch (error) {
         DebugTool.debugLog("连接失败");
@@ -132,13 +123,13 @@ async function checkUrlActive(url, timeout = 3000) {
 // 顶层阻塞初始化
 var result = await checkUrlActive(`${CONSTPARAM.INTERFACEIP}${CONSTPARAM.INTERFACEBASE}/getServerUrl`);
 if (result) {
-    CONSTPARAM.LOGINIP = await initializeAnyUrl(CONSTPARAM.NACOSLOGIN);
-    CONSTPARAM.INFOIP = await initializeAnyUrl(CONSTPARAM.NACOSINFO);
-    CONSTPARAM.PROJECTIONCENTERIP = await initializeAnyUrl(CONSTPARAM.NACOSPROJECTION);
-    CONSTPARAM.AISYSTEMIP = await initializeAnyUrl(CONSTPARAM.NACOSAIASSISTANT);
-    CONSTPARAM.ARTICLESYSTEMIP = await initializeAnyUrl(CONSTPARAM.NACOSARTICLE);
-    CONSTPARAM.TRAINIP = await initializeAnyUrl(CONSTPARAM.NACOSTRAIN);
-    CONSTPARAM.RESOURCEIP = await initializeAnyUrl(CONSTPARAM.NACOSRESOURCE);
+    CONSTPARAM.LOGINIP                  = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.INFOIP                   = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.PROJECTIONCENTERIP       = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.AISYSTEMIP               = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.ARTICLESYSTEMIP          = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.TRAINIP                  = CONSTPARAM.INTERFACEIP
+    CONSTPARAM.RESOURCEIP               = CONSTPARAM.INTERFACEIP
     syncResource();
 }
 

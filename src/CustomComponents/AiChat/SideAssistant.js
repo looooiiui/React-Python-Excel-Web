@@ -1,17 +1,17 @@
 import { useEffect, useState, useRef } from "react";
 
 //========自定义工具引入===========================
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import Theme from "../../Theme/theme";
+import { DebugTool }    from "../../Util/DebugTool/DebugTool";
+import Theme            from "../../Theme/theme";
 // CSS样式
 import "../../Theme/CSS/AiChat/AiChat.css";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
 // Ai渲染样式
-import MarkdownWithMath from "../../Util/NormalUtils/MarkDown";
+import MarkdownWithMath         from "../../Util/NormalUtils/MarkDown";
 
 // ========== Ant Design 组件 ==========
-import { Input, Button, Space, Typography, Drawer } from "antd";
-import { SendOutlined, ClearOutlined, RobotOutlined, LeftOutlined } from "@ant-design/icons";
+import { Input, Button, Space, Typography, Drawer }                     from "antd";
+import { SendOutlined, ClearOutlined, RobotOutlined, LeftOutlined }     from "@ant-design/icons";
 
 const { Title } = Typography;
 const { TextArea } = Input;

@@ -1,17 +1,17 @@
-import { use, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { use, useState }    from "react";
+import { useNavigate }      from "react-router-dom";
 
 //==========自定义工具组引入===================
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem"
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import Theme from "../../Theme/theme";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import ThemedButton from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem"
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import Theme                    from "../../Theme/theme";
+import CONSTPARAM               from "../../Core/CONST/CONST";
+import ThemedButton             from "../../CustomComponents/OverrideCom/OverrideButton/ThemeButton";
 //============================================
 
 //================UI库引入=======================
 import { Button, Card, Checkbox, Input, Space, Typography } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined }                       from "@ant-design/icons";
 // 用户常量
 const INPUTMAXLEN = 20;
 

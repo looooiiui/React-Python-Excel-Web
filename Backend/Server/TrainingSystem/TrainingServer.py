@@ -496,4 +496,4 @@ def get_score_by_class(class_id):
 #=================================================================================
 # 服务启动入口
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)
+    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True, threaded=True)

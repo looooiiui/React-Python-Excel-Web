@@ -1,5 +1,5 @@
-import CONSTPARAM from "../../Core/CONST/CONST";
-import ThemedButton from "../OverrideCom/OverrideButton/ThemeButton";
+import CONSTPARAM           from "../../Core/CONST/CONST";
+import ThemedButton         from "../OverrideCom/OverrideButton/ThemeButton";
 
 function clickProjectCenter() {
     window.location.href = `${CONSTPARAM.PROJECTIONCENTERURL}`;

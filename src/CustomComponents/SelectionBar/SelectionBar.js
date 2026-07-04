@@ -1,7 +1,7 @@
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import CONSTPARAM               from "../../Core/CONST/CONST";
 //=============自定义组件===============
-import ThemedButton from "../OverrideCom/OverrideButton/ThemeButton";
+import ThemedButton             from "../OverrideCom/OverrideButton/ThemeButton";
 
 function clickTraineeManager() {
     window.location.href = `${CONSTPARAM.TRAINEEMANAGERURL}`;

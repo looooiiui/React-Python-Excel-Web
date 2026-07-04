@@ -6,10 +6,10 @@ import { LeftOutlined, ReloadOutlined, SendOutlined, BookOutlined, RobotOutlined
 import MDEditor from '@uiw/react-md-editor';
 
 //===================自定义工具=======================
-import Theme from '../../Theme/theme';
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import NormalTool from '../../Util/NormalUtils/NormalTool';
-import SideAssistant from '../../CustomComponents/AiChat/SideAssistant';
+import Theme                    from '../../Theme/theme';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import NormalTool               from '../../Util/NormalUtils/NormalTool';
+import SideAssistant            from '../../CustomComponents/AiChat/SideAssistant';
 
 const { Title } = Typography;
 const { TextArea } = Input;

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Layout, Table, Space, Button, message, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+import { useNavigate }  from "react-router-dom";
+import dayjs            from "dayjs";
 
 //=======================自定义工具============================
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import { ReconciliationFilled } from "@ant-design/icons";
+import { DebugTool }                    from "../../Util/DebugTool/DebugTool";
+import { InfomationSystem }             from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM                       from "../../Core/CONST/CONST";
+import { ReconciliationFilled }         from "@ant-design/icons";
 
 const { Content } = Layout;
 

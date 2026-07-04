@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState }  from "react";
+import axios                    from "axios";
 
 //==============自定义工具引入===============
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import ThemedButton from "../OverrideCom/OverrideButton/ThemeButton";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import CONSTPARAM               from "../../Core/CONST/CONST";
+import ThemedButton             from "../OverrideCom/OverrideButton/ThemeButton";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
 //==============UI库引入=====================
 import { Table, Button, Layout, Typography } from "antd";
 

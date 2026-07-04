@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState }      from "react";
 import { Layout, Table, Button, Space, message, Modal, Form, Select, Spin } from "antd";
-import dayjs from "dayjs";
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import dayjs                        from "dayjs";
+import { DebugTool }                from "../../Util/DebugTool/DebugTool";
+import { InfomationSystem }         from "../../InfomationSystem/InfomationSystem";
 
 const { Content } = Layout;
 

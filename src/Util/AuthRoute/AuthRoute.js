@@ -1,14 +1,14 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Navigate, useLocation }        from "react-router-dom";
+import { useParams }                    from "react-router-dom";
 //===========自定义组件引入======================
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import { DebugTool } from "../DebugTool/DebugTool";
+import { InfomationSystem }         from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM                   from "../../Core/CONST/CONST";
+import { DebugTool }                from "../DebugTool/DebugTool";
 
 function AuthRoute({ children, requireAdmin = false }) {
     const { pathname } = useLocation();
     const loc = useLocation();
-    const LOGINURL = "/Login";
+    const LOGINURL = CONSTPARAM.LOGINURL;
 
     const getUserId = () => {
         const res = pathname.match(/\/user\/(\w+)/);

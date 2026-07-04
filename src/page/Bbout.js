@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef }      from "react";
+import { useNavigate }                      from "react-router-dom";
 // Ant Design 组件
 import { Typography, Row, Col, Card, Space, Divider } from "antd";
 
 //=================全局公共工具/常量==============================
-import { DebugTool } from "../Util/DebugTool/DebugTool";
-import Theme from "../Theme/theme";
-import CONSTPARAM from "../Core/CONST/CONST";
+import { DebugTool }        from "../Util/DebugTool/DebugTool";
+import Theme                from "../Theme/theme";
+import CONSTPARAM           from "../Core/CONST/CONST";
 
 const { Title, Paragraph } = Typography;
 export default function Bbout() {
