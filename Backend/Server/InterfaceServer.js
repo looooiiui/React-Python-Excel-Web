@@ -51,7 +51,8 @@ const configClient = new NacosConfigClient({
 
 const proxy = httpProxy.createProxyServer({
     agent: new http.Agent({ keepAlive: false }),
-    timeout: 5000
+    timeout: 60000,
+    proxyTimeout: 60000
 });
 
 // 捕获代理失败，防止进程崩溃
