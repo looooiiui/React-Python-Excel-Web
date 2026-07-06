@@ -12,6 +12,8 @@ const { DebugTool }     = require('../../src/Util/DebugTool/DebugTool');
 //===============================================================
 const { CONSTPARAM }    = require("./Core/CONST/CONST");
 
+const axios = require("axios");
+
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
@@ -137,7 +139,11 @@ function pickWeightInstance(instances) {
     // 注册接口服务
     await naming.registerInstance(
         CONSTPARAM.INTERFACESERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5001 },
+        { 
+            ip: CONSTPARAM.CONNECTIP, 
+            port: 5001,
+            ephemeral: false,
+        },
     );
     // 订阅服务实例变更
     for (const serviceName of serviceList) {
@@ -150,13 +156,15 @@ setInterval(async () => {
     for (const serviceName of serviceList) {
         try {
             // getAllInstances：获取该服务全部原始实例（包含 enabled=false 手动下线、不健康实例）
-            const allRawInstances = await naming.getAllInstances(serviceName);
+            const allRawInstances = await axios.get(`http://${CONSTPARAM.NACOSURL}/nacos/v1/ns/instance/list?serviceName=${serviceName}`)
             // DebugTool.debugLog(`${JSON.stringify(allRawInstances)}`);
+            const nacosData = allRawInstances.data;
+            const hostList = nacosData.hosts || [];
             // 过滤：只保留手动上线 + 健康的实例
-            const validOnlineInstances = allRawInstances.filter(ins => ins.enabled === true && ins.healthy === true);
+            const validOnlineInstances = hostList.filter(ins => ins.enabled === true && ins.healthy === true); 
             // 强制覆盖本地缓存，不管SDK推送有没有执行
             serverCache.set(serviceName, validOnlineInstances);
-            DebugTool.debugLog(`[定时刷新] ${serviceName} 原始实例总数:${allRawInstances.length} 有效可用实例:${validOnlineInstances.length}`);
+            DebugTool.debugLog(`[定时刷新] ${serviceName} 原始实例总数:${hostList.length} 有效可用实例:${validOnlineInstances.length}`);
         } catch (err) {
             DebugTool.debugLog(`[定时刷新异常] ${serviceName} 获取实例失败:`, err);
         }

@@ -27,7 +27,11 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.RESOURCESERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5009 },
+        { 
+            ip: CONSTPARAM.CONNECTIP, 
+            port: 5009,
+            ephemeral: false, 
+        },    
     );
 })()
 
