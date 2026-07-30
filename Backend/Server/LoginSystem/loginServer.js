@@ -1,19 +1,20 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+const express   = require('express');
+const cors      = require('cors');
+const helmet    = require('helmet');
+const morgan    = require('morgan');
+
 const app = express();
 const port = 5000;
 
 //=======================自定义工具===============================
-const { DebugTool } = require('../../../src/Util/DebugTool/DebugTool');
+const { DebugTool }                 = require('../../../src/Util/DebugTool/DebugTool');
 //账户登录系统验证
-const { pythonVerify } = require("./LoginSystem");
-const { transmitArgvConvert } = require("./LoginSystem");
-const { verifyAccountNotEmpty } = require("./LoginSystem");
-const { convertVerifyInfo } = require("./LoginSystem");
-const { pythonBanOperator } = require("./LoginSystem");
-const { pythonInfoChange } = require("./LoginSystem");
+const { pythonVerify }              = require("./LoginSystem");
+const { transmitArgvConvert }       = require("./LoginSystem");
+const { verifyAccountNotEmpty }     = require("./LoginSystem");
+const { convertVerifyInfo }         = require("./LoginSystem");
+const { pythonBanOperator }         = require("./LoginSystem");
+const { pythonInfoChange }          = require("./LoginSystem");
 
 //===============================================================
 const { CONSTPARAM } = require("../Core/CONST/CONST");
@@ -99,7 +100,11 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.LOGINSERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5000 },
+        { 
+            ip: CONSTPARAM.CONNECTIP, 
+            port: 5000,
+            ephemeral: false
+        },
     );
 })()
 

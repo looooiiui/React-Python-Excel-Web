@@ -1,17 +1,17 @@
-const path = require('path');
-const { exec } = require('child_process');
-const { promisify } = require('util');
-const execAsync = promisify(exec);
-const { DebugTool } = require('../../../src/Util/DebugTool/DebugTool');
+const path              = require('path');
+const { exec }          = require('child_process');
+const { promisify }     = require('util');
+const { DebugTool }     = require('../../../src/Util/DebugTool/DebugTool');
+const execAsync         = promisify(exec);
 
 //=========Python执行路径(绝对路径)==========
-const pythonPath = path.join(__dirname, "./PythonExcel/FileProcessingMain.py");
-const accountExcelPath = path.join(__dirname, "./PythonExcel/AccountInfomation.xlsx");
+const pythonPath        = path.join(__dirname, "./PythonExcel/FileProcessingMain.py");
+const accountExcelPath  = path.join(__dirname, "./PythonExcel/AccountInfomation.xlsx");
 
 //==========验证参数===================
-const LOGINPARAM = "0";         // 登录请求参数 
-const REGISTERPARAM = "1";      // 注册请求操作
-const ADMINBANOPERATOR = "3"    // 封禁指令
+const LOGINPARAM        = "0";         // 登录请求参数 
+const REGISTERPARAM     = "1";      // 注册请求操作
+const ADMINBANOPERATOR  = "3"    // 封禁指令
 //=========登录信息校验基本信息返回映射表============
 const LOGINMAP = {
     "-3": "后端程序运行出错",

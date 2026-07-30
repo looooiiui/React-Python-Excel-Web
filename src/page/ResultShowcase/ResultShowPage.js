@@ -1,6 +1,6 @@
 
 //=================三方工具====================
-import { Layout, Typography } from "antd";
+import { Layout, Typography }   from "antd";
 
 //================自定义工具=======================
 import { DebugTool } from "../../Util/DebugTool/DebugTool";

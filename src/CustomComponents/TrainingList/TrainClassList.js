@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { Layout, Table, Button, Modal, Form, Input, DatePicker, Select, Space, message, Spin } from "antd";
-import dayjs from "dayjs";
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import dayjs                    from "dayjs";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
 
 const { Content } = Layout;
 const { TextArea } = Input;

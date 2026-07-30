@@ -1,7 +1,7 @@
-import axios from "axios";
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import { InfomationSystem } from "../InfomationSystem";
+import axios                    from "axios";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import CONSTPARAM               from "../../Core/CONST/CONST";
+import { InfomationSystem }     from "../InfomationSystem";
 
 // ===================== 用户模块 tb_user =====================
 // 获取全部用户

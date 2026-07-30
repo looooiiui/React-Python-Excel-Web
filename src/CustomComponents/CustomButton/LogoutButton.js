@@ -1,6 +1,6 @@
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
-import { useNavigate } from "react-router-dom";
-import CONSTPARAM from "../../Core/CONST/CONST";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
+import { useNavigate }          from "react-router-dom";
+import CONSTPARAM               from "../../Core/CONST/CONST";
 
 function LogoutButton() {
     const navigate = useNavigate();

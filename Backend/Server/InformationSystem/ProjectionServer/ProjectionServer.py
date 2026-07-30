@@ -1,10 +1,10 @@
 # Web后端工具，系统工具
 #=======三方库===========
-from flask import Flask, jsonify, Response, request
-from flask_cors import CORS
+from flask          import Flask, jsonify, Response, request
+from flask_cors     import CORS
 #========自定义工具=============
-from Utils import MySqlUtil
-from Utils.DebugTool.DebugUtil import DebugTool
+from Utils                      import MySqlUtil
+from Utils.DebugTool.DebugUtil  import DebugTool
 
 
 #==============基准IP==============
@@ -248,5 +248,5 @@ def edit_project():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)
+    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True, threaded=True)
     

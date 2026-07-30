@@ -1,15 +1,15 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios                from "axios";
+import { useNavigate }      from "react-router-dom";
 // Ant Design 组件
 import { Carousel, Typography, Row, Col, Card, Space, Tag, Layout, Spin, Empty } from "antd";
-import dayjs from "dayjs";
+import dayjs                from "dayjs";
 
 //=================自定义组件==============================
-import { DebugTool } from "../Util/DebugTool/DebugTool";
-import Theme from "../Theme/theme";
-import CONSTPARAM from "../Core/CONST/CONST";
-import { InfomationSystem } from "../InfomationSystem/InfomationSystem";
+import { DebugTool }            from "../Util/DebugTool/DebugTool";
+import Theme                    from "../Theme/theme";
+import CONSTPARAM               from "../Core/CONST/CONST";
+import { InfomationSystem }     from "../InfomationSystem/InfomationSystem";
 
 const { Title, Paragraph } = Typography;
 function MainPage() {
@@ -87,14 +87,14 @@ function MainPage() {
 
     // 快捷功能入口（点击统一跳成果列表）
     const funcList = [
-        { bg: "#285dadff", text: "研究院党建专栏" },
-        { bg: "#f70202ff", text: "90周年校庆AI成果专题" },
-        { bg: "#285dadff", text: "主题教育学习专区" },
-        { bg: "#f70202ff", text: "科研经费预决算公开" },
-        { bg: "#285dadff", text: "信息公开公示" },
-        { bg: "#f70202ff", text: "AI学术期刊投稿入口" },
-        { bg: "#285dadff", text: "教学培养质量年报" },
-        { bg: "#f70202ff", text: "图灵学堂在线课程" },
+        { bg: "#285dadff", text: "待填充" },
+        { bg: "#f70202ff", text: "待填充" },
+        { bg: "#285dadff", text: "待填充" },
+        { bg: "#f70202ff", text: "待填充" },
+        { bg: "#285dadff", text: "待填充" },
+        { bg: "#f70202ff", text: "待填充" },
+        { bg: "#285dadff", text: "待填充" },
+        { bg: "#f70202ff", text: "待填充" },
     ];
 
     // 底部图文招生板块（点击跳转成果列表）

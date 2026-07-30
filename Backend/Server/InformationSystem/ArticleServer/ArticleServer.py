@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, Response, request
-from flask_cors import CORS
+from flask              import Flask, jsonify, Response, request
+from flask_cors         import CORS
 #==============自定义工具引入================
-from Utils.DebugTool.DebugUtil import DebugTool
-from Utils import MySqlUtil
+from Utils.DebugTool.DebugUtil  import DebugTool
+from Utils                      import MySqlUtil
 
 #==============基准IP==============
 DEFAULTURL: str = "127.0.0.1"
@@ -15,6 +15,14 @@ DEFAULTROUTE: str = "/article"
 #==========Python后端创建===================
 app = Flask(__name__)
 CORS(app)
+
+@app.before_request
+def print_request_path():
+    # 打印完整路径
+    print("【Python后端接收路径】", request.path)
+    # 可选：打印完整URL、请求方法
+    print("完整URL：", request.url)
+    print("请求方式：", request.method)
 
 # 1. 查询所有文章
 @app.route(f"{DEFAULTROUTE}/info/all", methods=["GET"])
@@ -99,4 +107,4 @@ def delete_article(article_id):
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)
+    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True, threaded=True)

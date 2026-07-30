@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Layout, Typography, Spin, Empty, Row, Col, Card, Space, Tag } from 'antd';
-import { FileTextOutlined, ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { useState, useEffect, useRef }      from 'react';
+import { useNavigate }                      from 'react-router-dom';
+import { Layout, Typography, Spin, Empty, Row, Col, Card, Space, Tag }  from 'antd';
+import { FileTextOutlined, ClockCircleOutlined, UserOutlined }          from '@ant-design/icons';
 import dayjs from 'dayjs';
 // 你的全局工具
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import { DebugTool } from '../../Util/DebugTool/DebugTool';
-import Theme from '../../Theme/theme';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import { DebugTool }            from '../../Util/DebugTool/DebugTool';
+import Theme                    from '../../Theme/theme';
 
 const { Sider, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;

@@ -1,11 +1,11 @@
-import { useState } from "react";
-import Register from "../page/LoginSystem/Register";
-import { DebugTool } from "../Util/DebugTool/DebugTool";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import CONSTPARAM from "../Core/CONST/CONST";
+import axios                    from "axios";
+import { useState }             from "react";
+import { useNavigate }          from "react-router-dom";
+import CONSTPARAM               from "../Core/CONST/CONST";
+import Register                 from "../page/LoginSystem/Register";
+import { DebugTool }            from "../Util/DebugTool/DebugTool";
 
-// 仅引入底层请求函数
+// 引入请求函数
 import {
     sendLoginInfo,
     sendRegisterInfo,
@@ -97,12 +97,12 @@ const BACKERROR = 99;   // 程序异常
 // ====================== 统一Getter静态方法，给子脚本读取 ======================
 export class InfomationSystem {
     // 常量 Getter
-    static getLoginVerifyURL() { return loginVerifyURL; }
-    static getRegisterVerifyURL() { return registerVerifyURL; }
-    static getAdminBanURL() { return adminBanURL; }
-    static getNormalParma() { return NORMALPARMA; }
-    static getAdminParma() { return ADMINPARMA; }
-    static getBackError() { return BACKERROR; }
+    static getLoginVerifyURL()      { return loginVerifyURL; }
+    static getRegisterVerifyURL()   { return registerVerifyURL; }
+    static getAdminBanURL()         { return adminBanURL; }
+    static getNormalParma()         { return NORMALPARMA; }
+    static getAdminParma()          { return ADMINPARMA; }
+    static getBackError()           { return BACKERROR; }
 
     // 全局状态 Getter
     static getCurrentLoginInfo() {

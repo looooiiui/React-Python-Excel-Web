@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect }     from 'react';
+import { createPortal }         from 'react-dom';
 
 export default function Toast({ show, type, message, duration = 3000, onClose }) {
     useEffect(() => {

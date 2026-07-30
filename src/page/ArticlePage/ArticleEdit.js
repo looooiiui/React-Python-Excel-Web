@@ -1,14 +1,14 @@
 import { Form, Input, Button, Typography, Card, message, Layout, Space, Spin, Divider } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState }  from 'react';
+import { useNavigate, useParams }       from 'react-router-dom';
 import { LeftOutlined, ReloadOutlined, SaveOutlined, DeleteOutlined, BookOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor                         from '@uiw/react-md-editor';
 
 //=============自定义工具===========================
-import Theme from '../../Theme/theme';
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import NormalTool from '../../Util/NormalUtils/NormalTool';
+import Theme                    from '../../Theme/theme';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import NormalTool               from '../../Util/NormalUtils/NormalTool';
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;

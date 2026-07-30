@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState }  from "react";
+import axios                    from "axios";
 // AntD 组件引入
 import { Layout, Table, Button, Modal, Form, Input, DatePicker, Select, Space, message } from "antd";
-import dayjs from "dayjs";
+import dayjs                    from "dayjs";
 
 // 自定义工具引入
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import CONSTPARAM               from "../../Core/CONST/CONST";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
 
 const { Content } = Layout;
 const { TextArea } = Input;

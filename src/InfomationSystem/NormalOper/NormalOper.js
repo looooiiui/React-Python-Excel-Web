@@ -1,8 +1,8 @@
-import axios from "axios";
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import CONSTPARAM from "../../Core/CONST/CONST";
+import axios                    from "axios";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import CONSTPARAM               from "../../Core/CONST/CONST";
 // 引入主类用于读取全局常量/状态
-import { InfomationSystem } from "../InfomationSystem";
+import { InfomationSystem }     from "../InfomationSystem";
 
 // 发送登录检测
 export function sendLoginInfo(accountId, password, callback, adminParam) {

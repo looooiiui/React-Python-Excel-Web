@@ -1,12 +1,13 @@
-const express = require('express');
-const cors = require('cors');
+const express   = require('express');
+const cors      = require('cors');
+
 const app = express();
 const port = 4001;
 
 //=======================自定义工具===============================
-const { DebugTool } = require("../../DebugTool/DebugTool")
+const { DebugTool }     = require("../../DebugTool/DebugTool")
 //===============================================================
-const { CONSTPARAM } = require("../../Core/CONST/CONST");
+const { CONSTPARAM }    = require("../../Core/CONST/CONST");
 
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
@@ -33,7 +34,11 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.INFOSERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: 5002 },
+        { 
+            ip: CONSTPARAM.CONNECTIP, 
+            port: 5002,
+            ephemeral: false
+        },
     );
 })()
 

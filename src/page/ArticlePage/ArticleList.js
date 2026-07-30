@@ -4,10 +4,10 @@ import { Layout, Menu, Button, Space, Popconfirm, message, Typography, Card, Row
 import { PlusOutlined, EyeOutlined, EditOutlined, DeleteOutlined, FileTextOutlined, ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 //===================自定义工具=================
-import Theme from '../../Theme/theme';
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import { DebugTool } from '../../Util/DebugTool/DebugTool';
+import Theme                    from '../../Theme/theme';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import { DebugTool }            from '../../Util/DebugTool/DebugTool';
 
 const { Title, Text, Paragraph } = Typography;
 const { Sider, Content } = Layout;

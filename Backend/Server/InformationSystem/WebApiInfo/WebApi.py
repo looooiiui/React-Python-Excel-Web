@@ -1,6 +1,6 @@
 # Web后端接口层 用户账号模块
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask          import Flask, jsonify, request
+from flask_cors     import CORS
 #==============自定义工具引入================
 from Utils.DebugTool.DebugUtil import DebugTool
 from Utils import MySqlUtil
@@ -178,4 +178,4 @@ def delete_account(accountId):
         }), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True)
+    app.run(host="0.0.0.0", port=DEFAULTPORT, debug=True, threaded=True)

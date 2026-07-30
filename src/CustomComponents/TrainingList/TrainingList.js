@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Layout, Table, Button, Modal, Form, Input, InputNumber, Select, Space, message, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+import { useNavigate }  from "react-router-dom";
+import dayjs            from "dayjs";
 
 //=========================自定义工具============================
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
-import CONSTPARAM from "../../Core/CONST/CONST";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM               from "../../Core/CONST/CONST";
 
 const { Content } = Layout;
 const { TextArea } = Input;

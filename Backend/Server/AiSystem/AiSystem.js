@@ -1,9 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const axios = require("axios");
-const helmet = require('helmet');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
+const express       = require('express');
+const cors          = require('cors');
+const axios         = require("axios");
+const helmet        = require('helmet');
+const morgan        = require('morgan');
+const rateLimit     = require('express-rate-limit');
+
 const app = express();
 const port = 5004;
 
@@ -34,7 +35,7 @@ const { NacosConfigClient, NacosNamingClient } = require("nacos");
 const naming = new NacosNamingClient({
     serverList: CONSTPARAM.NACOSURL,
     namespace: "public",
-    logger: console
+    logger: console,
 });
 
 // 注册
@@ -42,7 +43,11 @@ const naming = new NacosNamingClient({
     await naming.ready()
     await naming.registerInstance(
         CONSTPARAM.AISYSTEMSERVER,
-        { ip: CONSTPARAM.CONNECTIP, port: port },
+        { 
+            ip: CONSTPARAM.CONNECTIP, 
+            port: port,
+            ephemeral: false
+        },
     );
 })()
 
@@ -82,6 +87,21 @@ app.post(`${CONSTPARAM.AISYSTEMBASEURL}/chat`, async (req, res) => {
         res.status(500).json({ error: "AI服务调用失败:" + error.message });
     }
 });
+
+/**
+ * 切换自身实例 enabled 状态
+ * @param {boolean} enabled true上线 / false下线
+ */
+async function toggleSelfInstance(enabled) {
+    const params = new URLSearchParams();
+    params.append("serviceName", CONSTPARAM.AISYSTEMSERVER);
+    params.append("ip", CONSTPARAM.CONNECTIP);
+    params.append("port", port);
+    params.append("enabled", enabled);
+
+    const res = await axios.put(`http://${CONSTPARAM.NACOSURL}/nacos/v1/ns/instance`, params);
+    return res.data === "ok";
+}
 
 // 启动监听
 app.listen(port, async () => {

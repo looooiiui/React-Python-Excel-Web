@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect }  from 'react';
 import { Layout, Table, Button, Space, message, Spin, Modal, Form, Input, InputNumber, Select } from 'antd';
-import dayjs from 'dayjs';
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import { DebugTool } from '../../Util/DebugTool/DebugTool';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import ThemedButton from '../OverrideCom/OverrideButton/ThemeButton';
+import dayjs                    from 'dayjs';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import { DebugTool }            from '../../Util/DebugTool/DebugTool';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import ThemedButton             from '../OverrideCom/OverrideButton/ThemeButton';
 
 const { Content } = Layout;
 

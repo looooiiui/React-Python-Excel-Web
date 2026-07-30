@@ -1,15 +1,15 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { Card, Typography, Button, Layout, message, Spin, Space, Divider } from 'antd';
-import { LeftOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import MDEditor from '@uiw/react-md-editor';
+import { Card, Typography, Button, Layout, message, Spin, Space, Divider }  from 'antd';
+import { LeftOutlined, ReloadOutlined, EditOutlined, DeleteOutlined }       from '@ant-design/icons';
+import { useEffect, useState, useRef }                                      from 'react';
+import { useNavigate }      from 'react-router-dom';
+import MDEditor             from '@uiw/react-md-editor';
 //=========================自定义工具引入=================
-import { InfomationSystem } from '../../InfomationSystem/InfomationSystem';
-import Theme from '../../Theme/theme';
-import CONSTPARAM from '../../Core/CONST/CONST';
-import { DebugTool } from '../../Util/DebugTool/DebugTool';
-import Toast from '../../CustomComponents/CustomIntegration/Toast/Toast';
+import { InfomationSystem }     from '../../InfomationSystem/InfomationSystem';
+import Theme                    from '../../Theme/theme';
+import CONSTPARAM               from '../../Core/CONST/CONST';
+import { DebugTool }            from '../../Util/DebugTool/DebugTool';
+import Toast                    from '../../CustomComponents/CustomIntegration/Toast/Toast';
 
 const { Title, Text } = Typography;
 const { Sider, Content } = Layout;

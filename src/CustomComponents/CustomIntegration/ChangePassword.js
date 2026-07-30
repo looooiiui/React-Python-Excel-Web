@@ -1,10 +1,10 @@
-import { useState } from "react";
-import Theme from "../../Theme/theme";
-import { InfomationSystem } from "../../InfomationSystem/InfomationSystem";
-import CONSTPARAM from "../../Core/CONST/CONST";
-import { DebugTool } from "../../Util/DebugTool/DebugTool";
-import ThemedButton from "../OverrideCom/OverrideButton/ThemeButton";
-import Toast from "./Toast/Toast";
+import { useState }             from "react";
+import Theme                    from "../../Theme/theme";
+import { InfomationSystem }     from "../../InfomationSystem/InfomationSystem";
+import CONSTPARAM               from "../../Core/CONST/CONST";
+import { DebugTool }            from "../../Util/DebugTool/DebugTool";
+import ThemedButton             from "../OverrideCom/OverrideButton/ThemeButton";
+import Toast                    from "./Toast/Toast";
 
 export default function ChangePassword() {
     const [newPwd, setNewPwd] = useState("");

@@ -1,6 +1,6 @@
 import sys                                                          # Python环境工具
-from typing import Optional                                         # 引入类型标注工具 
-from pathlib import Path   
+from typing     import Optional                                         # 引入类型标注工具 
+from pathlib    import Path   
                                          # 路径工具
 # 项目根目录
 ROOT_DIR = Path(__file__).parent
